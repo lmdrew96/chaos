@@ -1,0 +1,24 @@
+# Monorepo-level ignores (per-app ignores live in each app's .gitignore)
+
+# dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# turbo
+.turbo/
+
+# os
+.DS_Store
+
+# editor
+.idea/
+.vscode/
+
+# env at root (apps have their own .env files)
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
