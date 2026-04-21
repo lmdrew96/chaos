@@ -17,7 +17,7 @@ import type { NewGrammarFeature } from '@/lib/db/schema';
 import * as dotenv from 'dotenv';
 import { resolve } from 'path';
 
-dotenv.config({ path: resolve(process.cwd(), '.env.local.local') });
+dotenv.config({ path: resolve(process.cwd(), '.env.local') });
 
 const features: NewGrammarFeature[] = [
   // ═══════════════════════════════════════
