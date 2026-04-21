@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CircleQuestionMark, Search, Loader2 } from "lucide-react"
-import { DefinitionCard } from "@/components/features/ce-inseamna/DefinitionCard"
+import { DefinitionCard } from "@/components/features/que-significa/DefinitionCard"
 
 type MysteryAnalysis = {
   definition: string
@@ -19,7 +19,7 @@ type HistoryItem = {
   result: MysteryAnalysis
 }
 
-export default function CeInseamnaPage() {
+export default function QueSignificaPage() {
   const [query, setQuery] = useState("")
   const [result, setResult] = useState<MysteryAnalysis | null>(null)
   const [currentWord, setCurrentWord] = useState("")
@@ -51,7 +51,7 @@ export default function CeInseamnaPage() {
     setSavedToShelf(false)
 
     try {
-      const res = await fetch("/api/ce-inseamna", {
+      const res = await fetch("/api/que-significa", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ word }),
@@ -67,7 +67,7 @@ export default function CeInseamnaPage() {
       setHistory((prev) => [{ word, result: data }, ...prev.filter((h) => h.word.toLowerCase() !== word.toLowerCase())])
     } catch {
       // Error handled via state
-      setError("Nu am putut analiza cuvântul. Încearcă din nou.")
+      setError("No pude analizar la palabra. Inténtalo de nuevo.")
     } finally {
       setIsLoading(false)
     }
@@ -85,7 +85,7 @@ export default function CeInseamnaPage() {
           word: currentWord,
           context: result.context,
           definition: result.definition,
-          source: "ce-inseamna",
+          source: "que-significa",
         }),
       })
 
@@ -111,10 +111,10 @@ export default function CeInseamnaPage() {
       <div>
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <CircleQuestionMark className="h-7 w-7 text-primary" />
-          Ce înseamnă?
+          ¿Qué significa?
         </h1>
         <p className="text-muted-foreground">
-          Quick translations and definitions for Romanian words and phrases
+          Quick translations and definitions for Spanish words and phrases
         </p>
       </div>
 
@@ -127,7 +127,7 @@ export default function CeInseamnaPage() {
               <Input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Type a Romanian word or phrase..."
+                placeholder="Type a Spanish word or phrase..."
                 className="pl-9"
                 maxLength={200}
                 autoFocus
@@ -137,7 +137,7 @@ export default function CeInseamnaPage() {
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                "Ce înseamnă?"
+                "¿Qué significa?"
               )}
             </Button>
           </form>

@@ -128,7 +128,7 @@ export default function AskTutorPage() {
           Ask Tutor
         </h1>
         <p className="text-muted-foreground">
-          Ask anything about Romanian language — grammar, vocabulary, etymology, culture
+          Ask anything about Spanish language — grammar, vocabulary, etymology, culture
         </p>
       </div>
 
@@ -146,7 +146,7 @@ export default function AskTutorPage() {
                 <div className="space-y-2">
                   <GraduationCap className="h-12 w-12 text-muted-foreground/50 mx-auto" />
                   <p className="text-muted-foreground">
-                    What would you like to know about Romanian?
+                    What would you like to know about Spanish?
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2 justify-center max-w-md">
@@ -198,7 +198,7 @@ export default function AskTutorPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask about Romanian..."
+              placeholder="Ask about Spanish..."
               rows={1}
               maxLength={1000}
               className="flex-1 resize-none bg-muted rounded-xl px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"

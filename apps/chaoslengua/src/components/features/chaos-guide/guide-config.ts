@@ -65,18 +65,18 @@ const guideConfig: Record<string, PageGuideConfig> = {
       "How often should I check my progress?",
     ],
   },
-  "/ce-inseamna": {
-    pageName: "Ce înseamnă?",
-    pageDescription: "Quick word/phrase lookup — find out what Romanian text means instantly.",
+  "/que-significa": {
+    pageName: "¿Qué significa?",
+    pageDescription: "Quick word/phrase lookup — find out what Spanish text means instantly.",
     suggestedQuestions: [
       "How is this different from Google Translate?",
       "Does it remember what I look up?",
       "Can I look up phrases, not just words?",
     ],
   },
-  "/cum-se-pronunta": {
-    pageName: "Cum se pronunță?",
-    pageDescription: "Pronunciation practice — hear how Romanian sounds and practice speaking.",
+  "/como-se-pronuncia": {
+    pageName: "¿Cómo se pronuncia?",
+    pageDescription: "Pronunciation practice — hear how Spanish sounds and practice speaking.",
     suggestedQuestions: [
       "How does pronunciation analysis work?",
       "What should I focus on as an English speaker?",

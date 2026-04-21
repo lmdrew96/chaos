@@ -111,15 +111,15 @@ export function TopBar() {
               <DropdownMenuLabel className="text-xs text-muted-foreground">Quick Tools</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer" asChild>
-                <Link href="/ce-inseamna">
+                <Link href="/que-significa">
                   <BookOpen className="mr-2 h-4 w-4" />
-                  Ce înseamnă?
+                  ¿Qué significa?
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" asChild>
-                <Link href="/cum-se-pronunta">
+                <Link href="/como-se-pronuncia">
                   <Volume2 className="mr-2 h-4 w-4" />
-                  Cum se pronunță?
+                  ¿Cómo se pronuncia?
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" asChild>

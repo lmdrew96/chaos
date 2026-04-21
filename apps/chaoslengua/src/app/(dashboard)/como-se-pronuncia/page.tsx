@@ -205,10 +205,10 @@ export default function CumSePronuntaPage() {
       <div>
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <Speech className="h-7 w-7 text-accent" />
-          Cum se pronunță?
+          ¿Cómo se pronuncia?
         </h1>
         <p className="text-muted-foreground">
-          Listen to Romanian pronunciation powered by Google Cloud TTS
+          Listen to Spanish pronunciation powered by Google Cloud TTS
         </p>
       </div>
 
@@ -219,7 +219,7 @@ export default function CumSePronuntaPage() {
             <Input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Type a Romanian word or phrase..."
+              placeholder="Type a Spanish word or phrase..."
               maxLength={200}
               autoFocus
               disabled={limitReached}

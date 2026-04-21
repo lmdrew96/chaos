@@ -120,7 +120,7 @@ const features = [
     name: "Deep Fog",
     tagline: "Let confusion be the teacher.",
     description:
-      "Immerse yourself in authentic Romanian content. No hand-holding. The ambiguity is the pedagogy.",
+      "Immerse yourself in authentic Spanish content. No hand-holding. The ambiguity is the pedagogy.",
     accent: "from-teal-500/15 to-teal-500/5 hover:border-teal-500/30",
     labelColor: "text-teal-400",
   },
@@ -148,7 +148,7 @@ const steps = [
   {
     number: "01",
     Icon: Atom,
-    title: "Practice with real Romanian",
+    title: "Practice with real Spanish",
     description:
       "Speak, write, and explore authentic content. Make mistakes — that's the whole plan.",
   },
@@ -225,7 +225,7 @@ export default function LandingPage() {
           <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/30">
             <Sparkles className="w-4 h-4 text-primary-foreground" />
           </div>
-          <span className="font-bold text-lg tracking-tight">ChaosLimbă</span>
+          <span className="font-bold text-lg tracking-tight">ChaosLengua</span>
         </div>
         <div className="flex items-center gap-2">
           <Button
@@ -266,7 +266,7 @@ export default function LandingPage() {
             className="inline-flex items-center gap-2 rounded-full border border-border/40 bg-card/60 backdrop-blur-sm px-4 py-1.5 text-sm text-muted-foreground mb-10"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Romanian · AI-powered · Built for ADHD brains
+            Spanish · AI-powered · Built for ADHD brains
           </motion.div>
 
           {/* Headline */}
@@ -289,7 +289,7 @@ export default function LandingPage() {
             transition={{ duration: 0.7, delay: 0.22 }}
             className="text-xl text-muted-foreground max-w-2xl mb-10 leading-relaxed"
           >
-            The first Romanian learning platform that transforms your errors into curriculum.
+            The first Spanish learning platform that transforms your errors into curriculum.
             Grounded in Second Language Acquisition theory — designed for the way ADHD brains
             actually work.
           </motion.p>
@@ -333,19 +333,19 @@ export default function LandingPage() {
             {
               emoji: "🌸",
               label: "Error detected",
-              sub: 'Article usage: "un" → "o"',
+              sub: 'Ser vs estar: "soy cansado" → "estoy cansado"',
               color: "text-rose-400",
             },
             {
               emoji: "📊",
               label: "Pattern found",
-              sub: "Subjunctive mood — 73% error rate",
+              sub: "Preterite vs imperfect — 68% error rate",
               color: "text-amber-400",
             },
             {
               emoji: "⚡",
               label: "Session adapted",
-              sub: "Routing to Workshop: Subjunctive",
+              sub: "Routing to Workshop: Por vs Para",
               color: "text-sky-400",
             },
           ].map((card, i) => (
@@ -426,7 +426,7 @@ export default function LandingPage() {
           <span
             className="text-[160px] md:text-[240px] font-black text-foreground/[0.025] whitespace-nowrap tracking-[-0.05em] leading-none font-mono"
           >
-            HAOS
+            CAOS
           </span>
         </div>
 
@@ -531,7 +531,7 @@ export default function LandingPage() {
                 </span>
               </h2>
               <p className="text-muted-foreground text-lg mb-10 max-w-md mx-auto leading-relaxed">
-                Free forever. No credit card. No streaks. Just you, Romanian, and beautifully
+                Free forever. No credit card. No streaks. Just you, Spanish, and beautifully
                 structured chaos.
               </p>
               <Button
