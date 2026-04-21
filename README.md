@@ -8,7 +8,7 @@ Monorepo for the Chaos Suite of language-learning apps. See `docs/CHAOS-MONOREPO
 chaos/
 ├── apps/
 │   ├── chaoslimba/    Romanian — English-to-Romanian CALL app
-│   └── chaoslengua/   Spanish — planned (Phase 2)
+│   └── chaoslengua/   Spanish — English-to-Spanish CALL app
 ├── packages/          Shared code — extracted only when duplication causes friction (Phase 3+)
 └── languages/         Per-language pedagogical content + rules (Phase 2+)
 ```
@@ -19,7 +19,7 @@ chaos/
 
 ```bash
 pnpm install
-pnpm dev         # runs dev for all apps (currently only chaoslimba)
+pnpm dev         # runs dev for all apps (chaoslimba → :5001, chaoslengua → :5002)
 pnpm build       # builds all apps
 pnpm test        # runs tests across the workspace
 ```
@@ -29,6 +29,8 @@ To run a single app:
 ```bash
 pnpm --filter chaoslimba dev
 pnpm --filter chaoslimba build
+pnpm --filter chaoslengua dev
+pnpm --filter chaoslengua build
 ```
 
 ## Tech
@@ -39,5 +41,4 @@ pnpm --filter chaoslimba build
 
 ## Planned siblings
 
-- ChaosLengua (Spanish) — Phase 2
 - French, German, Portuguese — future

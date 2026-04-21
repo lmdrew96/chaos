@@ -15,7 +15,7 @@ node_modules/
 .idea/
 .vscode/
 
-# env at root (apps have their own .env files)
+# env at root (apps have their own .env.local files)
 .env
 .env.*
 !.env.example

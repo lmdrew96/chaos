@@ -1,0 +1,82 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# clerk configuration (can include secrets)
+/.clerk/
+
+# compiled output
+/dist/
+
+# development tracking
+*.csv
+
+# log files
+*.txt
+
+# database files (local development only)
+*.db
+
+# Common Voice corpus (large audio dataset - stored in R2)
+/Common Voice/
+.temp-cv-convert/
+.cv-upload-progress.json
+.cv-upload-batch*.log
+
+# Temporary YouTube audio files (auto-generated, deleted after transcription)
+.temp-yt-audio/
+
+# ElevenLabs-generated audio files
+/generated-audio/
+/public/audio/
+
+# Google TTS Credentials
+/google-tts-credentials.json
+*-credentials.json
+
+# Generated audio output (podcasts, etc.)
+/audio-output/
+
+# Python cache files
+scripts/tts/__pycache__
+
+# Test scripts
+scripts/test-tts.js
