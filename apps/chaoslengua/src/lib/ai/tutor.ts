@@ -1,28 +1,44 @@
 import { callGroq, ChatMessage } from "./groq";
 import type { FossilizationAlert } from './adaptation';
 
-const BASE_SYSTEM_PROMPT = `You are the ChaosLimbă Tutor, a brilliant but slightly chaotic Romanian language expert.
-Your goal is to help learners master Romanian through "productive confusion".
-You explain things clearly but with personality. You love etymology and cultural nuances.
+const BASE_SYSTEM_PROMPT = `You are ChaosLengua's AI Spanish tutor — a brilliant, slightly chaotic Spanish language expert.
+Your goal is to help English L1 learners master Spanish through "productive confusion" — questions and follow-ups that force learners to engage with hard Spanish distinctions rather than avoid them.
+You explain things clearly but with personality. You love etymology, regional variation, and cultural nuances.
 You ALWAYS respond in JSON format.
 
-CRITICAL ROMANIAN GRAMMAR RULES — You MUST follow these in ALL Romanian you generate:
+DIALECTAL DEFAULT: LatAm-neutral Spanish (seseo, yeísmo, ustedes for plural-you, tú for informal singular). Accept voseo and vosotros when learners use them, but produce LatAm-neutral forms unless the conversation has established a different target dialect.
 
-1. VERB "A PLĂCEA" (to like/to please) — The verb agrees with the OBJECT, not the subject:
-   - Singular object → "place": "Îți place cartea?" (Do you like the book?)
-   - Plural object → "plac": "Îți plac merele?" (Do you like the apples?)
-   - WRONG: "Îți place merele?" — NEVER do this.
+CRITICAL SPANISH GRAMMAR — you MUST follow these in ALL Spanish you generate:
 
-2. SUBJECT-VERB AGREEMENT — Verbs must match their subject in person and number:
-   - "Eu merg" (I go), "Noi mergem" (We go), "Ei merg" (They go)
-   - "El este" (He is), "Ei sunt" (They are)
+1. SER vs ESTAR — selected by SEMANTIC CATEGORY, not "permanent vs temporary":
+   - Ser: identity, origin, time, profession, material ("Es médico", "Soy de México", "Es de madera")
+   - Estar: location, temporary state, progressive, result of change ("Está en casa", "Está cansado", "Estoy estudiando")
+   - WRONG: "Es cansado" (means "He is a tiring person", almost always wrong); "Está profesor" (forces a current-state reading that's almost never what's intended).
 
-3. DEFINITE ARTICLES — Attached to the end of nouns:
-   - Masculine: -ul/-le (băiatul, câinele)
-   - Feminine: -a (casa, fata)
-   - Plural: -le/-i (merele, băieții)
+2. GUSTAR-TYPE VERBS — agree with the THING LIKED, not the person:
+   - Singular liked thing → "gusta": "Me gusta el libro" (I like the book)
+   - Plural liked thing → "gustan": "Me gustan los libros" (I like the books)
+   - WRONG: "Me gustan el libro" — NEVER do this. Same pattern for encantar, doler, faltar, importar.
 
-4. BEFORE outputting any Romanian, mentally check: Does the verb agree with its subject/object? Are articles correct?`;
+3. PRETERITE vs IMPERFECT — selected by ASPECT, not by time adverbs:
+   - Preterite: completed bounded events ("Caminé al parque" — I walked there, single completed action)
+   - Imperfect: ongoing, habitual, descriptive, backgrounded states ("Caminaba al parque cada día" — I used to walk there)
+   - Both refer to past time; the choice encodes how the speaker frames the event.
+
+4. OBJECT PRONOUN PLACEMENT — positional rules:
+   - Pre-verbal with finite verbs: "Lo veo"
+   - Attached to infinitives, gerunds, affirmative imperatives: "Voy a verlo" / "Estoy viéndolo" / "¡Míralo!"
+   - Pre-verbal with negative imperatives: "¡No lo mires!"
+
+5. GENDER + NUMBER AGREEMENT — across the noun phrase:
+   - "la casa blanca", "los libros rojos" — articles, adjectives, and any agreeing pronouns must match
+   - WRONG: "la casa blanco", "los libros rojo"
+
+6. DIACRITICS + INVERTED PUNCTUATION — required:
+   - Use á, é, í, ó, ú, ü, ñ where they belong
+   - Questions start with ¿, exclamations with ¡
+
+BEFORE outputting any Spanish, mentally check: ser vs estar correct? Gustar agreeing with the thing liked? Aspect right? Object pronoun placed properly? Agreement throughout the phrase? Diacritics in place? Inverted punctuation present?`;
 
 /**
  * Builds a system prompt with CEFR level baked in at the system level
@@ -33,15 +49,15 @@ function getSystemPrompt(userLevel: string): string {
         return `${BASE_SYSTEM_PROMPT}
 
 ABSOLUTE CONSTRAINT: The learner is CEFR A1 (absolute beginner). This overrides all other instructions.
-- Your Romanian questions MUST be answerable with "da", "nu", or 1-3 words maximum.
-- ONLY use: present tense, "tu" form, verbs like a fi/a avea/a face/a plăcea/a merge.
-- Maximum 10 Romanian words in any question you ask.
+- Your Spanish questions MUST be answerable with "sí", "no", or 1-3 words maximum.
+- ONLY use: present tense, "tú" form, high-frequency verbs (ser, estar, tener, haber, ir, hacer, gustar, comer, beber, ver).
+- Maximum 10 Spanish words in any question you ask.
 - ALWAYS include an English translation as the hint.
-- FORBIDDEN: "de ce", "crezi că", subjunctive, comparatives (mai...decât), conditional, subordinate clauses, formal "dumneavoastră".
-- GRAMMAR REMINDER: "a plăcea" agrees with the object! Singular → "place", Plural → "plac". "Îți place audio-ul?" (singular) vs "Îți plac merele?" (plural). NEVER write "Îți place merele".
-- GOOD: "Îți place audio-ul?", "Ce fruct vezi?", "Îți plac merele?"
-- BAD: "De ce crezi că merele sunt mai ieftine decât portocalele?" (TOO COMPLEX - uses "de ce crezi că" + comparative)
-- BAD: "Îți place merele?" (WRONG GRAMMAR - plural object needs "plac" not "place")`;
+- FORBIDDEN: subjunctive, conditional, comparatives ("más... que"), subordinate clauses, formal "usted", complex past tenses, vosotros, "por qué crees que".
+- GRAMMAR REMINDER: gustar agrees with the THING LIKED, not the person! Singular → "gusta", plural → "gustan". "¿Te gusta el audio?" (singular) vs "¿Te gustan las manzanas?" (plural). NEVER write "¿Te gustan el audio?".
+- GOOD: "¿Te gusta el audio?", "¿Qué fruta ves?", "¿Te gustan las manzanas?"
+- BAD: "¿Por qué crees que las manzanas son más baratas que las naranjas?" (TOO COMPLEX — uses "por qué crees que" + comparative)
+- BAD: "¿Te gustan el audio?" (WRONG GRAMMAR — singular thing needs "gusta", not "gustan")`;
     }
 
     if (userLevel === 'A2') {
@@ -49,13 +65,13 @@ ABSOLUTE CONSTRAINT: The learner is CEFR A1 (absolute beginner). This overrides 
 
 ABSOLUTE CONSTRAINT: The learner is CEFR A2 (elementary). This overrides all other instructions.
 - Questions must be answerable in one short sentence (5-8 words).
-- Use present tense and simple past only (am fost, am văzut).
-- Maximum 15 Romanian words in any question.
-- Use "tu" form, basic connectors only (și, dar, pentru că).
+- Use present tense and simple past (preterite: comí, vi, fui, escuché).
+- Maximum 15 Spanish words in any question.
+- Use "tú" form, basic connectors only (y, pero, porque).
 - ALWAYS include an English hint.
-- FORBIDDEN: "de ce crezi că", hypotheticals, subjunctive, complex comparisons.
-- GOOD: "Ce fruct îți place din magazin?", "Ce ai auzit despre mere?"
-- BAD: "Explicați de ce considerați că prețurile variază sezonier" (TOO COMPLEX)`;
+- FORBIDDEN: "por qué crees que", hypotheticals, subjunctive, complex comparisons, vosotros.
+- GOOD: "¿Qué fruta te gusta del mercado?", "¿Qué escuchaste sobre las manzanas?"
+- BAD: "Explica por qué consideras que los precios varían según la temporada" (TOO COMPLEX)`;
     }
 
     // B1+ don't need hard constraints in system prompt
@@ -128,36 +144,37 @@ export async function analyzeMysteryItem(
 ): Promise<MysteryAnalysis> {
 
     const prompt = `
-Analyze the Romanian word/phrase: "${word}"
+Analyze the Spanish word/phrase: "${word}"
 ${userContext ? `Context where user encountered it: "${userContext}"` : "No context provided."}
 User's CEFR level: ${userLevel}
 
 Provide a COMPREHENSIVE analysis for a language learner. Return JSON:
 {
   "definition": "Clear English definition (2-3 sentences max)",
-  "pronunciation": "Syllable breakdown with stress marked in CAPS, e.g. 'în-DO-iel-nic'",
+  "pronunciation": "Syllable breakdown with stress marked in CAPS, e.g. 'em-pe-ZAR' or 'mu-RIÉN-do-se'",
   "grammarInfo": {
     "partOfSpeech": "noun/verb/adjective/adverb/etc",
-    "gender": "masculine/feminine/neuter (if applicable, else null)",
-    "conjugation": "For verbs: conjugation group and key forms (eu/tu/el forms). Null if not a verb.",
-    "declension": "For nouns/adjectives: how it changes with articles/cases. Null if not applicable.",
-    "notes": "Any important grammar notes (e.g. 'takes dative', 'irregular plural')"
+    "gender": "masculine/feminine (Spanish has only two grammatical genders; null if not applicable)",
+    "conjugation": "For verbs: conjugation class (-ar / -er / -ir), regular vs irregular vs stem-changing, key forms (yo/tú/él present + preterite if useful). Null if not a verb.",
+    "declension": "Spanish nouns do not decline by case — leave null. Adjective agreement patterns can go in 'notes' instead.",
+    "notes": "Any important grammar notes (e.g. 'irregular yo form: tengo', 'stem-changing e→ie', 'reflexive verb', 'always plural', 'false cognate of EN X', 'used with personal a')"
   },
-  "context": "A natural Romanian sentence using this word (corrected version if user provided context, or new example)",
+  "context": "A natural Spanish sentence using this word (corrected version if user provided context, or new example)",
   "examples": [
-    "Romanian example sentence 1 (simple, ${userLevel} appropriate)",
-    "Romanian example sentence 2 (different context)",
-    "Romanian example sentence 3 (slightly more complex)"
+    "Spanish example sentence 1 (simple, ${userLevel} appropriate)",
+    "Spanish example sentence 2 (different context)",
+    "Spanish example sentence 3 (slightly more complex)"
   ],
   "relatedWords": ["synonym1", "antonym1", "word_family_member"],
-  "practicePrompt": "A short, engaging prompt asking the user to write a sentence using this word. Make it specific and fun, e.g. 'Use îndoielnic to describe something you're not sure about today.'",
-  "etymology": "Brief origin (Latin root, Slavic borrowing, etc.) - 1 sentence max"
+  "practicePrompt": "A short, engaging prompt asking the user to write a sentence using this word. Make it specific and fun, e.g. 'Use madrugar to describe something you do early in the morning.'",
+  "etymology": "Brief origin (Latin root, Arabic substrate, Indigenous American borrowing, Anglicism, etc.) — 1 sentence max"
 }
 
 IMPORTANT:
-- Keep examples appropriate for ${userLevel} level
-- practicePrompt should be in English but ask for Romanian output
-- All Romanian text must have correct diacritics (ă, â, î, ș, ț)
+- Keep examples appropriate for ${userLevel} level (LatAm-neutral Spanish unless context suggests otherwise)
+- practicePrompt should be in English but ask for Spanish output
+- All Spanish text must use proper diacritics (á, é, í, ó, ú, ü, ñ) and inverted punctuation (¿, ¡)
+- If the word is a notorious false cognate (embarazada, asistir, realizar, éxito, actual, sensible, soportar, molestar, recordar), flag it explicitly in "notes" and "definition"
 `;
 
     try {
@@ -204,47 +221,49 @@ export type InitialQuestion = {
  */
 function getCEFRGuidelines(userLevel: string): string {
     const guidelines: Record<string, string> = {
-        'A1': `CRITICAL - The learner is CEFR A1 (Beginner). You MUST:
+        'A1': `CRITICAL — The learner is CEFR A1 (Beginner). You MUST:
 - Ask yes/no questions OR questions answerable in 1-3 words
-- Use ONLY present tense and basic verbs (a fi, a avea, a face, a merge, a plăcea)
+- Use ONLY present tense and high-frequency verbs (ser, estar, tener, haber, ir, hacer, gustar, comer, beber, ver)
 - Keep your question under 10 words
-- Use informal "tu" form, NOT formal "dumneavoastră"
+- Use informal "tú" form, NOT formal "usted", NOT vosotros
 - ALWAYS provide an English hint in the "hint" field
-- GRAMMAR: "a plăcea" agrees with object! "Îți place [singular]?" vs "Îți plac [plural]?"
-- Example questions: "Îți place audio-ul?", "Ce este [thing]?", "Îți plac merele?"
+- GRAMMAR: gustar agrees with the THING LIKED! "¿Te gusta [singular]?" vs "¿Te gustan [plural]?"
+- Example questions: "¿Te gusta el audio?", "¿Qué es esto?", "¿Te gustan las manzanas?"
 - NEVER use subjunctive, conditional, or complex subordinate clauses`,
 
-        'A2': `CRITICAL - The learner is CEFR A2 (Elementary). You MUST:
+        'A2': `CRITICAL — The learner is CEFR A2 (Elementary). You MUST:
 - Ask questions answerable in one short sentence (5-8 words)
-- Use present tense, simple past (am fost, am văzut, am auzit)
+- Use present tense and simple past (preterite: fui, vi, comí, escuché, hablé)
 - Keep your question under 15 words
-- Use basic connectors only (și, dar, pentru că)
-- Use informal "tu" form
+- Use basic connectors only (y, pero, porque)
+- Use informal "tú" form, NOT vosotros
 - Provide an English hint in the "hint" field
-- GRAMMAR: "a plăcea" agrees with object! "place" for singular, "plac" for plural.
-- Example: "Ce animal din text îți place cel mai mult?", "Ce ai auzit despre [topic]?"`,
+- GRAMMAR: gustar agrees with the THING LIKED! "gusta" for singular, "gustan" for plural.
+- Example: "¿Qué animal del texto te gusta más?", "¿Qué escuchaste sobre [topic]?"`,
 
         'B1': `The learner is CEFR B1 (Intermediate). You should:
 - Ask questions requiring 1-2 sentence answers
-- Can use opinions, comparisons, past/future tense
+- Can use opinions, comparisons, past tenses (preterite + imperfect with aspectual contrast), near-future ir+a, light reflexive verbs
+- Subjunctive only in formulaic triggers (espero que, quiero que, ojalá) — not productively
 - Keep your question under 20 words
 - Hint is optional but helpful for cultural topics
-- Example: "De ce crezi că Delta Dunării este importantă?"`,
+- Example: "¿Por qué crees que la siesta sigue siendo importante en algunos lugares?"`,
 
         'B2': `The learner is CEFR B2 (Upper Intermediate). You can:
 - Ask open-ended questions requiring multi-sentence answers
-- Use abstract topics, hypotheticals, nuanced opinions
+- Use subjunctive across noun/adjective/adverbial clauses, conditionals, hypotheticals
+- Use abstract topics and nuanced opinions
 - No word limit constraints
 - Hint only needed for obscure cultural references`,
 
         'C1': `The learner is CEFR C1 (Advanced). You can:
 - Ask complex analytical questions
-- Use idiomatic expressions and nuanced vocabulary
+- Use idiomatic expressions, regional pragmatic markers, nuanced vocabulary, imperfect subjunctive in hypotheticals
 - No constraints on complexity`,
 
         'C2': `The learner is CEFR C2 (Mastery). You can:
 - Ask the most challenging questions possible
-- Use literary, academic, or highly specialized language
+- Use literary, academic, or highly specialized Spanish (any region)
 - No constraints whatsoever`,
     };
 
@@ -257,12 +276,12 @@ function getCEFRGuidelines(userLevel: string): string {
 function getFallbackQuestion(contentType: 'audio' | 'text', userLevel: string): InitialQuestion {
     const fallbacks: Record<string, Record<string, InitialQuestion>> = {
         'A1': {
-            audio: { question: "Îți place acest audio?", questionType: 'comprehension', hint: "Do you like this audio? Answer da (yes) or nu (no)" },
-            text: { question: "Ce cuvinte cunoști din text?", questionType: 'vocabulary', hint: "What words do you recognize from the text?" },
+            audio: { question: "¿Te gusta este audio?", questionType: 'comprehension', hint: "Do you like this audio? Answer sí (yes) or no (no)" },
+            text: { question: "¿Qué palabras conoces del texto?", questionType: 'vocabulary', hint: "What words do you recognize from the text?" },
         },
         'A2': {
-            audio: { question: "Ce ai auzit în audio? Spune un lucru.", questionType: 'comprehension', hint: "What did you hear? Say one thing." },
-            text: { question: "Ce ai citit? Spune o idee din text.", questionType: 'comprehension', hint: "What did you read? Say one idea from the text." },
+            audio: { question: "¿Qué escuchaste en el audio? Di una cosa.", questionType: 'comprehension', hint: "What did you hear? Say one thing." },
+            text: { question: "¿Qué leíste? Di una idea del texto.", questionType: 'comprehension', hint: "What did you read? Say one idea from the text." },
         },
     };
 
@@ -273,10 +292,10 @@ function getFallbackQuestion(contentType: 'audio' | 'text', userLevel: string): 
 
     // B1+ fallbacks (no hint needed)
     const defaultFallbacks: Record<string, InitialQuestion> = {
-        audio: { question: "Ce ai auzit în acest audio? Descrie pe scurt conținutul.", questionType: 'comprehension' },
-        text: { question: "Ce ai citit? Spune-mi ideea principală în propriile tale cuvinte.", questionType: 'comprehension' },
+        audio: { question: "¿Qué escuchaste en este audio? Describe brevemente el contenido.", questionType: 'comprehension' },
+        text: { question: "¿Qué leíste? Cuéntame la idea principal con tus propias palabras.", questionType: 'comprehension' },
     };
-    return defaultFallbacks[contentType] || { question: "Ce ai înțeles din acest conținut?", questionType: 'comprehension' };
+    return defaultFallbacks[contentType] || { question: "¿Qué entendiste de este contenido?", questionType: 'comprehension' };
 }
 
 /**
@@ -343,17 +362,17 @@ export async function generateInitialQuestion(
     let featurePrompt = '';
     if (targetFeatures.length > 0) {
         featurePrompt = `
-GRAMMAR TARGETING: Guide the learner toward using these Romanian structures in their response.
+GRAMMAR TARGETING: Guide the learner toward using these Spanish structures in their response.
 Do NOT explain the structures — let them discover through your question:
 ${targetFeatures.map(f => `- ${f.featureName}: ${f.description || ''}`).join('\n')}
-For example, if targeting "definite article", ask about something where the natural answer uses "cartea" rather than "o carte".`;
+For example, if targeting "ser vs estar — location", ask about where something is so the natural answer uses "está en X". If targeting "preterite vs imperfect — aspect", set up a context where the natural answer requires choosing one aspect over the other.`;
     }
 
     let firstSessionPrompt = '';
     if (isFirstSession && userLevel === 'A1') {
         firstSessionPrompt = `
-🌟 FIRST SESSION: This learner is BRAND NEW to Romanian. Their very first interaction.
-- Start with something they can actually answer (yes/no, pointing at a word, repeating "Bună!")
+🌟 FIRST SESSION: This learner is BRAND NEW to Spanish. Their very first interaction.
+- Start with something they can actually answer (yes/no, pointing at a word, repeating "¡Hola!")
 - Use maximum English in your hint
 - If the content has a greeting, ask them to try saying it back
 - Make this feel exciting, not overwhelming
@@ -373,23 +392,23 @@ ${fossilizationAlerts.length > 0 ? buildFossilizationPromptSection(fossilization
 Generate an engaging OPENING QUESTION to ask the learner after they consume this content.
 
 Rules:
-1. The question should be in ROMANIAN (the learner is practicing Romanian!)
+1. The question should be in SPANISH (the learner is practicing Spanish!), with proper diacritics and inverted punctuation
 2. ${hasTranscript ? 'Reference something SPECIFIC from the transcript' : 'Ask about the topic implied by the title'}
-3. Don't ask them to summarize everything - pick ONE interesting aspect
+3. Don't ask them to summarize everything — pick ONE interesting aspect
 4. Make it feel conversational, not like a test
 5. If targeting known error patterns, work them into the question naturally
 ${targetFeatures.length > 0 ? '6. Design the question so the natural answer requires using the targeted grammar structures' : ''}
 
 Return JSON:
 {
-  "question": "Your Romanian question here",
+  "question": "Your Spanish question here",
   "questionType": "comprehension|translation|grammar|vocabulary|cultural",
-  "hint": "English hint - REQUIRED for A1/A2, optional for B1+"
+  "hint": "English hint — REQUIRED for A1/A2, optional for B1+"
 }
 
 ${cefrGuidelines}
 
-FINAL CHECK before responding: Count the words in your question. For ${userLevel}: ${userLevel === 'A1' ? 'it MUST be under 10 words, answerable with da/nu or 1-3 words. If it contains "de ce", "crezi că", or comparatives — REWRITE IT SIMPLER.' : userLevel === 'A2' ? 'it MUST be under 15 words, answerable in one short sentence. If it contains "de ce crezi" or complex grammar — REWRITE IT SIMPLER.' : 'ensure appropriate complexity.'}`;
+FINAL CHECK before responding: Count the words in your question. For ${userLevel}: ${userLevel === 'A1' ? 'it MUST be under 10 words, answerable with sí/no or 1-3 words. If it contains "por qué", "crees que", or comparatives — REWRITE IT SIMPLER.' : userLevel === 'A2' ? 'it MUST be under 15 words, answerable in one short sentence. If it contains "por qué crees que" or complex grammar — REWRITE IT SIMPLER.' : 'ensure appropriate complexity.'}`;
 
     try {
         const output = await callGroq([
@@ -420,11 +439,11 @@ FINAL CHECK before responding: Count the words in your question. For ${userLevel
  */
 function extractVocabQuestions(text: string): { cleanText: string; vocabQuestions: string[] } {
     const vocabPatterns = [
-        /\(cum se spune[^\)]*\)/gi,
+        /\(cómo se dice[^\)]*\)/gi,
+        /\(qué significa[^\)]*\)/gi,
         /\(what is[^\)]*\)/gi,
         /\(how do you say[^\)]*\)/gi,
         /\(what's the word for[^\)]*\)/gi,
-        /\(ce înseamnă[^\)]*\)/gi,
         /\(translation[^\)]*\)/gi,
     ];
 
@@ -456,14 +475,14 @@ async function answerVocabQuestion(question: string): Promise<VocabHelp> {
     const prompt = `
 Vocabulary question: "${question}"
 
-The learner is asking how to say "${targetWord}" in Romanian (or the other way around).
+The learner is asking how to say "${targetWord}" in Spanish (or the other way around).
 
 Provide a clear, concise answer in JSON format:
 {
   "question": "The original question",
   "word": "The word being asked about",
-  "translation": "The Romanian translation or English meaning",
-  "context": "Optional example sentence showing usage"
+  "translation": "The Spanish translation or English meaning",
+  "context": "Optional example sentence showing usage (Spanish text must use proper diacritics and inverted punctuation)"
 }
 `;
 
@@ -525,25 +544,27 @@ export async function generateTutorResponse(
     const cefrGuidelines = getCEFRGuidelines(userLevel);
 
     const prompt = `
-You are the ChaosLimbă Tutor, a brilliant but slightly chaotic Romanian language expert.
-Your goal is to help learners master Romanian through "productive confusion".
+You are ChaosLengua's AI Spanish tutor — a brilliant, slightly chaotic Spanish language expert.
+Your goal is to help English L1 learners master Spanish through "productive confusion".
 
 Context: The user just heard/read: "${context}"
 ${hasFullTranscript ? '' : '⚠️ NOTE: You only have the content title, not the full transcript. Focus on grammar and form rather than semantic accuracy.'}
 
 User's response: "${textToGrade}"
-${vocabQuestions.length > 0 ? `⚠️ NOTE: The user also asked a vocabulary question in parentheses, which has been handled separately. Do NOT grade the vocabulary question - only grade the actual Romanian production.` : ''}
+${vocabQuestions.length > 0 ? `⚠️ NOTE: The user also asked a vocabulary question in parentheses, which has been handled separately. Do NOT grade the vocabulary question — only grade the actual Spanish production.` : ''}
 ${errorPatterns.length > 0 ? `Known error patterns to watch for: ${errorPatterns.join(', ')}` : ''}
 
-FOR THE "nextQuestion" FIELD - ${cefrGuidelines}
-${['A1', 'A2'].includes(userLevel) ? 'Keep feedback explanations simple and short. Use English for grammar explanations. Be EXTRA encouraging - any attempt at this level deserves praise.' : 'Use English for all feedback, explanations, and encouragement. Only use Romanian for corrections, example sentences, and the nextQuestion field.'}
+DIALECTAL POLICY: LatAm-neutral baseline. Do NOT flag voseo (vos tenés), vosotros (habláis), Peninsular leísmo (le vi), or standard regional lexical variants (coche / carro / auto) as errors when used consistently. Only flag inconsistent regional mixing within a single response as a register/regional suggestion.
+
+FOR THE "nextQuestion" FIELD — ${cefrGuidelines}
+${['A1', 'A2'].includes(userLevel) ? 'Keep feedback explanations simple and short. Use English for grammar explanations. Be EXTRA encouraging — any attempt at this level deserves praise.' : 'Use English for all feedback, explanations, and encouragement. Only use Spanish for corrections, example sentences, and the nextQuestion field.'}
 ${targetFeatures.length > 0 ? `
 GRAMMAR TARGETING for nextQuestion: Design your follow-up question to naturally require these structures:
 ${targetFeatures.map(f => `- ${f.featureName}: ${f.description || ''}`).join('\n')}
 Don't explain them — let the learner discover through production.` : ''}
 ${newlyDiscoveredFeatures.length > 0 ? `
 DISCOVERY MOMENT: The learner just encountered these structures for the FIRST TIME: ${newlyDiscoveredFeatures.join(', ')}.
-If they used any of these correctly, briefly celebrate it in your encouragement (e.g., "Nice use of the past tense!") — but don't lecture about the rule.
+If they used any of these correctly, briefly celebrate it in your encouragement (e.g., "Nice ser/estar choice!", "Good aspect on that preterite!") — but don't lecture about the rule.
 If they didn't notice a new structure in the content, gently draw attention in your nextQuestion (e.g., "Did you notice how 'X' works in that sentence?"). Plant a seed, don't lecture.` : ''}
 ${fossilizationAlerts.length > 0 ? buildFossilizationPromptSection(fossilizationAlerts) : ''}
 
@@ -556,7 +577,7 @@ Analyze the response and provide feedback in this JSON format:
         "type": "error_type",
         "incorrect": "incorrect_part",
         "correct": "correct_form",
-        "explanation": "clear_explanation",
+        "explanation": "clear_explanation (be linguistically accurate: ser/estar by semantic category not permanent/temporary; preterite/imperfect by aspect not time adverbs; gustar agrees with thing liked)",
         "severity": "minor|major|critical",
         "feedbackType": "error|suggestion"
       }
@@ -574,6 +595,8 @@ Analyze the response and provide feedback in this JSON format:
   "levelAssessmentReady": false // Set to true ONLY IF you have asked enough questions (typically 3+) and confidently gauged the user's true proficiency level.
 }
 
+All Spanish text in corrections, examples, and the nextQuestion must use proper diacritics (á, é, í, ó, ú, ü, ñ) and inverted punctuation (¿, ¡).
+
 Focus on:
 1. Grammar accuracy with specific corrections
 ${hasFullTranscript ? '2. Semantic understanding of the content (DID THEY UNDERSTAND WHAT WAS SAID?)' : '2. ⚠️ SKIP semantic evaluation (no transcript available)'}
@@ -581,7 +604,7 @@ ${hasFullTranscript ? '2. Semantic understanding of the content (DID THEY UNDERS
 4. Next question at ${userLevel} CEFR level that ${hasFullTranscript ? 'addresses identified weaknesses AND references the content' : 'focuses on grammar/form'}
 5. Error patterns that should go to the Error Garden
 
-FINAL CHECK for nextQuestion: ${userLevel === 'A1' ? 'It MUST be under 10 words, answerable with da/nu or 1-3 words. NO "de ce", "crezi că", or comparatives.' : userLevel === 'A2' ? 'It MUST be under 15 words, answerable in one short sentence. NO "de ce crezi" or complex grammar.' : `Ensure appropriate complexity for ${userLevel}.`}
+FINAL CHECK for nextQuestion: ${userLevel === 'A1' ? 'It MUST be under 10 words, answerable with sí/no or 1-3 words. NO "por qué", "crees que", or comparatives.' : userLevel === 'A2' ? 'It MUST be under 15 words, answerable in one short sentence. NO "por qué crees que" or complex grammar.' : `Ensure appropriate complexity for ${userLevel}.`}
 `;
 
     try {
