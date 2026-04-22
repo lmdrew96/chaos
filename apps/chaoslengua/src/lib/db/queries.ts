@@ -642,24 +642,53 @@ export async function getFeaturesForLevel(cefrLevel: CEFRLevelEnum): Promise<Gra
 export function mapErrorCategoryToFeatureKey(errorType: ErrorType, category: string | null): string | null {
   if (!category) return null;
 
-  // Direct mapping: many error categories already match feature keys
+  // Direct mapping: ES Error Garden categories → grammarFeatureMap keys.
+  // Keys match the fixed taxonomy in src/lib/ai/error-enrichment.ts.
+  // Values are feature keys seeded by scripts/seed-grammar-features-es.ts.
+  // See docs/pedagogy/error-garden-taxonomy-es.md for the full taxonomy.
   const directMappings: Record<string, string> = {
-    'verb_conjugation': 'present_tense_regular_group1',
-    'definite_article': 'definite_article',
-    'indefinite_article': 'indefinite_article',
+    // Ser vs Estar (Stage 1 iconic)
+    'ser_vs_estar_core': 'ser_vs_estar_core',
+    'ser_vs_estar_meaning_shift': 'ser_vs_estar_meaning_shift',
+
+    // Aspect (Stage 1 iconic)
+    'preterite_formation': 'preterite_formation',
+    'imperfect_formation': 'imperfect_formation',
+    'preterite_vs_imperfect_aspect': 'preterite_vs_imperfect_aspect',
+    'preterite_imperfect_meaning_shift': 'preterite_imperfect_meaning_shift',
+
+    // Object pronouns (Stage 1)
+    'direct_object_pronouns': 'direct_object_pronouns',
+    'indirect_object_pronouns': 'indirect_object_pronouns',
+    'combined_object_pronouns': 'combined_object_pronouns',
+    'personal_a': 'basic_prepositions',
+
+    // Por vs Para (Stage 1 iconic)
+    'por_vs_para': 'por_vs_para_intro',
+
+    // Gender & articles
     'gender_agreement': 'gender_agreement',
-    'negation': 'basic_negation',
-    'preposition': 'basic_prepositions',
-    'past_tense': 'past_tense_perfect_compus',
-    'reflexive': 'reflexive_verbs',
-    'accusative': 'accusative_pronouns',
-    'dative': 'dative_pronouns',
-    'comparative': 'comparative_adjectives',
-    'future': 'future_informal_o_sa',
-    'imperative': 'imperative_basic',
-    'possession': 'possession_al_a',
-    'plural': 'plural_nouns',
-    'word_order': 'basic_questions',
+    'definite_article_omission': 'definite_articles',
+    'indefinite_article_overuse': 'indefinite_articles',
+    'article_contraction': 'basic_prepositions',
+
+    // Verb conjugation / morphology
+    'present_tense_regular': 'present_tense_regular_ar',
+    'present_tense_stem_change': 'stem_changing_e_ie',
+    'present_tense_irregular': 'present_tense_ser',
+    'future_ir_a': 'future_informal_ir_a',
+    'informal_commands': 'informal_commands_tu',
+    'reflexive_verbs': 'reflexive_verbs_es',
+
+    // Supporting A1/A2 structures
+    'comparisons': 'comparisons',
+    'possessives': 'possessives',
+    'gustar_construction': 'gustar_construction',
+    'tener_idioms': 'present_tense_tener',
+    'double_negation': 'basic_negation',
+
+    // Vocabulary
+    'false_cognate': 'vocab_false_cognates',
   };
 
   // Try direct match first
