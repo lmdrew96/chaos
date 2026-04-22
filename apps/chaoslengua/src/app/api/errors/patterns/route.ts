@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server';
 import { db } from '@/lib/db';
 import { errorLogs, ErrorLog } from '@/lib/db/schema';
 import { eq, sql, desc, and, gte } from 'drizzle-orm';
-import { getAdaptationProfile, type AdaptationPriority } from '@/lib/ai/adaptation';
+import { getAdaptationProfile, type AdaptationPriority } from '@chaos/core-ai';
 
 export type TrendDirection = 'improving' | 'stable' | 'worsening';
 

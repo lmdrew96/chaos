@@ -20,6 +20,9 @@ importers:
       '@chaos/ai-clients':
         specifier: workspace:*
         version: link:../../packages/ai-clients
+      '@chaos/core-ai':
+        specifier: workspace:*
+        version: link:../../packages/core-ai
       '@chaos/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -174,6 +177,9 @@ importers:
       '@chaos/ai-clients':
         specifier: workspace:*
         version: link:../../packages/ai-clients
+      '@chaos/core-ai':
+        specifier: workspace:*
+        version: link:../../packages/core-ai
       '@chaos/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -321,6 +327,22 @@ importers:
         version: 5.9.3
 
   packages/ai-clients:
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.19.33
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+
+  packages/core-ai:
+    dependencies:
+      '@chaos/db':
+        specifier: workspace:*
+        version: link:../db
+      drizzle-orm:
+        specifier: ^0.45.1
+        version: 0.45.1(@neondatabase/serverless@1.0.2)(@types/pg@8.16.0)
     devDependencies:
       '@types/node':
         specifier: ^20

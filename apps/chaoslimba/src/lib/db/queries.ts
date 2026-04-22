@@ -35,7 +35,7 @@ import {
   recordIntervention,
   type AdaptationProfile,
   type AdaptationPriority,
-} from '@/lib/ai/adaptation';
+} from '@chaos/core-ai';
 import { enrichErrorCategories } from '@/lib/ai/error-enrichment';
 
 /**

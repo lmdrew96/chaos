@@ -1,20 +1,19 @@
-// src/lib/ai/adaptation.ts
 // Adaptation Engine: fossilization-aware targeting with 3 escalation tiers
 //
 // Closes the Error Garden → content/challenge feedback loop.
 // When patterns persist despite exposure, the system progressively
 // increases pressure: nudge → push → destabilize.
 
-import { db } from '@/lib/db';
 import {
+  db,
   errorLogs,
   adaptationInterventions,
   type ErrorType,
   type AdaptationTier,
   type AdaptationSource,
   type NewAdaptationIntervention,
-} from '@/lib/db/schema';
-import { eq, and, gte, isNull, lte, desc } from 'drizzle-orm';
+} from '@chaos/db';
+import { eq, and, gte, lte, desc } from 'drizzle-orm';
 
 // ─── Types ───
 

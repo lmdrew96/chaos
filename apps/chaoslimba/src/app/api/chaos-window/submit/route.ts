@@ -6,7 +6,7 @@ import { trackFeatureExposure, extractFeaturesFromErrors } from "@/lib/ai/exposu
 import { saveErrorPatternsToGarden, saveBeautifulMistake } from "@/lib/db/queries";
 import { runFeedbackPipeline } from "@/lib/ai/aggregator";
 import type { ExtractedErrorPattern } from "@/types/aggregator";
-import type { FossilizationAlert } from "@/lib/ai/adaptation";
+import type { FossilizationAlert } from "@chaos/core-ai";
 
 export async function POST(req: NextRequest) {
   try {

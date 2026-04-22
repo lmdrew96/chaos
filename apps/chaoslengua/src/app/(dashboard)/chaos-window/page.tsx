@@ -25,7 +25,7 @@ import { ContentItem } from "@/lib/db/schema"
 import { AudioPlayer } from "@/components/features/content-player/AudioPlayer"
 import { PronunciationPractice } from "@/components/features/chaos-window/PronunciationPractice"
 import { PronunciationResult } from "@chaos/ai-clients"
-import type { FossilizationAlert } from "@/lib/ai/adaptation"
+import type { FossilizationAlert } from "@chaos/core-ai"
 import { useNavigationGuard } from "@/hooks/useNavigationGuard"
 
 type Modality = "text" | "speech"

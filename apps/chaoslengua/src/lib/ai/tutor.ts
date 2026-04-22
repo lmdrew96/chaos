@@ -1,5 +1,5 @@
 import { callGroq, ChatMessage } from "@chaos/ai-clients";
-import type { FossilizationAlert } from './adaptation';
+import type { FossilizationAlert } from '@chaos/core-ai';
 
 const BASE_SYSTEM_PROMPT = `You are ChaosLengua's AI Spanish tutor — a brilliant, slightly chaotic Spanish language expert.
 Your goal is to help English L1 learners master Spanish through "productive confusion" — questions and follow-ups that force learners to engage with hard Spanish distinctions rather than avoid them.

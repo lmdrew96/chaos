@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
-import { getAdaptationProfile, buildFossilizationAlerts } from '@/lib/ai/adaptation'
+import { getAdaptationProfile, buildFossilizationAlerts } from '@chaos/core-ai'
 
 export async function GET() {
   const { userId } = await auth()

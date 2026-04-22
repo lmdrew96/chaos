@@ -3,7 +3,7 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  transpilePackages: ["@chaos/ai-clients", "@chaos/db"],
+  transpilePackages: ["@chaos/ai-clients", "@chaos/core-ai", "@chaos/db"],
   turbopack: {
     root: path.resolve(__dirname, "..", ".."),
   },
