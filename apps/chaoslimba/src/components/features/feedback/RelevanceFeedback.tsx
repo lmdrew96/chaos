@@ -1,8 +1,8 @@
 'use client';
 
 import { SpamBResult } from '@/lib/ai/spamB';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card } from '@chaos/ui';
+import { Badge } from '@chaos/ui';
 import { AlertCircle, AlertTriangle, Info } from 'lucide-react';
 
 interface RelevanceFeedbackProps {

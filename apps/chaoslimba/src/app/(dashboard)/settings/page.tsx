@@ -1,11 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@chaos/ui"
+import { Button } from "@chaos/ui"
+import { Switch } from "@chaos/ui"
+import { Label } from "@chaos/ui"
+import { Slider } from "@chaos/ui"
 import {
     Settings as SettingsIcon,
     User,
@@ -23,7 +23,7 @@ import {
     Database,
     Eye,
 } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { Input } from "@chaos/ui"
 import { useRouter } from "next/navigation"
 import { useClerk, useUser } from "@clerk/nextjs"
 import type { UserPreferences } from "@/lib/db/schema"
@@ -38,7 +38,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@chaos/ui"
 import { toast } from "sonner"
 
 const CEFR_LEVELS = [

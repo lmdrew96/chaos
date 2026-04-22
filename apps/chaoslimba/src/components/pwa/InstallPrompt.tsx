@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Download, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@chaos/ui"
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>

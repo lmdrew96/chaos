@@ -1,9 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Card, CardContent } from "@chaos/ui";
+import { Button } from "@chaos/ui";
+import { cn } from "@chaos/ui";
 import { Trophy, MessageSquare, ArrowRight, Sparkles, CheckCircle } from "lucide-react";
 import type { OnboardingData } from "./OnboardingWizard";
 

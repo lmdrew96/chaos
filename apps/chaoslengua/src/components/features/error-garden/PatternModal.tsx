@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@chaos/ui"
 import { TrendChart } from "./TrendChart"
 import type { ErrorPattern } from "@/app/api/errors/patterns/route"
 import { AlertTriangle, BookOpen, Brain, Sparkles, TrendingUp, X, Volume2, Loader2, Play, Pause } from "lucide-react"

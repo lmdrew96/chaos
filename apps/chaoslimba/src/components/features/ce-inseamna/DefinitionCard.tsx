@@ -1,7 +1,7 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@chaos/ui"
+import { Button } from "@chaos/ui"
 import { BookmarkPlus, GraduationCap, BookOpen, Quote, History } from "lucide-react"
 import Link from "next/link"
 

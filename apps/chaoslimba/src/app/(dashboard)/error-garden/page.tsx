@@ -1,13 +1,13 @@
 "use client"
 
 import { useEffect, useState, useCallback, useMemo } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@chaos/ui"
+import { Button } from "@chaos/ui"
 import { Flower2, AlertTriangle, TrendingUp, TrendingDown, Minus, Lightbulb, Sparkles, Loader2, LayoutGrid, List as ListIcon, Info, Filter, X, Zap, Mic, Type, ArrowUp, ArrowDown, Heart } from "lucide-react"
 import type { ErrorPattern } from "@/app/api/errors/patterns/route"
 import type { BeautifulMistake } from "@/lib/db/schema"
 import { PatternModal } from "@/components/features/error-garden/PatternModal"
-import { cn } from "@/lib/utils"
+import { cn } from "@chaos/ui"
 
 type PatternData = {
   patterns: ErrorPattern[]

@@ -4,10 +4,10 @@ import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useTheme } from "next-themes"
 import ReactMarkdown from "react-markdown"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Textarea } from "@/components/ui/textarea"
+import { Card, CardContent } from "@chaos/ui"
+import { Button } from "@chaos/ui"
+import { Badge } from "@chaos/ui"
+import { Textarea } from "@chaos/ui"
 import {
   Atom,
   Wrench,

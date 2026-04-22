@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@chaos/ui"
+import { Button } from "@chaos/ui"
 import { Mic, Square, Play, RotateCcw, Loader2, Volume2 } from "lucide-react"
 import { PronunciationResult } from "@chaos/ai-clients"
 

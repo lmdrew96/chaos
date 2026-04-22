@@ -1,8 +1,8 @@
 "use client"
 
 import { useRef, useEffect, type FormEvent, type KeyboardEvent } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@chaos/ui"
+import { Button } from "@chaos/ui"
 import {
   Send,
   Loader2,

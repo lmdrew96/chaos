@@ -2,7 +2,7 @@
 
 import ReactMarkdown from "react-markdown"
 import { GraduationCap, User } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@chaos/ui"
 
 interface ChatMessageProps {
   role: "user" | "assistant"

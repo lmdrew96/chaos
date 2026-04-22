@@ -1,12 +1,12 @@
 "use client"
 
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@chaos/ui"
+import { Badge } from "@chaos/ui"
 import { MessageSquare, Sparkles, AlertTriangle, CheckCircle2, Target, ExternalLink, Volume2 } from "lucide-react"
 import { TutorResponse, GrammarError } from "@/lib/ai/tutor"
 import { FormattedFeedback } from "@/lib/ai/formatter"
 import { RelevanceFeedback } from "@/components/features/feedback/RelevanceFeedback"
-import { cn } from "@/lib/utils"
+import { cn } from "@chaos/ui"
 import Link from "next/link"
 
 export interface GradingReport {

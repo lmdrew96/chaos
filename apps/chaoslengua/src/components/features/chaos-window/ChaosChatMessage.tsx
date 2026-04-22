@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@chaos/ui"
 import {
   GraduationCap,
   User,
@@ -19,7 +19,7 @@ import {
 import { TutorResponse, GrammarError } from "@/lib/ai/tutor"
 import { GradingReport, GrammarErrorCard, GrammarSuggestionCard } from "./AIResponse"
 import { RelevanceFeedback } from "@/components/features/feedback/RelevanceFeedback"
-import { cn } from "@/lib/utils"
+import { cn } from "@chaos/ui"
 import Link from "next/link"
 
 interface ChaosChatMessageProps {

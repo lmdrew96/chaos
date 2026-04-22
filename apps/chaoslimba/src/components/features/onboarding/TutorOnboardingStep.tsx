@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@chaos/ui";
+import { Button } from "@chaos/ui";
+import { cn } from "@chaos/ui";
 import { MessageSquare, Send, Loader2, Sparkles, User } from "lucide-react";
 import type { CEFRLevel } from "@/lib/proficiency";
 

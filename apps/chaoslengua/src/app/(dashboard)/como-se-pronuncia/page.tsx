@@ -1,9 +1,9 @@
 "use client"
 
 import { useState, useRef, useEffect, useCallback, type FormEvent } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "@chaos/ui"
+import { Button } from "@chaos/ui"
+import { Input } from "@chaos/ui"
 import {
   Speech,
   Volume2,

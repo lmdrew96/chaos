@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Card, CardContent } from "@chaos/ui";
+import { Button } from "@chaos/ui";
+import { cn } from "@chaos/ui";
 
 export interface WelcomeData {
     selfAssessment: "complete_beginner" | "some_basics" | "intermediate" | "advanced";

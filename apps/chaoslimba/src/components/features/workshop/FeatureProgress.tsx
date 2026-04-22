@@ -1,6 +1,6 @@
 "use client"
 
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@chaos/ui"
 import { Wrench } from "lucide-react"
 import { challengeTypeConfig } from "@/components/features/workshop/ChallengeCard"
 import type { WorkshopChallengeType } from "@/lib/ai/workshop"

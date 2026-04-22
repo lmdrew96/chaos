@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@chaos/ui"
+import { Card, CardContent } from "@chaos/ui"
 import { AlertTriangle, RotateCcw, Home } from "lucide-react"
 import Link from "next/link"
 

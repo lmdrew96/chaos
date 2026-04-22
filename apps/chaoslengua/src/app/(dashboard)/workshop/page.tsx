@@ -1,9 +1,9 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@chaos/ui"
+import { Button } from "@chaos/ui"
+import { Badge } from "@chaos/ui"
 import {
   Wrench,
   Play,

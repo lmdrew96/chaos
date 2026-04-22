@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Button } from "@chaos/ui";
+import { cn } from "@chaos/ui";
 import { Play, Pause, Bookmark, Headphones, FileText } from "lucide-react";
 import { AudioPlayerProps, PLAYBACK_SPEEDS, PlaybackSpeed } from "./types";
 

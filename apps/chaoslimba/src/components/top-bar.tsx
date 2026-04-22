@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { User, Settings, LogOut, BookOpen, Volume2, MessageCircle, Sparkles, HelpCircle } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@chaos/ui"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,8 +10,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+} from "@chaos/ui"
+import { Avatar, AvatarFallback, AvatarImage } from "@chaos/ui"
 import { useClerk, useUser } from "@clerk/nextjs"
 import { usePathname } from "next/navigation"
 import Link from "next/link"

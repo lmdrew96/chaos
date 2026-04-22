@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback, type FormEvent } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@chaos/ui"
+import { Button } from "@chaos/ui"
 import {
   Atom,
   Play,
@@ -15,7 +15,7 @@ import {
   Square,
   Clock,
 } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@chaos/ui"
 import { GradingReport } from "@/components/features/chaos-window/AIResponse"
 import { ConversationMessage } from "@/components/features/chaos-window/ConversationHistory"
 import { ChaosChat } from "@/components/features/chaos-window/ChaosChat"

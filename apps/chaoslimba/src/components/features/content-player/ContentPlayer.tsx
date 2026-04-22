@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@chaos/ui";
 import { AudioPlayer } from "./AudioPlayer";
 import { TextReader } from "./TextReader";
 import { ContentPlayerProps } from "./types";

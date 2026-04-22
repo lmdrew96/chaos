@@ -5,7 +5,7 @@ import { motion, useInView } from "framer-motion"
 import { useAuth } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { Button } from "@chaos/ui"
 import {
   Flower2,
   Zap,

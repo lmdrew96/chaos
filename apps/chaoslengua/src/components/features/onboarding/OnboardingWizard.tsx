@@ -3,13 +3,13 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@chaos/ui";
 import { ConsentStep } from "./ConsentStep";
 import { WelcomeStep, type WelcomeData } from "./WelcomeStep";
 import { TutorOnboardingStep, type TutorOnboardingResult } from "./TutorOnboardingStep";
 import { ResultsStep } from "./ResultsStep";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@chaos/ui";
 import type { CEFRLevel } from "@/lib/proficiency";
 
 // Steps: Consent → Welcome → Tutor Chat → Results

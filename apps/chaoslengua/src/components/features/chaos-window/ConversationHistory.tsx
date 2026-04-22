@@ -1,9 +1,9 @@
 "use client"
 
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent } from "@chaos/ui"
 import { User, MessageSquare, Sparkles } from "lucide-react"
 import { TutorResponse } from "@/lib/ai/tutor"
-import { cn } from "@/lib/utils"
+import { cn } from "@chaos/ui"
 
 interface ConversationMessage {
   id: string

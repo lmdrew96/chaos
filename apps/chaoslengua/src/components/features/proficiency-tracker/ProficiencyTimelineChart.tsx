@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { TrendingUp, BookOpen } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent } from "@chaos/ui"
 
 interface TimelineData {
     date: string

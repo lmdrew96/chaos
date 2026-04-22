@@ -1,6 +1,6 @@
 "use client"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@chaos/ui"
 import type { CEFRLevel } from "@/lib/proficiency"
 import { Headphones, BookOpen, Mic2, PenTool, TrendingUp, TrendingDown, Minus } from "lucide-react"
 

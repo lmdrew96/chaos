@@ -2,7 +2,7 @@
 
 import ReactMarkdown from "react-markdown"
 import { Compass, User } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@chaos/ui"
 
 interface GuideMessageProps {
   role: "user" | "assistant"

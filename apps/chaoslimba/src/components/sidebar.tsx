@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
+import { cn } from "@chaos/ui"
 import {
   LayoutDashboard,
   BookOpen,
@@ -19,7 +19,7 @@ import {
 } from "lucide-react"
 import { useState, useSyncExternalStore } from "react"
 import { useTheme } from "next-themes"
-import { Button } from "@/components/ui/button"
+import { Button } from "@chaos/ui"
 
 const navItems = [
   {

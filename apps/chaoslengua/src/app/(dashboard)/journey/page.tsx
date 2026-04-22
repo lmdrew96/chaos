@@ -1,9 +1,9 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
+import { Card, CardContent } from "@chaos/ui"
+import { Button } from "@chaos/ui"
+import { Textarea } from "@chaos/ui"
 import {
     BookOpen,
     Loader2,

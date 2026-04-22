@@ -4,7 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Footer } from "@/components/layout/Footer";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@chaos/ui";
 import { themeInitScript } from "@/lib/theme-init";
 import { PWARegister } from "@/components/pwa/PWARegister";
 

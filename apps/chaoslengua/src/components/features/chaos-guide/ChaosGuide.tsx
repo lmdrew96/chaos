@@ -3,13 +3,13 @@
 import { useState, useRef, useEffect, useCallback, KeyboardEvent } from "react"
 import { Compass, Send, RotateCcw, Loader2 } from "lucide-react"
 import { usePathname } from "next/navigation"
-import { Button } from "@/components/ui/button"
+import { Button } from "@chaos/ui"
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet"
+} from "@chaos/ui"
 import { GuideMessage } from "./GuideMessage"
 import { getGuideConfig } from "./guide-config"
 

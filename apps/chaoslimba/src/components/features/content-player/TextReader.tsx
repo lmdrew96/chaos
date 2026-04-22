@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@chaos/ui";
 import { BookOpen } from "lucide-react";
 import { TextReaderProps } from "./types";
 

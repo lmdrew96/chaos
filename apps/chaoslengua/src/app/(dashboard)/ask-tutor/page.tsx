@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect, type FormEvent, type KeyboardEvent } from "react"
 import { useSearchParams } from "next/navigation"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@chaos/ui"
+import { Button } from "@chaos/ui"
 import { GraduationCap, Send, Loader2 } from "lucide-react"
 import { ChatMessage } from "@/components/features/ask-tutor/ChatMessage"
 

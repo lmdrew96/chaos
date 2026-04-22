@@ -9,9 +9,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+} from "@chaos/ui"
+import { Button } from "@chaos/ui"
+import { Card, CardContent } from "@chaos/ui"
 import { Sparkles, TrendingUp, Target, Clock, Volume2, Headphones } from "lucide-react"
 
 interface GeneratedContentItem {

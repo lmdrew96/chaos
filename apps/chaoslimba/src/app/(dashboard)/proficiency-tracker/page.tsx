@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@chaos/ui"
+import { Button } from "@chaos/ui"
 import {
     TrendingUp,
     Loader2,
