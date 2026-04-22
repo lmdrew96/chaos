@@ -77,7 +77,7 @@ export function ResultsStep({ data, onComplete }: ResultsStepProps) {
                     </motion.div>
 
                     <div className="space-y-2">
-                        <p className="text-muted-foreground">Your Romanian Level</p>
+                        <p className="text-muted-foreground">Your Spanish Level</p>
                         <h1 className={cn(
                             "text-5xl font-bold bg-gradient-to-r bg-clip-text text-transparent",
                             info.color

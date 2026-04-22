@@ -177,7 +177,7 @@ export function PronunciationPractice({ targetText, onComplete }: PronunciationP
           </div>
           <div className="flex-1">
             <h4 className="font-medium">Pronunciation Practice</h4>
-            <p className="text-xs text-muted-foreground">Record yourself speaking Romanian</p>
+            <p className="text-xs text-muted-foreground">Record yourself speaking Spanish</p>
           </div>
         </div>
 

@@ -21,7 +21,7 @@ const SELF_ASSESSMENT_OPTIONS = [
         value: "complete_beginner" as const,
         emoji: "🌱",
         title: "Complete Beginner",
-        description: "I know little to no Romanian",
+        description: "I know little to no Spanish",
     },
     {
         value: "some_basics" as const,
@@ -39,7 +39,7 @@ const SELF_ASSESSMENT_OPTIONS = [
         value: "advanced" as const,
         emoji: "🏔️",
         title: "Advanced",
-        description: "I'm quite comfortable with Romanian",
+        description: "I'm quite comfortable with Spanish",
     },
 ];
 
@@ -60,17 +60,17 @@ export function WelcomeStep({ data, onUpdate }: WelcomeStepProps) {
                 <div className="text-center space-y-4">
                     <div className="text-6xl mb-4">🎭</div>
                     <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                        Bine ai venit la ChaosLimbă!
+                        ¡Bienvenido a ChaosLengua!
                     </h1>
                     <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                        Welcome! Let's discover your Romanian level so we can personalize your learning journey.
+                        Welcome! Let's discover your Spanish level so we can personalize your learning journey.
                     </p>
                 </div>
 
                 {/* Self Assessment */}
                 <div className="space-y-4">
                     <h2 className="text-lg font-medium text-center">
-                        How would you describe your Romanian right now?
+                        How would you describe your Spanish right now?
                     </h2>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

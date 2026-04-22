@@ -52,7 +52,7 @@ export async function GET() {
         exportDate: new Date().toISOString(),
         userId,
         version: "1.0",
-        platform: "ChaosLimbă",
+        platform: "ChaosLengua",
       },
       preferences: preferences[0] || null,
       sessions: userSessions,

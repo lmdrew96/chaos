@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Terms of Service | ChaosLimbă",
-    description: "Terms of Service for ChaosLimbă - Romanian language learning platform",
+    title: "Terms of Service | ChaosLengua",
+    description: "Terms of Service for ChaosLengua - Spanish language learning platform",
 };
 
 export default function TermsOfServicePage() {
@@ -35,7 +35,7 @@ export default function TermsOfServicePage() {
                                 <path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z" />
                             </g>
                         </svg>
-                        ← Back to ChaosLimbă
+                        ← Back to ChaosLengua
                     </Link>
                     <h1 className="text-4xl font-bold text-foreground mb-4">Terms of Service</h1>
                     <p className="text-muted-foreground">Last updated: {lastUpdated}</p>
@@ -44,10 +44,10 @@ export default function TermsOfServicePage() {
                 {/* Content */}
                 <div className="prose prose-invert prose-purple max-w-none space-y-8">
                     <section>
-                        <h2 className="text-2xl font-semibold text-foreground mb-4">👋 Welcome to ChaosLimbă</h2>
+                        <h2 className="text-2xl font-semibold text-foreground mb-4">👋 Welcome to ChaosLengua</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            By using ChaosLimbă (&quot;the Service&quot;), you agree to these Terms of Service.
-                            ChaosLimbă is an AI-powered Romanian language learning platform designed for
+                            By using ChaosLengua (&quot;the Service&quot;), you agree to these Terms of Service.
+                            ChaosLengua is an AI-powered Spanish language learning platform designed for
                             learners who thrive in structured chaos. Please read these terms carefully.
                         </p>
                     </section>
@@ -56,7 +56,7 @@ export default function TermsOfServicePage() {
                         <h2 className="text-2xl font-semibold text-foreground mb-4">⚠️ Beta / Preview Status</h2>
                         <div className="bg-chart-3/10 border border-chart-3/30 rounded-lg p-4">
                             <p className="text-chart-3 leading-relaxed">
-                                <strong>IMPORTANT:</strong> ChaosLimbă is currently in <strong>live preview</strong> mode.
+                                <strong>IMPORTANT:</strong> ChaosLengua is currently in <strong>live preview</strong> mode.
                                 This means:
                             </p>
                             <ul className="list-disc list-inside text-chart-3 space-y-2 mt-4">
@@ -76,7 +76,7 @@ export default function TermsOfServicePage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">👤 Eligibility</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            You must be at least <strong className="text-primary">16 years of age</strong> to use ChaosLimbă.
+                            You must be at least <strong className="text-primary">16 years of age</strong> to use ChaosLengua.
                             If you are under 18, we recommend reviewing these terms with a parent or guardian.
                             By creating an account, you confirm that you meet this age requirement.
                             This threshold complies with the EU General Data Protection Regulation (GDPR) Article 8.
@@ -86,13 +86,13 @@ export default function TermsOfServicePage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">✅ Acceptable Use</h2>
                         <p className="text-muted-foreground leading-relaxed mb-4">
-                            When using ChaosLimbă, you agree to:
+                            When using ChaosLengua, you agree to:
                         </p>
                         <ul className="list-disc list-inside text-muted-foreground space-y-2">
                             <li>Use the service for personal language learning purposes</li>
                             <li>Provide accurate account information</li>
                             <li>Keep your account credentials secure</li>
-                            <li>Respect other users and the ChaosLimbă community</li>
+                            <li>Respect other users and the ChaosLengua community</li>
                             <li>Not attempt to reverse engineer or exploit the service</li>
                             <li>Not use the service for any illegal purposes</li>
                             <li>Not upload harmful, offensive, or inappropriate content</li>
@@ -103,7 +103,7 @@ export default function TermsOfServicePage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">📝 Your Content</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            When you use ChaosLimbă, you create content (text, audio recordings, notes, etc.).
+                            When you use ChaosLengua, you create content (text, audio recordings, notes, etc.).
                             You retain ownership of your content, but you grant us a license to:
                         </p>
                         <ul className="list-disc list-inside text-muted-foreground space-y-2 mt-4">
@@ -119,7 +119,7 @@ export default function TermsOfServicePage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">🤖 AI-Generated Content</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            ChaosLimbă uses AI to provide grammar feedback, pronunciation assessment,
+                            ChaosLengua uses AI to provide grammar feedback, pronunciation assessment,
                             tutoring, and other features. Important notes:
                         </p>
                         <ul className="list-disc list-inside text-muted-foreground space-y-2 mt-4">
@@ -132,7 +132,7 @@ export default function TermsOfServicePage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">💳 Payments & Subscriptions</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            During the live preview period, ChaosLimbă is <strong className="text-green-400">free to use</strong>.
+                            During the live preview period, ChaosLengua is <strong className="text-green-400">free to use</strong>.
                             When we introduce paid features:
                         </p>
                         <ul className="list-disc list-inside text-muted-foreground space-y-2 mt-4">
@@ -161,7 +161,7 @@ export default function TermsOfServicePage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">⚖️ Limitation of Liability</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            To the maximum extent permitted by law, ChaosLimbă and its creator(s) shall not be
+                            To the maximum extent permitted by law, ChaosLengua and its creator(s) shall not be
                             liable for any indirect, incidental, special, consequential, or punitive damages,
                             or any loss of profits or revenues, whether incurred directly or indirectly, or any
                             loss of data, use, goodwill, or other intangible losses resulting from:
@@ -190,7 +190,7 @@ export default function TermsOfServicePage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">📝 Changes to Terms</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            We may update these terms as ChaosLimbă evolves. We&apos;ll notify you of significant
+                            We may update these terms as ChaosLengua evolves. We&apos;ll notify you of significant
                             changes via email or in-app notification. Continued use after changes means you
                             accept the new terms.
                         </p>
@@ -231,7 +231,7 @@ export default function TermsOfServicePage() {
                             ← Privacy Policy
                         </Link>
                         <p className="text-muted-foreground/60 text-sm">
-                            © 2026 ChaosLimbă. All rights reserved.
+                            © 2026 ChaosLengua. All rights reserved.
                         </p>
                     </div>
                 </div>

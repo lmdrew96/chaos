@@ -74,7 +74,7 @@ export function TopBar() {
             </g>
           </svg>
           <span className="font-bold text-sm bg-gradient-to-r from-foreground to-primary/70 bg-clip-text text-transparent">
-            ChaosLimbă
+            ChaosLengua
           </span>
         </Link>
         <div className="hidden md:block">

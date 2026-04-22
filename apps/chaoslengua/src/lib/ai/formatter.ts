@@ -77,7 +77,7 @@ function generateSummary(score: number, errors: ExtractedErrorPattern[]): string
 
   if (score >= 90) {
     return errorCount === 0
-      ? '🎉 Excellent work! Your Romanian is spot-on!'
+      ? '🎉 Excellent work! Your Spanish is spot-on!'
       : `🎉 Excellent work! Just ${errorCount} small ${errorCount === 1 ? 'detail' : 'details'} to polish.`;
   }
 

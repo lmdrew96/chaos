@@ -142,7 +142,7 @@ export default function JourneyPage() {
                     </h1>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                    The story of your Romanian language development, written by AI from your real learning data.
+                    The story of your Spanish language development, written by AI from your real learning data.
                     Learners who reflect on their journey show higher persistence.
                 </p>
             </div>
@@ -209,7 +209,7 @@ export default function JourneyPage() {
                         <BookOpen className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
                         <h3 className="font-medium text-muted-foreground">Your story begins here</h3>
                         <p className="text-sm text-muted-foreground/70 mt-2 max-w-md mx-auto">
-                            As you learn Romanian through Chaos Window, Workshop, and other features,
+                            As you learn Spanish through Chaos Window, Workshop, and other features,
                             your learning data builds up. Generate a narrative to see your progress as a story.
                         </p>
                     </CardContent>

@@ -268,7 +268,7 @@ export default function SettingsPage() {
                         <User className="h-5 w-5 text-primary" />
                         Account
                     </CardTitle>
-                    <CardDescription>Your ChaosLimbă account information</CardDescription>
+                    <CardDescription>Your ChaosLengua account information</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="flex items-center gap-4">
@@ -303,7 +303,7 @@ export default function SettingsPage() {
                         <Palette className="h-5 w-5 text-primary" />
                         Theme & Appearance
                     </CardTitle>
-                    <CardDescription>Customize how ChaosLimbă looks and feels</CardDescription>
+                    <CardDescription>Customize how ChaosLengua looks and feels</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <ThemeSelector />
@@ -421,7 +421,7 @@ export default function SettingsPage() {
                                 Anonymous Analytics
                             </Label>
                             <p className="text-sm text-muted-foreground">
-                                Help improve ChaosLimbă by sharing anonymous usage data
+                                Help improve ChaosLengua by sharing anonymous usage data
                             </p>
                         </div>
                         <Switch

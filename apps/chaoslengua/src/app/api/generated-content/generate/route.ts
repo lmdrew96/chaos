@@ -67,7 +67,7 @@ export async function POST(req: Request) {
       patterns = await getUserErrorPatternsForContent(userId, 5);
       if (patterns.length === 0) {
         return NextResponse.json(
-          { error: 'No error patterns found. Use ChaosLimbă more to build your error profile.' },
+          { error: 'No error patterns found. Use ChaosLengua more to build your error profile.' },
           { status: 404 }
         );
       }

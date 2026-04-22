@@ -37,7 +37,7 @@ export const challengeTypeConfig: Record<
   transform: { label: "Transform", color: "bg-accent/20 text-accent border-accent/30", borderColor: "border-l-accent", icon: ArrowRightLeft, taskInstruction: "Change the sentence as instructed and rewrite it." },
   complete: { label: "Complete", color: "bg-chart-4/20 text-chart-4 border-chart-4/30", borderColor: "border-l-chart-4", icon: PenLine, taskInstruction: "Fill in the blank with the correct word or form." },
   fix: { label: "Fix", color: "bg-chart-3/20 text-chart-3 border-chart-3/30", borderColor: "border-l-chart-3", icon: Wrench, taskInstruction: "Find the grammar error and rewrite the sentence correctly." },
-  rewrite: { label: "Rewrite", color: "bg-primary/20 text-primary border-primary/30", borderColor: "border-l-primary", icon: RotateCcw, taskInstruction: "Translate this into Romanian using the target grammar structure." },
+  rewrite: { label: "Rewrite", color: "bg-primary/20 text-primary border-primary/30", borderColor: "border-l-primary", icon: RotateCcw, taskInstruction: "Translate this into Spanish using the target grammar structure." },
   use_it: { label: "Use It", color: "bg-accent/20 text-accent border-accent/30", borderColor: "border-l-accent", icon: MessageSquare, taskInstruction: "Write a complete sentence using the given word or phrase." },
   which_one: { label: "Which One?", color: "bg-secondary/20 text-secondary border-secondary/30", borderColor: "border-l-secondary", icon: CircleHelp, taskInstruction: "Pick the sentence that uses the structure correctly." },
   spot_the_trap: { label: "Spot the Trap", color: "bg-destructive/20 text-destructive border-destructive/30", borderColor: "border-l-destructive", icon: TriangleAlert, taskInstruction: "This sentence looks correct but has a subtle error. Find it." },
@@ -119,7 +119,7 @@ export function ChallengeCard({ challenge, onSubmit, onSkip, isSubmitting }: Cha
 
           {challenge.targetSentence && (
             <div className="rounded-xl bg-muted/50 pl-4 pr-4 py-3 border-l-2 border-accent/40">
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-medium">Romanian</span>
+              <span className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-medium">Spanish</span>
               <div className="text-base italic text-foreground/90 mt-0.5">
                 <ReactMarkdown
                   components={{
@@ -202,7 +202,7 @@ export function ChallengeCard({ challenge, onSubmit, onSkip, isSubmitting }: Cha
               value={response}
               onChange={(e) => setResponse(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type your answer in Romanian..."
+              placeholder="Type your answer in Spanish..."
               className="min-h-[80px] rounded-xl border-border/40 bg-background/50 focus:border-accent/50 resize-none"
               disabled={isSubmitting}
             />

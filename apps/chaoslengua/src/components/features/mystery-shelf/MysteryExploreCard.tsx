@@ -345,7 +345,7 @@ export function MysteryExploreCard({ item, onCloseAction, onExploreAction, onMar
                 {!practiceResult ? (
                   <>
                     <Textarea
-                      placeholder="Write your Romanian sentence here..."
+                      placeholder="Write your Spanish sentence here..."
                       value={practiceAnswer}
                       onChange={(e) => setPracticeAnswer(e.target.value)}
                       className="min-h-[80px] bg-background/50"

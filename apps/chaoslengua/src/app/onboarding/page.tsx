@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { OnboardingWizard } from "@/components/features/onboarding/OnboardingWizard";
 
 export const metadata: Metadata = {
-    title: "Welcome to ChaosLimbă - Proficiency Test",
-    description: "Let's discover your Romanian proficiency level",
+    title: "Welcome to ChaosLengua - Proficiency Test",
+    description: "Let's discover your Spanish proficiency level",
 };
 
 export default function OnboardingPage() {
@@ -29,7 +29,7 @@ export default function OnboardingPage() {
                         </g>
                     </svg>
                     <span className="font-bold text-2xl bg-gradient-to-r from-foreground to-primary/70 bg-clip-text text-transparent">
-                        ChaosLimbă
+                        ChaosLengua
                     </span>
                 </div>
                 <OnboardingWizard />

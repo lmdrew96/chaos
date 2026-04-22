@@ -34,7 +34,7 @@ export function TutorTutorialOverlay() {
                 {
                     id: "tutor-initial",
                     role: "tutor",
-                    content: "Buna! Welcome to ChaosLimbă. I'm your Tutor, here to show you around. Before we start the tour, what is your main goal for learning Romanian?",
+                    content: "¡Hola! Welcome to ChaosLengua. I'm your Tutor, here to show you around. Before we start the tour, what is your main goal for learning Spanish?",
                     timestamp: new Date()
                 }
             ]);

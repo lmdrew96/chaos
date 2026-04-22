@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Privacy Policy | ChaosLimbă",
-    description: "Privacy Policy for ChaosLimbă - Romanian language learning platform",
+    title: "Privacy Policy | ChaosLengua",
+    description: "Privacy Policy for ChaosLengua - Spanish language learning platform",
 };
 
 export default function PrivacyPolicyPage() {
@@ -35,7 +35,7 @@ export default function PrivacyPolicyPage() {
                                 <path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z" />
                             </g>
                         </svg>
-                        ← Back to ChaosLimbă
+                        ← Back to ChaosLengua
                     </Link>
                     <h1 className="text-4xl font-bold text-foreground mb-4">Privacy Policy</h1>
                     <p className="text-muted-foreground">Last updated: {lastUpdated}</p>
@@ -46,7 +46,7 @@ export default function PrivacyPolicyPage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">🔒 Our Commitment to Your Privacy</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            ChaosLimbă is built by a language learner, for language learners. We believe your learning data
+                            ChaosLengua is built by a language learner, for language learners. We believe your learning data
                             is <strong className="text-primary">your data</strong>. We collect only what&apos;s necessary to
                             provide the service, and we never sell or share your personal information with third parties
                             for advertising purposes.
@@ -93,7 +93,7 @@ export default function PrivacyPolicyPage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">📈 Analytics & Consent Controls</h2>
                         <p className="text-muted-foreground leading-relaxed mb-4">
-                            ChaosLimbă uses <strong className="text-primary">Umami</strong>, a privacy-focused, open-source analytics tool.
+                            ChaosLengua uses <strong className="text-primary">Umami</strong>, a privacy-focused, open-source analytics tool.
                             Analytics are <strong className="text-primary">opt-in only</strong> — no tracking occurs unless you explicitly enable it in your Settings.
                         </p>
                         <p className="text-muted-foreground leading-relaxed mb-4">
@@ -144,7 +144,7 @@ export default function PrivacyPolicyPage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">🤖 Automated Decision-Making (GDPR Art. 22)</h2>
                         <p className="text-muted-foreground leading-relaxed mb-4">
-                            ChaosLimbă uses an <strong className="text-primary">Adaptation Engine</strong> that automatically adjusts your learning experience based on your error patterns. Here&apos;s how it works:
+                            ChaosLengua uses an <strong className="text-primary">Adaptation Engine</strong> that automatically adjusts your learning experience based on your error patterns. Here&apos;s how it works:
                         </p>
                         <ul className="list-disc list-inside text-muted-foreground space-y-2">
                             <li>The system monitors the frequency of specific error types (e.g., verb conjugation, noun cases) across your sessions.</li>
@@ -198,7 +198,7 @@ export default function PrivacyPolicyPage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">🤝 Third-Party Services & AI Data Processing</h2>
                         <p className="text-muted-foreground leading-relaxed mb-4">
-                            We use the following third-party services to provide ChaosLimbă:
+                            We use the following third-party services to provide ChaosLengua:
                         </p>
                         <ul className="list-disc list-inside text-muted-foreground space-y-2">
                             <li><strong className="text-primary">Clerk:</strong> Authentication and user management</li>
@@ -246,7 +246,7 @@ export default function PrivacyPolicyPage() {
                         <h2 className="text-2xl font-semibold text-foreground mb-4">⚠️ Beta / Preview Notice</h2>
                         <div className="bg-chart-3/10 border border-chart-3/30 rounded-lg p-4">
                             <p className="text-chart-3 leading-relaxed">
-                                ChaosLimbă is currently in <strong>live preview</strong> mode. This means features may change,
+                                ChaosLengua is currently in <strong>live preview</strong> mode. This means features may change,
                                 data structures may be updated, and there may be bugs. While we take every precaution to protect
                                 your data, please be aware that this is pre-release software. We recommend not uploading
                                 sensitive personal information beyond what&apos;s required for the service.
@@ -257,7 +257,7 @@ export default function PrivacyPolicyPage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">📝 Changes to This Policy</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            We may update this privacy policy as ChaosLimbă evolves. We&apos;ll notify you of significant
+                            We may update this privacy policy as ChaosLengua evolves. We&apos;ll notify you of significant
                             changes via email or in-app notification. Continued use of the service after changes constitutes
                             acceptance of the updated policy.
                         </p>
@@ -284,7 +284,7 @@ export default function PrivacyPolicyPage() {
                             Terms of Service →
                         </Link>
                         <p className="text-muted-foreground/60 text-sm">
-                            © 2026 ChaosLimbă. All rights reserved.
+                            © 2026 ChaosLengua. All rights reserved.
                         </p>
                     </div>
                 </div>

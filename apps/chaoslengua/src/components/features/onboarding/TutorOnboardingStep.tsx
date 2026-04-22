@@ -29,7 +29,7 @@ interface TutorOnboardingStepProps {
     usedSelfAssessmentFallback?: boolean;
 }
 
-const FALLBACK_OPENING = "Bună! 👋 Welcome to ChaosLimbă! Let's chat a bit so I can find your level. Tell me about your Romanian learning experience!";
+const FALLBACK_OPENING = "¡Hola! 👋 Welcome to ChaosLengua! Let's chat a bit so I can find your level. Tell me about your Spanish learning experience!";
 
 export function TutorOnboardingStep({ selfAssessment, data, onUpdate, onUseSelfAssessment, usedSelfAssessmentFallback }: TutorOnboardingStepProps) {
     const [messages, setMessages] = useState<ChatMessage[]>(data?.conversationHistory || []);
@@ -275,7 +275,7 @@ export function TutorOnboardingStep({ selfAssessment, data, onUpdate, onUseSelfA
 
                 {/* Hint */}
                 <p className="text-xs text-muted-foreground text-center">
-                    💡 Speak naturally! Romanian, English, or a mix - whatever feels comfortable.
+                    💡 Speak naturally! Spanish, English, or a mix - whatever feels comfortable.
                 </p>
 
                 {/* Escape valve: after 2 exchanges, let users opt out of the chat

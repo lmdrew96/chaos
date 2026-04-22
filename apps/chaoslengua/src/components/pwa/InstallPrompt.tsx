@@ -54,12 +54,12 @@ export function InstallPrompt() {
   return (
     <div
       role="dialog"
-      aria-label="Install ChaosLimbă"
+      aria-label="Install ChaosLengua"
       className="fixed bottom-4 right-4 z-50 flex max-w-sm items-start gap-3 rounded-lg border border-border bg-card p-4 shadow-lg"
     >
       <Download className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />
       <div className="flex-1 space-y-2">
-        <p className="text-sm font-medium">Install ChaosLimbă</p>
+        <p className="text-sm font-medium">Install ChaosLengua</p>
         <p className="text-xs text-muted-foreground">
           Add it to your home screen for faster, app-like access.
         </p>

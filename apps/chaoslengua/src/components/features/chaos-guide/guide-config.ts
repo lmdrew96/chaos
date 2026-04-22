@@ -85,7 +85,7 @@ const guideConfig: Record<string, PageGuideConfig> = {
   },
   "/ask-tutor": {
     pageName: "Ask Tutor",
-    pageDescription: "Your AI Romanian tutor — ask any question about the language and get expert answers.",
+    pageDescription: "Your AI Spanish tutor — ask any question about the language and get expert answers.",
     suggestedQuestions: [
       "What can I ask the tutor about?",
       "How is the tutor different from the Chaos Guide?",
@@ -94,9 +94,9 @@ const guideConfig: Record<string, PageGuideConfig> = {
   },
   "/journey": {
     pageName: "Your Learning Journey",
-    pageDescription: "AI-generated narratives of your Romanian progress — reflect on your story and understand your growth.",
+    pageDescription: "AI-generated narratives of your Spanish progress — reflect on your story and understand your growth.",
     suggestedQuestions: [
-      "Why Romanian?",
+      "Why Spanish?",
       "How are my learning narratives generated?",
       "Why does reflecting on my journey help me learn?",
       "What data goes into my story?",
@@ -104,7 +104,7 @@ const guideConfig: Record<string, PageGuideConfig> = {
   },
   "/settings": {
     pageName: "Settings",
-    pageDescription: "Customize your ChaosLimbă experience — themes, preferences, and more.",
+    pageDescription: "Customize your ChaosLengua experience — themes, preferences, and more.",
     suggestedQuestions: [
       "What themes are available?",
       "Can I change how the app looks?",
@@ -114,10 +114,10 @@ const guideConfig: Record<string, PageGuideConfig> = {
 }
 
 const fallbackConfig: PageGuideConfig = {
-  pageName: "ChaosLimbă",
-  pageDescription: "Your AI-powered Romanian learning platform built on chaos theory and SLA research.",
+  pageName: "ChaosLengua",
+  pageDescription: "Your AI-powered Spanish learning platform built on chaos theory and SLA research.",
   suggestedQuestions: [
-    "What makes ChaosLimbă different?",
+    "What makes ChaosLengua different?",
     "How does the AI ensemble work?",
     "What is the chaos theory approach?",
     "Where should I start?",

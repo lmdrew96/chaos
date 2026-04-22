@@ -12,14 +12,14 @@ function getResend(): Resend {
   return _resend;
 }
 
-const fromAddress = process.env.RESEND_FROM_EMAIL || "ChaosLimbă <onboarding@resend.dev>";
+const fromAddress = process.env.RESEND_FROM_EMAIL || "ChaosLengua <onboarding@resend.dev>";
 
 const encouragements = [
   "Every error is a stepping stone. Keep going!",
-  "Your brain is rewiring itself for Romanian — even when it doesn't feel like it.",
+  "Your brain is rewiring itself for Spanish — even when it doesn't feel like it.",
   "Progress isn't linear, especially with languages. You're doing great.",
   "The fact that you showed up this week matters more than any score.",
-  "Romanian is hard. You're doing it anyway. That's impressive.",
+  "Spanish is hard. You're doing it anyway. That's impressive.",
   "Small, messy sessions beat perfect plans every time.",
   "Your Error Garden is proof you're learning — errors are data, not failure.",
   "The chaos is the method. Trust the process.",
@@ -81,7 +81,7 @@ function buildWeeklySummaryHtml(data: WeeklySummaryData): string {
     : `
       <div style="padding: 24px; background: #2a2a3e; border-radius: 8px; text-align: center; margin: 24px 0;">
         <p style="color: #d1d5db; font-size: 16px; margin: 0;">No sessions this week — and that's okay.</p>
-        <p style="color: #9ca3af; font-size: 14px; margin: 8px 0 0 0;">No pressure. Romanian will be here when you're ready.</p>
+        <p style="color: #9ca3af; font-size: 14px; margin: 8px 0 0 0;">No pressure. Spanish will be here when you're ready.</p>
       </div>
     `;
 
@@ -93,8 +93,8 @@ function buildWeeklySummaryHtml(data: WeeklySummaryData): string {
   <div style="max-width: 560px; margin: 0 auto; padding: 40px 24px;">
     <!-- Header -->
     <div style="text-align: center; margin-bottom: 32px;">
-      <h1 style="color: #a78bfa; font-size: 24px; margin: 0;">ChaosLimbă</h1>
-      <p style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Your week in Romanian</p>
+      <h1 style="color: #a78bfa; font-size: 24px; margin: 0;">ChaosLengua</h1>
+      <p style="color: #6b7280; font-size: 13px; margin: 4px 0 0 0;">Your week in Spanish</p>
     </div>
 
     <!-- Greeting -->
@@ -143,7 +143,7 @@ export async function sendWeeklySummary(
     const { error } = await getResend().emails.send({
       from: fromAddress,
       to,
-      subject: "Your week in Romanian",
+      subject: "Your week in Spanish",
       html,
     });
 

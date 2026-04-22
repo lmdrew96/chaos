@@ -139,7 +139,7 @@ export function Sidebar() {
                 </g>
               </svg>
               <span className="font-bold text-lg bg-gradient-to-r from-foreground to-primary/70 bg-clip-text text-transparent">
-                ChaosLimbă
+                ChaosLengua
               </span>
             </Link>
             <button

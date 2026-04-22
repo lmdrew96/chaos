@@ -22,7 +22,7 @@ export default function SignUpPage() {
           </g>
         </svg>
         <span className="font-bold text-2xl bg-gradient-to-r from-foreground to-primary/70 bg-clip-text text-transparent">
-          ChaosLimbă
+          ChaosLengua
         </span>
       </div>
       <SignUp />

@@ -236,7 +236,7 @@ const FEATURES = [
   },
   {
     name: "Deep Fog",
-    description: "Immerse yourself in authentic Romanian content at your level. Productive confusion is the threshold of understanding.",
+    description: "Immerse yourself in authentic Spanish content at your level. Productive confusion is the threshold of understanding.",
     icon: Cloud,
     color: "text-chart-3",
     bg: "bg-chart-3/10",
@@ -250,7 +250,7 @@ const FEATURES = [
   },
   {
     name: "AI Tutor",
-    description: "Ask anything about Romanian. Get explanations grounded in linguistics, not just translations. Powered by a 10-component AI ensemble.",
+    description: "Ask anything about Spanish. Get explanations grounded in linguistics, not just translations. Powered by a 10-component AI ensemble.",
     icon: Brain,
     color: "text-destructive",
     bg: "bg-destructive/10",
@@ -422,7 +422,7 @@ export default function DemoPage() {
           </h1>
 
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mb-2">
-            AI-powered Romanian learning for ADHD brains.
+            AI-powered Spanish learning for ADHD brains.
           </p>
           <p className="text-lg text-muted-foreground/80 max-w-xl mb-8">
             We provide the method. You provide the mess.
@@ -549,7 +549,7 @@ export default function DemoPage() {
 
                   {challenge.targetSentence && (
                     <div className="rounded-xl bg-muted/50 pl-4 pr-4 py-3 border-l-2 border-accent/40">
-                      <span className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-medium">Romanian</span>
+                      <span className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-medium">Spanish</span>
                       <div className="text-base italic text-foreground/90 mt-0.5">
                         <ReactMarkdown
                           components={{
@@ -626,7 +626,7 @@ export default function DemoPage() {
                         onKeyDown={(e) => {
                           if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSubmit() }
                         }}
-                        placeholder="Type your answer in Romanian..."
+                        placeholder="Type your answer in Spanish..."
                         className="min-h-[80px] rounded-xl border-border/40 bg-background/50 focus:border-accent/50 resize-none"
                       />
                     )}
@@ -904,7 +904,7 @@ export default function DemoPage() {
             Ready to Embrace the Chaos?
           </h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
-            Free to use. No credit card. No streaks to maintain. Just you, Romanian, and productive confusion.
+            Free to use. No credit card. No streaks to maintain. Just you, Spanish, and productive confusion.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button asChild size="lg" className="bg-gradient-to-r from-primary to-primary/70 hover:from-primary hover:to-primary/80 rounded-xl shadow-lg shadow-primary/20 text-base px-8">

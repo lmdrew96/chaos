@@ -42,7 +42,7 @@ function getTranscriptLoadingMessage(contentType?: 'audio' | 'text'): string {
     const messages = [
       "Asking Groq to transcribe this audio magic...",
       "Running Whisper on this audio... (it's free! 🎉)",
-      "Converting Romanian speech to text...",
+      "Converting Spanish speech to text...",
       "Transcribing audio with AI wizardry...",
       "Groq Whisper is listening... 👂",
     ]
@@ -704,7 +704,7 @@ export default function ChaosWindowPage() {
               </h3>
               <p className="text-muted-foreground mb-4 max-w-md mx-auto">
                 Randomized content at your level with AI tutoring.
-                Listen or read, then answer questions in Romanian.
+                Listen or read, then answer questions in Spanish.
               </p>
 
               {userLevel && (
