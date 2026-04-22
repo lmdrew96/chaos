@@ -1,7 +1,12 @@
 /**
- * Personalized content generator for ChaosLimbă
- * Takes error patterns → generates targeted Romanian text via Groq/Llama (FREE)
+ * Personalized content generator for ChaosLengua
+ * Takes error patterns → generates targeted Spanish text via Groq/Llama (FREE)
  * Output is fed to Google Cloud TTS for audio synthesis
+ *
+ * Note on field naming: TS-level field names retain the legacy `romanian`/`romanianText`
+ * names because the DB column `romanian_text` (schema.ts:249) is bound to them. The
+ * LLM-facing JSON schema asks for `spanish`/`spanishText`; the parser adapts back to
+ * the legacy field names. A future patch will rename DB column + TS field together.
  */
 
 import { callGroq } from './groq';
@@ -77,10 +82,21 @@ export function computePatternFingerprint(patterns: ContentErrorPattern[], conte
 
 // ── System prompt ──────────────────────────────────────────
 
-const SYSTEM_PROMPT = `You are a Romanian language content creator for ChaosLimba, an app that helps learners master Romanian.
+const SYSTEM_PROMPT = `You are a Spanish language content creator for ChaosLengua, an SLA-grounded app that helps English L1 learners master Spanish.
 You create targeted practice content based on a learner's specific error patterns.
-Your Romanian is natural and accurate. You adjust difficulty to CEFR levels.
-You ALWAYS respond in valid JSON format. No markdown, no code fences.`;
+Your Spanish is natural and accurate, with proper diacritics (á, é, í, ó, ú, ü, ñ) and inverted punctuation (¿, ¡).
+You adjust difficulty to CEFR levels.
+You ALWAYS respond in valid JSON format. No markdown, no code fences.
+
+DIALECTAL DEFAULT: Use LatAm-neutral Spanish (seseo, yeísmo, ustedes for plural-you, tú for informal singular). Avoid regionally-marked vocabulary unless the target feature explicitly involves Peninsular, Rioplatense, or another regional variety.
+
+CRITICAL GRAMMAR — your generated Spanish MUST be correct:
+- Ser/estar by SEMANTIC CATEGORY, not "permanent vs temporary" (ser for identity/origin/profession/material; estar for location/temporary state/progressive/result of change).
+- Preterite vs imperfect by ASPECT (preterite for completed bounded events; imperfect for ongoing/habitual/descriptive states).
+- Gustar-type verbs agree with the THING LIKED, not the person ("Me gusta el libro" vs "Me gustan los libros"). NEVER "Me gustan el libro".
+- Gender and number agreement throughout the noun phrase ("la casa blanca", "los libros rojos").
+- Object pronoun placement: pre-verbal with finite verbs, attached to infinitives/gerunds/affirmative imperatives, pre-verbal with negative imperatives.
+- Por for cause/means/duration/exchange/path/agent; para for purpose/destination/recipient/deadline/opinion.`;
 
 // ── Helpers ────────────────────────────────────────────────
 
@@ -119,7 +135,7 @@ ${contentContext.transcript ? `Related content excerpt: "${contentContext.transc
 Generate sentences that relate to this content's theme and vocabulary while targeting the error patterns below.\n`
     : '';
 
-  const prompt = `Generate ${sentenceCount} practice sentence${sentenceCount > 1 ? 's' : ''} in Romanian targeting these error patterns for a ${userLevel} learner:
+  const prompt = `Generate ${sentenceCount} practice sentence${sentenceCount > 1 ? 's' : ''} in Spanish targeting these error patterns for a ${userLevel} learner:
 ${contentGrounding}
 ${formatPatternsForPrompt(errorPatterns)}
 
@@ -127,13 +143,14 @@ Each sentence MUST:
 1. Naturally use the grammatical structure the learner struggles with
 2. Be at ${userLevel} CEFR difficulty
 3. Demonstrate the CORRECT usage (not the error)
-4. Be a complete, natural-sounding Romanian sentence${contentContext ? '\n5. Relate thematically to the content the learner is currently studying' : ''}
+4. Be a complete, natural-sounding Spanish sentence with proper diacritics (á, é, í, ó, ú, ñ) and inverted punctuation (¿, ¡)
+5. Use LatAm-neutral Spanish (ustedes, tú, seseo) unless the target feature explicitly involves Peninsular or Rioplatense forms${contentContext ? '\n6. Relate thematically to the content the learner is currently studying' : ''}
 
 Return JSON:
 {
   "sentences": [
     {
-      "romanian": "Correct Romanian sentence",
+      "spanish": "Correct Spanish sentence",
       "english": "English translation",
       "targetFeature": "which error pattern this practices"
     }
@@ -146,11 +163,16 @@ Return JSON:
   ]);
 
   const parsed = JSON.parse(cleanGroqJson(output));
-  const fullText = parsed.sentences.map((s: { romanian: string }) => s.romanian).join('. \n');
+  const sentences = (parsed.sentences as Array<{ spanish?: string; romanian?: string; english: string; targetFeature: string }>).map(s => ({
+    romanian: s.spanish ?? s.romanian ?? '',
+    english: s.english,
+    targetFeature: s.targetFeature,
+  }));
+  const fullText = sentences.map(s => s.romanian).join('. \n');
 
   return {
     contentType: 'practice_sentences',
-    sentences: parsed.sentences,
+    sentences,
     fullText,
   };
 }
@@ -168,24 +190,26 @@ export async function generateMiniLesson(
 
   const primary = errorPatterns[0];
 
-  const prompt = `Create a short Romanian mini-lesson (spoken narration style) for a ${userLevel} learner.
+  const prompt = `Create a short Spanish mini-lesson (spoken narration style) for a ${userLevel} learner.
 
 Target error: ${primary.errorType}/${primary.category}
 Learner's common mistakes: ${primary.examples.slice(0, 3).map(e =>
     `"${e.incorrect}" should be "${e.correct || '?'}"`).join(', ')}
 
 The lesson should:
-1. Be narrated IN ROMANIAN (this will be converted to audio)
+1. Be narrated IN SPANISH (this will be converted to audio)
 2. Be 150-300 words (1-2 minutes of audio)
 3. Explain the rule through examples, not abstract grammar terminology
 4. Include 3-4 example sentences demonstrating correct usage
 5. End with a brief encouraging prompt to practice
 6. Adjust complexity to ${userLevel} level
+7. Use proper Spanish diacritics (á, é, í, ó, ú, ñ) and inverted punctuation (¿, ¡)
+8. Use LatAm-neutral Spanish (ustedes, tú, seseo) unless the target feature explicitly involves Peninsular or Rioplatense forms
 
 Return JSON:
 {
-  "title": "Short descriptive title in Romanian",
-  "romanianText": "The full lesson narration in Romanian",
+  "title": "Short descriptive title in Spanish",
+  "spanishText": "The full lesson narration in Spanish",
   "englishSummary": "2-3 sentence summary in English of what the lesson covers",
   "targetFeatures": ["list", "of", "targeted", "features"]
 }`;
@@ -200,7 +224,7 @@ Return JSON:
   return {
     contentType: 'mini_lesson',
     title: parsed.title,
-    romanianText: parsed.romanianText,
+    romanianText: parsed.spanishText ?? parsed.romanianText,
     englishSummary: parsed.englishSummary,
     targetFeatures: parsed.targetFeatures || [],
   };
@@ -225,19 +249,21 @@ export async function generateCorrectedVersions(
     throw new ContentGeneratorError('No correctable examples found in error patterns');
   }
 
-  const prompt = `A ${userLevel} Romanian learner made these errors. For each one, provide:
-1. The corrected Romanian sentence (natural-sounding, complete)
+  const prompt = `A ${userLevel} Spanish learner made these errors. For each one, provide:
+1. The corrected Spanish sentence (natural-sounding, complete, with proper diacritics and inverted punctuation)
 2. A brief English explanation of WHY it's correct
 
 Errors:
 ${allExamples.map((e, i) => `${i + 1}. Error: "${e.incorrect}" → Correct: "${e.correct}" (${e.category})`).join('\n')}
+
+Use LatAm-neutral Spanish (ustedes, tú, seseo) for corrections unless the original error context explicitly involves Peninsular or Rioplatense forms.
 
 Return JSON:
 {
   "corrections": [
     {
       "original": "the incorrect version",
-      "corrected": "the full corrected sentence in Romanian",
+      "corrected": "the full corrected sentence in Spanish",
       "explanation": "brief English explanation of the correction"
     }
   ]

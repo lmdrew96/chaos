@@ -103,9 +103,9 @@ function transformToGrammarErrors(providerErrors: GrammarCheckError[]): GrammarE
     // Adjust confidence based on feedbackType and category
     if (feedbackType === 'error') {
       // Errors get higher confidence
-      if (error.category === 'spelling' || error.category === 'diacritics') {
+      if (error.category === 'spelling' || error.category === 'accent_marks') {
         confidence = 0.95; // Claude is very accurate with diacritics
-      } else if (error.category === 'grammar' || error.type === 'grammar_correction') {
+      } else if (error.category === 'general_grammar' || error.type === 'grammar_correction') {
         confidence = 0.90;
       } else {
         confidence = 0.85;
@@ -120,46 +120,10 @@ function transformToGrammarErrors(providerErrors: GrammarCheckError[]): GrammarE
       learner_production: error.original,
       correct_form: error.correction,
       confidence,
-      category: error.category || categorizeError(error.original, error.correction),
+      category: error.category || 'general_grammar',
       feedbackType,
     };
   });
-}
-
-/**
- * Categorize errors based on the original and corrected text
- * Fallback for when provider doesn't specify category
- */
-function categorizeError(original: string, corrected: string): string {
-  const origLower = original.toLowerCase();
-  const corrLower = corrected.toLowerCase();
-
-  // Check for diacritics
-  if (origLower.replace(/[ăâîșț]/g, '') === corrLower.replace(/[ăâîșț]/g, '')) {
-    return 'diacritics';
-  }
-
-  // Check for verb endings (conjugation)
-  const verbEndings = ['esc', 'ez', 'ează', 'ăm', 'ați', 'esc'];
-  if (verbEndings.some(e => corrLower.endsWith(e) || origLower.endsWith(e))) {
-    return 'verb_conjugation';
-  }
-
-  // Check for articles
-  if (['-ul', '-a', '-le', '-ilor'].some(e => corrLower.endsWith(e) !== origLower.endsWith(e))) {
-    return 'article';
-  }
-
-  // Check for agreement (gender/number)
-  if (
-    corrLower.endsWith('ă') !== origLower.endsWith('ă') ||
-    corrLower.endsWith('i') !== origLower.endsWith('i') ||
-    corrLower.endsWith('e') !== origLower.endsWith('e')
-  ) {
-    return 'agreement';
-  }
-
-  return 'grammar';
 }
 
 
