@@ -1,6 +1,10 @@
 /**
- * Romanian Pronunciation Analysis using Groq Whisper
- * Transcribes Romanian speech via Groq (FREE) and scores against expected text
+ * Pronunciation Analysis using Groq Whisper
+ * Transcribes speech via Groq Whisper (multilingual) and scores against expected text.
+ *
+ * The `language` parameter is the ISO 639-1 code passed to Whisper as a language hint
+ * — required by the host app since this is a shared package serving multiple target
+ * languages (e.g., 'es' for ChaosLengua, 'ro' for ChaosLimbă).
  */
 
 const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
@@ -113,14 +117,16 @@ function levenshteinDistance(a: string, b: string): number {
 }
 
 /**
- * Analyze Romanian pronunciation from audio input
+ * Analyze pronunciation from audio input
  * Uses Groq Whisper (FREE) for transcription, then Levenshtein scoring
  * @param audioData - Audio Blob or base64 string
- * @param expectedText - Optional expected Romanian text for scoring
+ * @param language - ISO 639-1 code passed as Whisper language hint (e.g., 'es', 'ro')
+ * @param expectedText - Optional expected text in the target language for scoring
  * @param threshold - Pronunciation accuracy threshold (default 0.70 = 70% match)
  */
 export async function analyzePronunciation(
   audioData: string | Blob,
+  language: string,
   expectedText?: string,
   threshold: number = 0.70
 ): Promise<PronunciationResult> {
@@ -133,13 +139,14 @@ export async function analyzePronunciation(
     }
   }
 
-  // Build a cache key from the audio data
+  // Build a cache key from the audio data + language (different language hints
+  // can produce different transcriptions for the same audio)
   let cacheKey: string;
   if (audioData instanceof Blob) {
     const arrayBuffer = await audioData.arrayBuffer();
-    cacheKey = hashAudioData(Buffer.from(arrayBuffer).toString('base64').slice(0, 500));
+    cacheKey = hashAudioData(language + '|' + Buffer.from(arrayBuffer).toString('base64').slice(0, 500));
   } else {
-    cacheKey = hashAudioData(audioData.slice(0, 500));
+    cacheKey = hashAudioData(language + '|' + audioData.slice(0, 500));
   }
 
   // Check cache
@@ -179,7 +186,7 @@ export async function analyzePronunciation(
     }
 
     formData.append('model', 'whisper-large-v3');
-    formData.append('language', 'ro');
+    formData.append('language', language);
     formData.append('response_format', 'verbose_json');
 
     const response = await fetch(
@@ -250,6 +257,7 @@ export async function analyzePronunciation(
  */
 export async function analyzePronunciationFromFile(
   audioFilePath: string,
+  language: string,
   expectedText?: string,
   threshold?: number
 ): Promise<PronunciationResult> {
@@ -257,5 +265,5 @@ export async function analyzePronunciationFromFile(
   const audioBuffer = await fs.readFile(audioFilePath);
   const blob = new Blob([audioBuffer], { type: 'audio/webm' });
 
-  return analyzePronunciation(blob, expectedText, threshold);
+  return analyzePronunciation(blob, language, expectedText, threshold);
 }

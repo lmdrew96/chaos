@@ -1,4 +1,4 @@
-import { callGroq, ChatMessage } from "./groq";
+import { callGroq, ChatMessage } from "@chaos/ai-clients";
 import type { FossilizationAlert } from './adaptation';
 
 const BASE_SYSTEM_PROMPT = `You are the ChaosLimbă Tutor, a brilliant but slightly chaotic Romanian language expert.

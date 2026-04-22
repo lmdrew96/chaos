@@ -24,7 +24,7 @@ import { TutorResponse, InitialQuestion } from "@/lib/ai/tutor"
 import { ContentItem } from "@/lib/db/schema"
 import { AudioPlayer } from "@/components/features/content-player/AudioPlayer"
 import { PronunciationPractice } from "@/components/features/chaos-window/PronunciationPractice"
-import { PronunciationResult } from "@/lib/ai/pronunciation"
+import { PronunciationResult } from "@chaos/ai-clients"
 import type { FossilizationAlert } from "@/lib/ai/adaptation"
 import { useNavigationGuard } from "@/hooks/useNavigationGuard"
 

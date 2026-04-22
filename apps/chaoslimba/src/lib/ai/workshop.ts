@@ -1,7 +1,7 @@
 // src/lib/ai/workshop.ts
 // Workshop challenge generation and evaluation using Groq (FREE)
 
-import { callGroq, type ChatMessage } from './groq';
+import { callGroq, type ChatMessage } from '@chaos/ai-clients';
 import { analyzeGrammar, type GrammarResult, type GrammarError } from './grammar';
 import type { GrammarFeature, CEFRLevelEnum, AdaptationTier } from '@/lib/db/schema';
 

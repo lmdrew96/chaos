@@ -5,7 +5,7 @@
 // sub-category from a fixed taxonomy. This makes simple errorType+category
 // clustering much more precise without any query-time ML.
 
-import { callGroq } from './groq';
+import { callGroq } from '@chaos/ai-clients';
 
 // Fixed taxonomy per error type. Groq picks the best match.
 const GRAMMAR_CATEGORIES = [

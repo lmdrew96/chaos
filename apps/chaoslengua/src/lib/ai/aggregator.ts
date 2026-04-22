@@ -13,7 +13,7 @@ import { GrammarResult, GrammarError, analyzeGrammar } from './grammar';
 import { compareSemanticSimilarity, SpamAResult } from './spamA';
 import { analyzeRelevance } from './spamB';
 import { checkIntonationShift } from './spamD';
-import { analyzePronunciation } from './pronunciation';
+import { analyzePronunciation } from '@chaos/ai-clients';
 import { IntonationWarning } from '../../types/intonation';
 
 /**
@@ -66,7 +66,7 @@ export async function runFeedbackPipeline(input: FeedbackPipelineInput): Promise
   if (inputType === 'speech') {
     if (audioFile) {
       try {
-        const pronResult = await analyzePronunciation(audioFile, expectedResponse?.trim(), 0.70);
+        const pronResult = await analyzePronunciation(audioFile, 'es', expectedResponse?.trim(), 0.70);
         pronunciationResult = {
           phonemeScore: pronResult.pronunciationScore ? pronResult.pronunciationScore * 100 : 0,
           stressAccuracy: pronResult.pronunciationScore ? pronResult.pronunciationScore * 100 : 0,

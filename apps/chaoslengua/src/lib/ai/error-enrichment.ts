@@ -7,7 +7,7 @@
 //
 // Taxonomy design reference: docs/pedagogy/error-garden-taxonomy-es.md
 
-import { callGroq } from './groq';
+import { callGroq } from '@chaos/ai-clients';
 
 // Fixed ES taxonomy per error type. Groq picks the best match.
 // Category names are aligned with grammarFeatureMap keys in

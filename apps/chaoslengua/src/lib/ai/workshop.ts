@@ -2,7 +2,7 @@
 // Workshop challenge generation and evaluation using Groq (FREE)
 // ChaosLengua Spanish version — adapted from ChaosLimbă's workshop.ts
 
-import { callGroq, type ChatMessage } from './groq';
+import { callGroq, type ChatMessage } from '@chaos/ai-clients';
 import { analyzeGrammar, type GrammarResult, type GrammarError } from './grammar';
 import type { GrammarFeature, CEFRLevelEnum, AdaptationTier } from '@/lib/db/schema';
 

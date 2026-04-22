@@ -4,7 +4,7 @@ import { useState, useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Mic, Square, Play, RotateCcw, Loader2, Volume2 } from "lucide-react"
-import { PronunciationResult } from "@/lib/ai/pronunciation"
+import { PronunciationResult } from "@chaos/ai-clients"
 
 interface PronunciationPracticeProps {
   targetText: string

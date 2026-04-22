@@ -2,7 +2,7 @@ import { analyzeMysteryItem, MysteryAnalysis } from "./tutor";
 import { compareSemanticSimilarity, SpamAResult } from "./spamA";
 import { analyzeRelevance, SpamBResult } from "./spamB";
 import { checkIntonationShift } from "./spamD";
-import { analyzePronunciation, PronunciationResult } from "./pronunciation";
+import { analyzePronunciation, PronunciationResult } from "@chaos/ai-clients";
 import { IntonationWarning } from "../../types/intonation";
 import { FeedbackAggregator, AggregatorInput, AggregatedReport } from "./aggregator";
 
@@ -82,12 +82,12 @@ export class AIConductor {
     }
 
     private static async handlePronunciationAnalysis(payload: AIPayload): Promise<PronunciationResult> {
-        const { audioData, expectedText, threshold } = payload;
+        const { audioData, expectedText, threshold, language = 'es' } = payload;
         if (!audioData) {
             throw new Error("Audio data is required for pronunciation analysis");
         }
 
-        return analyzePronunciation(audioData, expectedText, threshold);
+        return analyzePronunciation(audioData, language, expectedText, threshold);
     }
 
     private static async handleFeedbackAggregation(payload: AIPayload): Promise<AggregatedReport> {

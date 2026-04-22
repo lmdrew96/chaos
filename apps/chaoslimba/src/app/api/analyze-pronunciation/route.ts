@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { analyzePronunciation, ValidationError } from "@/lib/ai/pronunciation";
+import { analyzePronunciation, ValidationError } from "@chaos/ai-clients";
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
     // Convert File to Blob (File extends Blob, so this works directly)
     const result = await analyzePronunciation(
       audioFile,
+      'ro',
       expectedText ?? undefined,
       threshold
     );

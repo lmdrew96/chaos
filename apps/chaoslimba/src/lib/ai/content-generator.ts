@@ -4,7 +4,7 @@
  * Output is fed to Google Cloud TTS for audio synthesis
  */
 
-import { callGroq } from './groq';
+import { callGroq } from '@chaos/ai-clients';
 import { createHash } from 'crypto';
 import type { ContentErrorPattern } from '@/lib/db/queries';
 

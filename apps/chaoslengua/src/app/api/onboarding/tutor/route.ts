@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { callGroq, type ChatMessage } from "@/lib/ai/groq";
+import { callGroq, type ChatMessage } from "@chaos/ai-clients";
 import type { CEFRLevel } from "@/lib/proficiency";
 
 interface OnboardingChatMessage {

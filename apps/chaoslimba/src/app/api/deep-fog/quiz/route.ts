@@ -1,5 +1,5 @@
 import { auth } from "@clerk/nextjs/server";
-import { callGroq } from "@/lib/ai/groq";
+import { callGroq } from "@chaos/ai-clients";
 import { NextResponse } from "next/server";
 
 export interface QuizQuestion {

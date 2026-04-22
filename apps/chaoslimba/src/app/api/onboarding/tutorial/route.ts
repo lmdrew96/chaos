@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { callGroq, type ChatMessage } from "@/lib/ai/groq";
+import { callGroq, type ChatMessage } from "@chaos/ai-clients";
 
 interface TutorialChatMessage {
     id: string;

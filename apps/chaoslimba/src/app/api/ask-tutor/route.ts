@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { callGroq, ChatMessage } from "@/lib/ai/groq";
+import { callGroq, ChatMessage } from "@chaos/ai-clients";
 
 const TUTOR_SYSTEM_PROMPT = `You are the ChaosLimbă Tutor, a brilliant Romanian language expert with a warm, encouraging personality.
 The learner is asking you a question about the Romanian language.

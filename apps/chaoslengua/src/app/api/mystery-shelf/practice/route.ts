@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { mysteryItems, sessions, userPreferences } from "@/lib/db/schema";
-import { callGroq } from "@/lib/ai/groq";
+import { callGroq } from "@chaos/ai-clients";
 import { saveErrorPatternsToGarden } from "@/lib/db/queries";
 import { recordSessionProficiency } from "@/lib/proficiency";
 import { trackFeatureExposure, extractFeaturesFromErrors } from "@/lib/ai/exposure-tracker";

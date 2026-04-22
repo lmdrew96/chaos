@@ -9,7 +9,7 @@
  * the legacy field names. A future patch will rename DB column + TS field together.
  */
 
-import { callGroq } from './groq';
+import { callGroq } from '@chaos/ai-clients';
 import { createHash } from 'crypto';
 import type { ContentErrorPattern } from '@/lib/db/queries';
 

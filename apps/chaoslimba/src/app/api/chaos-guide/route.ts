@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { callGroq, ChatMessage } from "@/lib/ai/groq";
+import { callGroq, ChatMessage } from "@chaos/ai-clients";
 
 function buildSystemPrompt(currentPage: string): string {
   return `You are the Chaos Guide — ChaosLimbă's built-in help companion. You're slightly chaotic, genuinely encouraging, and concise. Think of yourself as a knowledgeable friend who's excited about the app.

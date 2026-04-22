@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { learningNarratives } from "@/lib/db/schema";
 import { getAutobiographyData } from "@/lib/db/queries";
-import { callGroq } from "@/lib/ai/groq";
+import { callGroq } from "@chaos/ai-clients";
 import { eq, and, gte, lte } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
