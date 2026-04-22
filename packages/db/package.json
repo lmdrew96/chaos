@@ -1,0 +1,32 @@
+{
+  "name": "@chaos/db",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared Drizzle schema + Neon HTTP client for ChaosLengua and ChaosLimbă. Each app supplies its own DATABASE_URL and runs its own migrations against its own Neon project.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./schema": {
+      "types": "./src/schema.ts",
+      "import": "./src/schema.ts",
+      "default": "./src/schema.ts"
+    }
+  },
+  "scripts": {
+    "lint": "eslint src",
+    "test": "echo 'no tests yet'"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "drizzle-orm": "^0.45.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "typescript": "^5"
+  }
+}
