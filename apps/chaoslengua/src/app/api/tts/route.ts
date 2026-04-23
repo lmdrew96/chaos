@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { ttsUsage } from "@/lib/db/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
-import { generateRomanianAudio, GoogleTTSError, GoogleTTSProviderError } from "@/lib/tts/google-cloud";
+import { generateSpanishAudio, GoogleTTSError, GoogleTTSProviderError } from "@/lib/tts/google-cloud";
 
 const DAILY_CHAR_LIMIT = 2000;
 const MAX_TEXT_LENGTH = 200;
@@ -107,7 +107,7 @@ export async function POST(req: Request) {
     const speechSpeed = typeof speed === "number" ? Math.max(0.5, Math.min(2.0, speed)) : 1.0;
 
     // Generate speech via Google Cloud TTS
-    const ttsResult = await generateRomanianAudio(trimmed, {
+    const ttsResult = await generateSpanishAudio(trimmed, {
       speakingRate: speechSpeed,
       audioEncoding: "MP3",
       voice: "female",

@@ -1,7 +1,15 @@
 /**
- * Google Cloud Text-to-Speech for Romanian audio generation
+ * Google Cloud Text-to-Speech for Spanish audio generation
  * Primary provider for pronunciation clips and longer-form generated content
  * Pricing: $16 per 1M Wavenet characters ($0.000016/char)
+ *
+ * Dialect: Peninsular Spanish (es-ES). Verified in Google's voice catalog
+ * as of 2026-04. ChaosLengua's pedagogical stance is LatAm-neutral for
+ * content (vocabulary, grammar) but the synthesized voice dialect is a
+ * separate choice. If a LatAm voice is preferred, swap to
+ * `es-US-Neural2-*` or `es-US-Wavenet-*` after verifying in the Google
+ * Cloud Console voice list — voice name typos surface immediately as
+ * INVALID_ARGUMENT at first synth call.
  */
 
 import { TextToSpeechClient } from '@google-cloud/text-to-speech';
@@ -46,9 +54,11 @@ function mapGoogleErrorCodeToHttpStatus(code?: number): number {
   }
 }
 
+const LANGUAGE_CODE = 'es-ES';
+
 const VOICES = {
-  female: 'ro-RO-Wavenet-A',
-  male: 'ro-RO-Wavenet-B',
+  female: 'es-ES-Wavenet-C',
+  male: 'es-ES-Wavenet-B',
 } as const;
 
 export type VoiceGender = keyof typeof VOICES;
@@ -96,9 +106,9 @@ function getClient(): TextToSpeechClient {
 }
 
 /**
- * Generate Romanian audio from text via Google Cloud TTS
+ * Generate Spanish audio from text via Google Cloud TTS
  */
-export async function generateRomanianAudio(
+export async function generateSpanishAudio(
   text: string,
   options: GoogleTTSOptions = {}
 ): Promise<GoogleTTSResult> {
@@ -121,7 +131,7 @@ export async function generateRomanianAudio(
   const request = {
     input: { text: trimmed },
     voice: {
-      languageCode: 'ro-RO',
+      languageCode: LANGUAGE_CODE,
       name: voiceName,
     },
     audioConfig: {
@@ -160,14 +170,14 @@ export async function generateRomanianAudio(
 }
 
 /**
- * Generate Romanian audio and upload directly to R2
+ * Generate Spanish audio and upload directly to R2
  */
 export async function generateAndUploadToR2(
   text: string,
   r2Key: string,
   options: GoogleTTSOptions = {}
 ): Promise<{ url: string; metadata: GoogleTTSResult }> {
-  const result = await generateRomanianAudio(text, options);
+  const result = await generateSpanishAudio(text, options);
 
   const { url } = await uploadToR2({
     key: r2Key,
