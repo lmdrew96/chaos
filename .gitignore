@@ -22,3 +22,4 @@ node_modules/
 
 # logs
 *.log
+/.claude/snapshots/snap*
