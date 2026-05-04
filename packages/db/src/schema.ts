@@ -320,6 +320,21 @@ export const readingQuestions = pgTable('reading_questions', {
 export type ReadingQuestion = typeof readingQuestions.$inferSelect;
 export type NewReadingQuestion = typeof readingQuestions.$inferInsert;
 
+// Content questions table - per-content comprehension questions tied to content_items
+export const contentQuestions = pgTable('content_questions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  contentId: uuid('content_id').references(() => contentItems.id, { onDelete: 'cascade' }).notNull(),
+  question: text('question').notNull(),
+  options: jsonb('options').$type<string[]>().notNull(),
+  correctIndex: integer('correct_index').notNull(),
+  explanation: text('explanation'), // Optional pedagogical note shown after answering
+  sortOrder: integer('sort_order').default(0).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export type ContentQuestion = typeof contentQuestions.$inferSelect;
+export type NewContentQuestion = typeof contentQuestions.$inferInsert;
+
 // Tutor opening messages table - onboarding tutor greeting messages by self-assessment level
 export const tutorOpeningMessages = pgTable('tutor_opening_messages', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -341,7 +356,7 @@ export type FeatureCategory = (typeof featureCategoryEnum)[number];
 export const exposureTypeEnum = ['encountered', 'produced', 'corrected'] as const;
 export type ExposureType = (typeof exposureTypeEnum)[number];
 
-// Grammar Feature Map table - reference table of Romanian grammar/vocab features by CEFR level
+// Grammar Feature Map table - reference table of grammar/vocab features by CEFR level
 export const grammarFeatureMap = pgTable('grammar_feature_map', {
   id: uuid('id').primaryKey().defaultRandom(),
   featureKey: text('feature_key').notNull().unique(), // e.g. 'present_tense_a_fi', 'definite_article'
