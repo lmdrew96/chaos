@@ -97,7 +97,7 @@ export default function AskTutorPage() {
       ])
     } catch {
       // Error handled via state
-      setError("Tutorul nu a putut răspunde. Încearcă din nou.")
+      setError("El tutor no pudo responder. Inténtalo de nuevo.")
       // Remove the user message if the request failed
       setMessages(messages)
     } finally {
