@@ -290,6 +290,35 @@ export const stressMinimalPairs = pgTable('stress_minimal_pairs', {
 export type StressMinimalPair = typeof stressMinimalPairs.$inferSelect;
 export type NewStressMinimalPair = typeof stressMinimalPairs.$inferInsert;
 
+// Part of speech enum for vocab catalog
+export const partOfSpeechEnum = [
+  'noun', 'verb', 'adjective', 'adverb', 'pronoun',
+  'preposition', 'conjunction', 'determiner', 'interjection', 'numeral',
+] as const;
+export type PartOfSpeech = (typeof partOfSpeechEnum)[number];
+
+// Vocab items table - shared frequency-ranked vocabulary catalog
+// (Phase 1A foundation; seeded from SUBTLEX-ESP top 1500 lemmas + CEFR tags
+// from the Plan Curricular del Instituto Cervantes)
+export const vocabItems = pgTable('vocab_items', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  lemma: text('lemma').notNull().unique(), // dictionary form (hablar, casa, rojo)
+  partOfSpeech: text('part_of_speech').$type<PartOfSpeech>().notNull(),
+  cefrLevel: text('cefr_level').$type<CEFRLevelEnum>(), // null = unclassified
+  frequencyRank: integer('frequency_rank').notNull(), // 1 = most frequent
+  gender: text('gender').$type<'m' | 'f' | 'mf' | 'n'>(), // for nouns/adjectives
+  ipa: text('ipa'), // IPA transcription, optional
+  glossEn: text('gloss_en').notNull(), // 1-3 word English meaning
+  exampleEs: text('example_es'), // A1-grammar-friendly Spanish sentence
+  exampleEn: text('example_en'), // English translation of exampleEs
+  collocations: jsonb('collocations').$type<string[]>(), // common collocations
+  source: text('source').default('subtlex_esp').notNull(), // provenance tag
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export type VocabItem = typeof vocabItems.$inferSelect;
+export type NewVocabItem = typeof vocabItems.$inferInsert;
+
 // Suggested questions table - curated questions for Ask Tutor page
 export const suggestedQuestions = pgTable('suggested_questions', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -349,7 +378,7 @@ export type TutorOpeningMessage = typeof tutorOpeningMessages.$inferSelect;
 export type NewTutorOpeningMessage = typeof tutorOpeningMessages.$inferInsert;
 
 // Feature category enum
-export const featureCategoryEnum = ['grammar', 'vocabulary_domain'] as const;
+export const featureCategoryEnum = ['grammar', 'vocabulary_domain', 'phonology'] as const;
 export type FeatureCategory = (typeof featureCategoryEnum)[number];
 
 // Exposure type enum
@@ -362,7 +391,7 @@ export const grammarFeatureMap = pgTable('grammar_feature_map', {
   featureKey: text('feature_key').notNull().unique(), // e.g. 'present_tense_a_fi', 'definite_article'
   featureName: text('feature_name').notNull(), // Human-readable, e.g. "Present Tense: a fi (to be)"
   cefrLevel: text('cefr_level').$type<CEFRLevelEnum>().notNull(),
-  category: text('category').$type<FeatureCategory>().notNull(), // 'grammar' | 'vocabulary_domain'
+  category: text('category').$type<FeatureCategory>().notNull(), // 'grammar' | 'vocabulary_domain' | 'phonology'
   description: text('description'), // Brief description for AI prompting
   sortOrder: integer('sort_order').default(0).notNull(), // Rough priority within level
   createdAt: timestamp('created_at').defaultNow().notNull(),

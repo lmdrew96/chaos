@@ -206,12 +206,106 @@ const features: NewGrammarFeature[] = [
     description: 'When both direct and indirect object pronouns appear with third person DO, indirect "le/les" becomes "se": Se lo di (not "le lo di"). Se las mostré. Order is always indirect before direct. Stretch content for late Stage 1 / early Stage 2.',
     sortOrder: 21,
   },
+
+  // ═══════════════════════════════════════
+  // A1/A2 PHONOLOGY — PHASE 1A: foundational pronunciation features
+  // English L1 → Spanish L2 high-impact phonological contrasts
+  // ═══════════════════════════════════════
+  {
+    featureKey: 'phon_vowel_purity',
+    featureName: 'Spanish Vowel Purity',
+    cefrLevel: 'A1',
+    category: 'phonology',
+    description: 'Spanish has 5 pure, short vowels (/a e i o u/) with no diphthongization. English speakers tend to add glides: /e/ → [eɪ] (mesa → "mesay"), /o/ → [oʊ] (no → "noh-uh"). Hold each vowel short and steady, same quality from start to end.',
+    sortOrder: 100,
+  },
+  {
+    featureKey: 'phon_silent_h',
+    featureName: 'Silent Letter H',
+    cefrLevel: 'A1',
+    category: 'phonology',
+    description: 'The letter "h" is always silent in Spanish: hola → /ˈo.la/, hospital → /os.piˈtal/, hablar → /aˈβlaɾ/. Never aspirate it. The only h-like sound in Spanish is written "j" or "g" (before e/i).',
+    sortOrder: 101,
+  },
+  {
+    featureKey: 'phon_stress_predictable',
+    featureName: 'Predictable Stress Rules',
+    cefrLevel: 'A1',
+    category: 'phonology',
+    description: 'Spanish stress is rule-governed: words ending in vowel/n/s stress the penultimate syllable (CAsa, COmen, MEsas); other endings stress the final syllable (haBLAR, feLIZ). Written accents (´) override the rules and mark the stressed syllable explicitly (caFÉ, MÉdico, JaPÓN).',
+    sortOrder: 102,
+  },
+  {
+    featureKey: 'phon_syllable_timing',
+    featureName: 'Syllable-Timed Rhythm',
+    cefrLevel: 'A1',
+    category: 'phonology',
+    description: 'Spanish is syllable-timed: each syllable gets roughly equal duration, unlike English stress-timing which compresses unstressed syllables. Common L1 interference: English speakers reduce unstressed Spanish vowels to schwa /ə/ (saying "buh-NAH-nah" instead of "ba-NA-na"). Give every syllable its full vowel.',
+    sortOrder: 103,
+  },
+  {
+    featureKey: 'phon_flap_r',
+    featureName: 'Single R as Alveolar Flap',
+    cefrLevel: 'A2',
+    category: 'phonology',
+    description: 'The single Spanish /r/ between vowels or after most consonants is an alveolar flap [ɾ] — a quick tongue-tap against the alveolar ridge, identical to the American English "tt" in "butter" or "ladder". Examples: pero, caro, tres. Do NOT use the English retroflex /ɹ/.',
+    sortOrder: 104,
+  },
+  {
+    featureKey: 'phon_trill_rr',
+    featureName: 'Double RR as Alveolar Trill',
+    cefrLevel: 'A2',
+    category: 'phonology',
+    description: 'The double "rr" (and word-initial "r") is an alveolar trill [r] — multiple rapid tongue vibrations against the alveolar ridge. Examples: perro, carro, rojo, Roma. This is the single most challenging Spanish phoneme for English L1 learners. Distinguishes minimal pairs: pero (but) / perro (dog), caro (expensive) / carro (car).',
+    sortOrder: 105,
+  },
+  {
+    featureKey: 'phon_palatal_n',
+    featureName: 'Palatal Nasal Ñ',
+    cefrLevel: 'A2',
+    category: 'phonology',
+    description: 'The letter "ñ" is a palatal nasal /ɲ/ — articulated with the body of the tongue against the hard palate. Closest English approximation is the "ny" in "canyon" or "onion", but Spanish /ɲ/ is a single segment, not two. Examples: año (year), niño (child), señor (sir). Distinguishes año (year) / ano (anus) — important to get right.',
+    sortOrder: 106,
+  },
+  {
+    featureKey: 'phon_bv_merger',
+    featureName: 'B/V Merger (No Distinction)',
+    cefrLevel: 'A2',
+    category: 'phonology',
+    description: 'Spanish "b" and "v" represent the same phoneme — pronounced as bilabial stop [b] after pause or /m, n/ (vamos, hombre, un beso), and as bilabial approximant [β] elsewhere (haber, lavar, la vaca). Never use the English labiodental [v]. Vaca and baca are pronounced identically.',
+    sortOrder: 107,
+  },
+  {
+    featureKey: 'phon_voiceless_velar_j',
+    featureName: 'Voiceless Velar Fricative J',
+    cefrLevel: 'A2',
+    category: 'phonology',
+    description: 'The letter "j" (and "g" before e/i) is /x/ — a voiceless velar fricative, articulated further back than English /h/. Examples: jamón, jugar, gente, gigante. English speakers default to /h/ which sounds noticeably foreign; aim for friction at the back of the mouth.',
+    sortOrder: 108,
+  },
+  {
+    featureKey: 'phon_stress_contrast',
+    featureName: 'Stress-Contrast Minimal Pairs',
+    cefrLevel: 'A2',
+    category: 'phonology',
+    description: 'Many Spanish words differ only in stress placement, marked by the written accent: término (term, noun) / termino (I finish, present) / terminó (he finished, preterite). papá (dad) / papa (potato/pope). sí (yes) / si (if). Misplacing stress changes the word, tense, or person — not just accent.',
+    sortOrder: 109,
+  },
+  {
+    featureKey: 'phon_sinalefa',
+    featureName: 'Vowel Linking (Sinalefa)',
+    cefrLevel: 'A2',
+    category: 'phonology',
+    description: 'When a word ending in a vowel meets a word starting with a vowel, the two vowels merge into one syllable: la amiga → [la.ˈmi.ɣa], mi hermano → [mjeɾˈma.no], ¿cómo estás? → [ˈko.mo.esˈtas]. Native Spanish speech is heavily linked; pronouncing each word in isolation sounds robotic and foreign.',
+    sortOrder: 110,
+  },
 ];
 
 async function seedGrammarFeatures() {
   console.log('🧠 Seeding Spanish grammar feature map...');
   console.log(`   ${features.filter(f => f.cefrLevel === 'A2' && f.category === 'grammar').length} A2 grammar features`);
   console.log(`   ${features.filter(f => f.cefrLevel === 'B1' && f.category === 'grammar').length} B1 grammar features`);
+  console.log(`   ${features.filter(f => f.category === 'phonology').length} phonology features`);
   console.log(`   ${features.length} total features\n`);
 
   try {

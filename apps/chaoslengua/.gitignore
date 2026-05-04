@@ -49,6 +49,10 @@ next-env.d.ts
 # development tracking
 *.csv
 
+# vocab importer artifacts (SUBTLEX-ESP source + Claude enrichment cache)
+/content/subtlex-esp.*
+/content/vocab-enriched.json
+
 # log files
 *.txt
 
