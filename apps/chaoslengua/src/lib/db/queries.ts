@@ -10,6 +10,7 @@ import {
   stressMinimalPairs,
   suggestedQuestions,
   readingQuestions,
+  contentQuestions,
   tutorOpeningMessages,
   grammarFeatureMap,
   userFeatureExposure,
@@ -308,6 +309,23 @@ export async function getActiveReadingQuestions() {
     options: r.options,
     correctIndex: r.correctIndex,
   }));
+}
+
+/**
+ * Fetches hand-authored comprehension questions for a content item, ordered.
+ * Returns [] when none exist (caller can fall back to AI generation).
+ */
+export async function getContentQuestionsByContentId(contentId: string) {
+  return db
+    .select({
+      question: contentQuestions.question,
+      options: contentQuestions.options,
+      correctIndex: contentQuestions.correctIndex,
+      explanation: contentQuestions.explanation,
+    })
+    .from(contentQuestions)
+    .where(eq(contentQuestions.contentId, contentId))
+    .orderBy(asc(contentQuestions.sortOrder));
 }
 
 /**

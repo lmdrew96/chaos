@@ -1,6 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
 import { callGroq } from "@chaos/ai-clients";
 import { NextResponse } from "next/server";
+import { db } from "@/lib/db";
+import { contentItems } from "@/lib/db/schema";
+import { getContentQuestionsByContentId } from "@/lib/db/queries";
+import { eq } from "drizzle-orm";
 
 export interface QuizQuestion {
     type: 'multiple_choice' | 'fill_in_blank';
@@ -11,9 +15,9 @@ export interface QuizQuestion {
     explanation: string;
 }
 
-const QUIZ_SYSTEM_PROMPT = `You are a Romanian language quiz generator for a reading comprehension tool called "Deep Fog."
+const QUIZ_SYSTEM_PROMPT = `You are a Spanish language quiz generator for a reading comprehension tool called "Deep Fog."
 
-The learner has just read a Romanian text. Generate exactly 3 short comprehension questions based on the text:
+The learner has just read a Spanish text. Generate exactly 3 short comprehension questions based on the text:
 - 2 multiple choice questions (testing vocabulary meaning or text comprehension)
 - 1 fill-in-the-blank question (testing a grammar structure from the text)
 
@@ -29,9 +33,9 @@ Return valid JSON array:
   },
   {
     "type": "fill_in_blank",
-    "question": "Complete: 'El ___ la piață ieri.' (a merge)",
-    "correctAnswer": "a mers",
-    "targetFeature": "past_tense",
+    "question": "Complete: 'Ayer ___ al supermercado.' (ir)",
+    "correctAnswer": "fui",
+    "targetFeature": "preterite_perfective",
     "explanation": "Brief explanation (1 sentence)"
   }
 ]
@@ -41,9 +45,9 @@ Rules:
 - MC options must be shuffled (correct answer NOT always first)
 - MC distractors must be plausible but clearly wrong
 - Fill-in-blank: show the sentence with ___ and optionally a hint in parentheses
-- All Romanian text must have correct diacritics (ă, â, î, ș, ț)
+- All Spanish text must have correct diacritics (á, é, í, ó, ú, ü, ñ, ¿, ¡)
 - Adjust difficulty to the learner's CEFR level
-- Questions should be in English, Romanian text in answers/options
+- Questions should be in English, Spanish text in answers/options
 - Keep it quick and fun — these are comprehension checks, not exams`;
 
 export async function POST(req: Request) {
@@ -53,18 +57,48 @@ export async function POST(req: Request) {
     }
 
     try {
-        const { textContent, userLevel } = await req.json();
+        const { textContent, userLevel, contentId } = await req.json() as {
+            textContent?: string;
+            userLevel?: string;
+            contentId?: string;
+        };
 
+        // Prefer hand-authored content_questions when contentId is provided
+        if (contentId) {
+            const curated = await getContentQuestionsByContentId(contentId);
+            if (curated.length > 0) {
+                // Pull the content item's first grammar feature as the targetFeature
+                // so Error Garden can categorize wrong answers.
+                const [item] = await db
+                    .select({ languageFeatures: contentItems.languageFeatures })
+                    .from(contentItems)
+                    .where(eq(contentItems.id, contentId));
+                const grammarKeys = ((item?.languageFeatures as Record<string, unknown> | null)?.grammar as string[]) || [];
+                const targetFeature = grammarKeys[0];
+
+                const questions: QuizQuestion[] = curated.map((q) => ({
+                    type: 'multiple_choice' as const,
+                    question: q.question,
+                    options: q.options,
+                    correctAnswer: q.options[q.correctIndex],
+                    targetFeature,
+                    explanation: q.explanation || '',
+                }));
+
+                return NextResponse.json({ questions });
+            }
+        }
+
+        // Fallback: AI-generated questions for content without curated questions
         if (!textContent) {
             return new NextResponse("Text content is required", { status: 400 });
         }
 
-        // Truncate text for prompt efficiency
         const truncatedText = textContent.slice(0, 2000);
 
         const prompt = `The learner is at CEFR level ${userLevel || 'B1'}.
 
-Here is the Romanian text they just read:
+Here is the Spanish text they just read:
 ---
 ${truncatedText}
 ---

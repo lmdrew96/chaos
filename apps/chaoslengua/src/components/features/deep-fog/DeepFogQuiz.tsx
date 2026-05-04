@@ -50,7 +50,7 @@ export function DeepFogQuiz({ content, userLevel, onComplete, onSkip }: Props) {
                 const res = await fetch("/api/deep-fog/quiz", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ textContent, userLevel }),
+                    body: JSON.stringify({ textContent, userLevel, contentId: content.id }),
                 })
 
                 if (!res.ok) throw new Error("Failed to generate quiz")
