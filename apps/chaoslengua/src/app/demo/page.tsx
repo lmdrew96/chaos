@@ -57,67 +57,70 @@ const DEMO_CHALLENGES: DemoChallenge[] = [
   {
     type: "fix",
     prompt: "Find the grammar error and rewrite the sentence correctly.",
-    targetSentence: "Eu **merg** la magazin ieri.",
-    hint: "Think about verb tense — does the time expression match the verb form?",
-    expectedAnswers: ["Eu am mers la magazin ieri.", "Am mers la magazin ieri."],
-    featureKey: "past_tense_perfect_compus",
-    featureName: "Past Tense (Perfectul compus)",
-    grammarRule: "\"Ieri\" (yesterday) requires perfectul compus. Present tense \"merg\" must become \"am mers\".",
+    targetSentence: "Cuando era niño, **jugué** al fútbol todos los días.",
+    hint: "Look at the time expression \"todos los días\" — does the verb tense match a habitual past?",
+    expectedAnswers: [
+      "Cuando era niño, jugaba al fútbol todos los días.",
+      "Cuando era niño jugaba al fútbol todos los días.",
+    ],
+    featureKey: "preterite_imperfect_contrast",
+    featureName: "Preterite vs Imperfect",
+    grammarRule: "\"Todos los días\" signals a habitual, repeated past action — Spanish uses the imperfect (jugaba), not the preterite (jugué). Preterite would mark a single completed event.",
   },
   {
     type: "transform",
-    prompt: "Change this sentence from **informal** to **formal** (use the polite form).",
-    targetSentence: "Tu **vrei** un ceai?",
-    hint: "Romanian uses \"dumneavoastră\" for formal address, and verbs change to match.",
-    expectedAnswers: ["Dumneavoastră vreți un ceai?", "Dvs. vreți un ceai?"],
-    featureKey: "formal_informal_address",
-    featureName: "Formal vs. Informal Address",
-    grammarRule: "Romanian uses \"dumneavoastră\" for formal address. The verb conjugates to 2nd person plural: vrei → vreți.",
+    prompt: "Change this sentence from **present** to **preterite** (a single completed past action).",
+    targetSentence: "**Como** una manzana.",
+    hint: "Preterite -er verbs: yo → -í, tú → -iste, él/ella → -ió. Note the accent mark.",
+    expectedAnswers: ["Comí una manzana.", "Yo comí una manzana."],
+    featureKey: "preterite_perfective",
+    featureName: "Preterite for Completed Actions",
+    grammarRule: "Preterite marks discrete, completed past events. \"Comer\" → \"comí\" (1st person singular). The accent on \"-í\" distinguishes it from related forms.",
   },
   {
     type: "complete",
-    prompt: "Fill in the blank with the correct form of the article.",
-    targetSentence: "Am cumpărat _____ carte interesantă.",
-    hint: "\"Carte\" is feminine. What's the feminine indefinite article?",
-    expectedAnswers: ["o"],
-    featureKey: "definite_article",
-    featureName: "Romanian Articles",
-    grammarRule: "\"Carte\" is feminine and needs the indefinite article \"o\". The definite article is a suffix (-a), the indefinite is a separate word.",
+    prompt: "Fill in the blank with the correct form of **ser** or **estar**.",
+    targetSentence: "Madrid _____ en España.",
+    hint: "Location is always estar — even when the location is permanent.",
+    expectedAnswers: ["está"],
+    featureKey: "estar_location",
+    featureName: "Estar for Location",
+    grammarRule: "Physical location uses \"estar\" regardless of permanence. Madrid has been in Spain for centuries, but Spanish still uses \"está\" — location is the rule, not duration.",
   },
   {
     type: "which_one",
-    prompt: "Which sentence uses the **subjunctive** correctly?",
+    prompt: "Which sentence means **\"My sister is bored today\"** (not \"boring\")?",
     options: [
-      "Vreau că merg acasă.",
-      "Vreau să merg acasă.",
-      "Vreau de merg acasă.",
-      "Vreau la merg acasă.",
+      "Mi hermana es aburrida hoy.",
+      "Mi hermana está aburrida hoy.",
+      "Mi hermana es aburriendo hoy.",
+      "Mi hermana está aburrir hoy.",
     ],
-    hint: "After verbs of wanting, Romanian uses a special particle before the verb.",
-    expectedAnswers: ["Vreau să merg acasă."],
-    featureKey: "subjunctive_sa",
-    featureName: "Subjunctive Mood (Conjunctivul)",
-    grammarRule: "After verbs of wanting/wishing, Romanian uses \"să\" + subjunctive, not \"că\".",
+    hint: "With ser, \"aburrida\" = boring (essential trait). With estar, \"aburrida\" = bored (current state).",
+    expectedAnswers: ["Mi hermana está aburrida hoy."],
+    featureKey: "ser_estar_contrast",
+    featureName: "Ser vs Estar: Semantic Minimal Pairs",
+    grammarRule: "Ser + aburrido = boring (intrinsic trait). Estar + aburrido = bored (current state). The verb choice changes the meaning of the same adjective — a major Spanish L2 fossilization point.",
   },
   {
     type: "rewrite",
-    prompt: "Translate this into Romanian using the **dative** case.",
-    targetSentence: "I gave the book **to Maria**.",
-    hint: "In Romanian, feminine names take the dative form with \"-ei\" suffix.",
-    expectedAnswers: ["I-am dat cartea Mariei.", "Am dat cartea Mariei."],
-    featureKey: "dative_case",
-    featureName: "Dative Case",
-    grammarRule: "Romanian marks indirect objects with the dative case. Feminine proper nouns like Maria → Mariei. Pronominal doubling with clitic \"i-\" is required.",
+    prompt: "Translate this into Spanish using a **direct object pronoun**.",
+    targetSentence: "I bought it (the book).",
+    hint: "Direct object pronouns go BEFORE the conjugated verb. \"Book\" is masculine, so use \"lo\".",
+    expectedAnswers: ["Lo compré.", "Yo lo compré."],
+    featureKey: "direct_object_pronoun_preverbal",
+    featureName: "Direct Object Pronouns (Preverbal)",
+    grammarRule: "Direct object pronouns (lo/la/los/las) replace the direct object and sit BEFORE the conjugated verb. \"El libro\" (masc.) → \"lo\". Postverbal attachment (comprarlo) is a Stage 2 pattern.",
   },
   {
     type: "spot_the_trap",
     prompt: "This sentence looks correct but has a subtle error. Find it and fix it.",
-    targetSentence: "Copiii **meu** sunt la școală.",
-    hint: "Check if the possessive adjective agrees with the noun it modifies.",
-    expectedAnswers: ["Copiii mei sunt la școală."],
-    featureKey: "possessive_agreement",
-    featureName: "Possessive Agreement",
-    grammarRule: "Possessive adjectives must agree in gender and number with the noun. Copiii (masc. pl.) requires \"mei\" not \"meu\" (masc. sg.).",
+    targetSentence: "Mi madre **es una** profesora.",
+    hint: "Bare profession nouns in Spanish drop the indefinite article — unlike English.",
+    expectedAnswers: ["Mi madre es profesora."],
+    featureKey: "ser_profession",
+    featureName: "Ser for Profession",
+    grammarRule: "Spanish drops the indefinite article (un/una) before unmodified profession nouns. \"Es profesora\" — not \"es una profesora\". The article reappears only with modification: \"Es una profesora excelente.\"",
   },
 ]
 
@@ -134,44 +137,44 @@ interface DemoErrorPattern {
 
 const DEMO_ERROR_PATTERNS: DemoErrorPattern[] = [
   {
-    name: "Verb-Subject Agreement",
-    category: "Morphology",
-    frequency: 72,
+    name: "Ser vs Estar",
+    category: "Lexical Choice",
+    frequency: 78,
+    tier: 3,
+    examples: ["es cansado → está cansado", "soy una profesora → soy profesora"],
+    barClass: "bg-destructive",
+  },
+  {
+    name: "Preterite vs Imperfect",
+    category: "Aspect",
+    frequency: 64,
     tier: 2,
-    examples: ["Ei merge → Ei merg", "Noi face → Noi facem"],
+    examples: ["jugué todos los días → jugaba todos los días", "iba al cine ayer → fui al cine ayer"],
     barClass: "bg-chart-4",
   },
   {
-    name: "Article Placement",
+    name: "Object Pronoun Position",
     category: "Syntax",
-    frequency: 58,
-    tier: 1,
-    examples: ["un casa → o casă", "cartea bună → buna carte"],
+    frequency: 51,
+    tier: 2,
+    examples: ["veo lo → lo veo", "compré la → la compré"],
     barClass: "bg-chart-3",
   },
   {
-    name: "Case Marking (Dative)",
-    category: "Morphology",
-    frequency: 45,
+    name: "Profession Article (L1 Transfer)",
+    category: "Transfer",
+    frequency: 42,
     tier: 1,
-    examples: ["pentru Maria → Mariei", "la profesorul → profesorului"],
+    examples: ["es una doctora → es doctora", "soy un estudiante → soy estudiante"],
     barClass: "bg-primary",
   },
   {
-    name: "L1 Transfer (word order)",
-    category: "Transfer",
-    frequency: 38,
+    name: "Adjective Agreement",
+    category: "Morphology",
+    frequency: 35,
     tier: 1,
-    examples: ["Eu nu sunt acasă → Nu sunt acasă", "Am mers ieri → Ieri am mers"],
+    examples: ["las casas blanco → las casas blancas", "los libros nueva → los libros nuevos"],
     barClass: "bg-accent",
-  },
-  {
-    name: "Subjunctive Avoidance",
-    category: "Syntax",
-    frequency: 82,
-    tier: 3,
-    examples: ["Vreau că merg → Vreau să merg", "E bine că mergi → E bine să mergi"],
-    barClass: "bg-destructive",
   },
 ]
 
@@ -414,10 +417,10 @@ export default function DemoPage() {
 
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">
             <span className="bg-gradient-to-r from-foreground via-primary to-primary/50 bg-clip-text text-transparent">
-              ChaosLimb
+              ChaosLeng
             </span>
             <span className="bg-gradient-to-r from-primary/50 to-accent bg-clip-text text-transparent">
-              ă
+              ua
             </span>
           </h1>
 
@@ -462,10 +465,10 @@ export default function DemoPage() {
 
       {/* ─── WHY CHAOSLIMBA ──────────────────────────────────────────────── */}
       <section className="max-w-5xl mx-auto px-6 py-16">
-        <h2 className="text-2xl md:text-3xl font-bold mb-3">Why ChaosLimba?</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-3">Why ChaosLengua?</h2>
         <p className="text-muted-foreground mb-10 max-w-2xl">
           Most language apps punish mistakes, enforce streaks, and follow rigid paths.
-          ChaosLimba turns that upside down — your errors become your curriculum, and productive confusion drives real acquisition.
+          ChaosLengua turns that upside down — your errors become your curriculum, and productive confusion drives real acquisition.
         </p>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -699,7 +702,7 @@ export default function DemoPage() {
                       <p className="text-sm text-muted-foreground leading-relaxed">{evaluation.ruleExplanation}</p>
                       <div className="flex items-center gap-1.5 mt-3 text-xs text-primary/60">
                         <Sparkles className="h-3 w-3" />
-                        <span>Evaluated by ChaosLimba AI — same engine used in the full app</span>
+                        <span>Evaluated by ChaosLengua AI — same engine used in the full app</span>
                       </div>
                     </div>
 

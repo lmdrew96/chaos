@@ -4,12 +4,12 @@ import type { WorkshopChallenge } from '@/lib/ai/workshop';
 
 // Allowed feature keys for demo challenges — reject anything else
 const DEMO_FEATURE_KEYS = new Set([
-  'past_tense_perfect_compus',
-  'formal_informal_address',
-  'definite_article',
-  'subjunctive_sa',
-  'dative_case',
-  'possessive_agreement',
+  'preterite_imperfect_contrast',
+  'preterite_perfective',
+  'estar_location',
+  'ser_estar_contrast',
+  'direct_object_pronoun_preverbal',
+  'ser_profession',
 ]);
 
 export async function POST(req: NextRequest) {

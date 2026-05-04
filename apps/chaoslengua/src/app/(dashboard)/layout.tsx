@@ -12,7 +12,7 @@ import { InstallPrompt } from "@/components/pwa/InstallPrompt"
 
 export const metadata: Metadata = {
   title: "Dashboard",
-  description: "Your ChaosLimba learning dashboard - track progress and explore features",
+  description: "Your ChaosLengua learning dashboard - track progress and explore features",
 }
 
 export default async function DashboardLayout({
