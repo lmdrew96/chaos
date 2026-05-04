@@ -10,7 +10,7 @@ export default function TermsOfServicePage() {
     const lastUpdated = "February 16, 2026";
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900">
+        <div className="min-h-screen bg-background">
             <div className="max-w-4xl mx-auto px-6 py-16">
                 {/* Header */}
                 <div className="mb-12">
@@ -55,18 +55,18 @@ export default function TermsOfServicePage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">⚠️ Beta / Preview Status</h2>
                         <div className="bg-chart-3/10 border border-chart-3/30 rounded-lg p-4">
-                            <p className="text-chart-3 leading-relaxed">
-                                <strong>IMPORTANT:</strong> ChaosLengua is currently in <strong>live preview</strong> mode.
+                            <p className="text-foreground leading-relaxed">
+                                <strong className="text-chart-3">IMPORTANT:</strong> ChaosLengua is currently in <strong>live preview</strong> mode.
                                 This means:
                             </p>
-                            <ul className="list-disc list-inside text-chart-3 space-y-2 mt-4">
+                            <ul className="list-disc list-inside text-foreground space-y-2 mt-4">
                                 <li>Features may change, break, or be removed without notice</li>
                                 <li>Data may be reset or migrated during updates</li>
                                 <li>The service may experience downtime</li>
                                 <li>AI outputs may contain errors or inaccuracies</li>
                                 <li>Not all planned features are available yet</li>
                             </ul>
-                            <p className="text-chart-3 leading-relaxed mt-4">
+                            <p className="text-foreground leading-relaxed mt-4">
                                 By using the preview, you acknowledge and accept these limitations.
                                 We appreciate your patience and feedback as we build this together!
                             </p>
@@ -132,7 +132,7 @@ export default function TermsOfServicePage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">💳 Payments & Subscriptions</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            During the live preview period, ChaosLengua is <strong className="text-green-400">free to use</strong>.
+                            During the live preview period, ChaosLengua is <strong className="text-chart-3">free to use</strong>.
                             When we introduce paid features:
                         </p>
                         <ul className="list-disc list-inside text-muted-foreground space-y-2 mt-4">

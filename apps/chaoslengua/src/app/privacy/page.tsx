@@ -10,7 +10,7 @@ export default function PrivacyPolicyPage() {
     const lastUpdated = "February 16, 2026";
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900">
+        <div className="min-h-screen bg-background">
             <div className="max-w-4xl mx-auto px-6 py-16">
                 {/* Header */}
                 <div className="mb-12">
@@ -245,8 +245,8 @@ export default function PrivacyPolicyPage() {
                     <section>
                         <h2 className="text-2xl font-semibold text-foreground mb-4">⚠️ Beta / Preview Notice</h2>
                         <div className="bg-chart-3/10 border border-chart-3/30 rounded-lg p-4">
-                            <p className="text-chart-3 leading-relaxed">
-                                ChaosLengua is currently in <strong>live preview</strong> mode. This means features may change,
+                            <p className="text-foreground leading-relaxed">
+                                ChaosLengua is currently in <strong className="text-chart-3">live preview</strong> mode. This means features may change,
                                 data structures may be updated, and there may be bugs. While we take every precaution to protect
                                 your data, please be aware that this is pre-release software. We recommend not uploading
                                 sensitive personal information beyond what&apos;s required for the service.
