@@ -25,6 +25,10 @@ export async function POST(req: NextRequest) {
     let contentFeatures: string[] = [];
     let targetFeatures: Array<{ featureKey: string; featureName: string; description: string }> = [];
     let fossilizationAlerts: FossilizationAlert[] = [];
+    // The question the tutor asked the user — we grade the response against THIS,
+    // not against the source content. Optional only because the very first turn
+    // (before any tutor question exists) has nothing to ground against.
+    let previousQuestion: string | undefined;
 
     if (isSpeechMode) {
       // Speech mode - handle FormData
@@ -37,6 +41,7 @@ export async function POST(req: NextRequest) {
 
       userLevel = (formData.get('userLevel') as string) || 'B1';
       contentId = (formData.get('contentId') as string) || undefined;
+      previousQuestion = (formData.get('previousQuestion') as string) || undefined;
 
       // Parse content features from JSON string
       const contentFeaturesStr = formData.get('contentFeatures') as string | null;
@@ -120,6 +125,7 @@ export async function POST(req: NextRequest) {
       contentFeatures = body.contentFeatures || [];
       targetFeatures = body.targetFeatures || [];
       fossilizationAlerts = body.fossilizationAlerts || [];
+      previousQuestion = body.previousQuestion || undefined;
     }
 
     // Validate common inputs
@@ -195,7 +201,8 @@ export async function POST(req: NextRequest) {
       userLevel,
       targetFeatures,
       [], // newlyDiscoveredFeatures
-      fossilizationAlerts
+      fossilizationAlerts,
+      previousQuestion?.trim() || undefined
     );
 
     // Step 3: Format feedback for user display

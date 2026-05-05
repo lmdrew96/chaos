@@ -593,6 +593,7 @@ export default function ChaosWindowPage() {
           body: JSON.stringify({
             userResponse: response.trim(),
             context: currentContext,
+            previousQuestion: tutorPrompt,
             errorPatterns: errorPatterns,
             sessionId,
             modality: "text",
@@ -608,6 +609,7 @@ export default function ChaosWindowPage() {
         const formData = new FormData()
         formData.append('audio', audioBlob!, 'response.webm')
         formData.append('context', currentContext)
+        if (tutorPrompt) formData.append('previousQuestion', tutorPrompt)
         formData.append('sessionId', sessionId)
         formData.append('modality', 'speech')
         formData.append('errorPatterns', JSON.stringify(errorPatterns))

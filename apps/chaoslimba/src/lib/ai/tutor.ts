@@ -503,7 +503,8 @@ export async function generateTutorResponse(
     userLevel: string = 'B1',
     targetFeatures: TargetFeature[] = [],
     newlyDiscoveredFeatures: string[] = [],
-    fossilizationAlerts: FossilizationAlert[] = []
+    fossilizationAlerts: FossilizationAlert[] = [],
+    previousQuestion?: string
 ): Promise<TutorResponse> {
 
     // Step 1: Extract vocabulary questions from parentheses
@@ -528,7 +529,10 @@ export async function generateTutorResponse(
 You are the ChaosLimbă Tutor, a brilliant but slightly chaotic Romanian language expert.
 Your goal is to help learners master Romanian through "productive confusion".
 
-Context: The user just heard/read: "${context}"
+${previousQuestion ? `**The question you asked the user**: "${previousQuestion}"
+The user's response below is their answer to THIS question — grade relevance against the question, not the source content.` : ''}
+
+Background — the user just heard/read this content (use as background for vocabulary/structures, NOT as the grading target): "${context}"
 ${hasFullTranscript ? '' : '⚠️ NOTE: You only have the content title, not the full transcript. Focus on grammar and form rather than semantic accuracy.'}
 
 User's response: "${textToGrade}"
@@ -564,7 +568,7 @@ Analyze the response and provide feedback in this JSON format:
     "semantic": {
       "score": ${hasFullTranscript ? '0.85' : '0.0'},
       "matches": ${hasFullTranscript ? 'true' : 'false'},
-      "feedback": "${hasFullTranscript ? 'semantic_feedback' : 'Cannot evaluate semantic accuracy without full transcript'}"
+      "feedback": "${previousQuestion ? 'how well the response answers the question you asked' : (hasFullTranscript ? 'how well the response addresses the content' : 'Cannot evaluate semantic accuracy without full transcript')}"
     },
     "encouragement": "motivational_comment"
   },
@@ -576,7 +580,9 @@ Analyze the response and provide feedback in this JSON format:
 
 Focus on:
 1. Grammar accuracy with specific corrections
-${hasFullTranscript ? '2. Semantic understanding of the content (DID THEY UNDERSTAND WHAT WAS SAID?)' : '2. ⚠️ SKIP semantic evaluation (no transcript available)'}
+${previousQuestion
+  ? `2. **Did the response answer the question you asked?** ("${previousQuestion}") The source content is just background — do NOT mark the response off-topic for failing to discuss the content if it does answer your question.`
+  : (hasFullTranscript ? '2. Semantic understanding of the content (DID THEY UNDERSTAND WHAT WAS SAID?)' : '2. ⚠️ SKIP semantic evaluation (no transcript available)')}
 3. Encouragement that maintains motivation
 4. Next question at ${userLevel} CEFR level that ${hasFullTranscript ? 'addresses identified weaknesses AND references the content' : 'focuses on grammar/form'}
 5. Error patterns that should go to the Error Garden
