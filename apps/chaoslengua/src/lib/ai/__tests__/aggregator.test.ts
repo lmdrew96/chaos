@@ -1,7 +1,7 @@
 import { FeedbackAggregator } from '../aggregator';
 import { GrammarResult, GrammarError } from '../grammar';
 import { SpamAResult } from '../spamA';
-import { IntonationWarning } from '../../../types/intonation';
+import { IntonationWarning } from '@chaos/lang-config';
 import { AggregatorInput, AggregatedReport } from '../../../types/aggregator';
 
 describe('FeedbackAggregator', () => {

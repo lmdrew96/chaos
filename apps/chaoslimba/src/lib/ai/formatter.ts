@@ -2,7 +2,7 @@ import { AggregatedReport, ExtractedErrorPattern } from '@/types/aggregator';
 import { GrammarError } from './grammar';
 import { SpamAResult } from './spamA';
 import { PronunciationResult } from '@/types/aggregator';
-import { IntonationWarning } from '@/types/intonation';
+import { IntonationWarning } from '@chaos/lang-config';
 
 export interface FormattedFeedback {
   overallScore: number;

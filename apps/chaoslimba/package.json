@@ -28,6 +28,7 @@
     "@chaos/ai-clients": "workspace:*",
     "@chaos/core-ai": "workspace:*",
     "@chaos/db": "workspace:*",
+    "@chaos/lang-config": "workspace:*",
     "@chaos/ui": "workspace:*",
     "@clerk/nextjs": "^6.36.8",
     "@google-cloud/text-to-speech": "^6.4.0",

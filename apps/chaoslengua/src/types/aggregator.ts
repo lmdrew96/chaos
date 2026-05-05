@@ -1,7 +1,7 @@
 import { GrammarResult } from '../lib/ai/grammar';
 import { SpamAResult } from '../lib/ai/spamA';
 import { SpamBResult } from '../lib/ai/spamB';
-import { IntonationWarning } from './intonation';
+import { IntonationWarning } from '@chaos/lang-config';
 
 // Pronunciation analysis result (placeholder until implemented)
 export interface PronunciationResult {

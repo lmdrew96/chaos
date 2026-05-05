@@ -5,7 +5,7 @@ import {
   getStressErrorSeverity,
   STRESS_MINIMAL_PAIRS 
 } from '../spamD';
-import { IntonationWarning } from '@/types/intonation';
+import { IntonationWarning } from '@chaos/lang-config';
 
 describe('SPAM-D: Intonation-Meaning Mapper', () => {
   describe('STRESS_MINIMAL_PAIRS data structure', () => {

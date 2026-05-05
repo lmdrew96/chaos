@@ -3,7 +3,7 @@ import { compareSemanticSimilarity, SpamAResult } from "./spamA";
 import { analyzeRelevance, SpamBResult } from "./spamB";
 import { checkIntonationShift } from "./spamD";
 import { analyzePronunciation, PronunciationResult } from "@chaos/ai-clients";
-import { IntonationWarning } from "../../types/intonation";
+import { IntonationWarning } from "@chaos/lang-config";
 import { FeedbackAggregator, AggregatorInput, AggregatedReport } from "./aggregator";
 
 /**

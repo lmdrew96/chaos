@@ -1,4 +1,4 @@
-import { StressVariant, MinimalPair, IntonationWarning, StressPattern } from '../../types/intonation';
+import { StressVariant, MinimalPair, IntonationWarning, StressPattern } from '@chaos/lang-config';
 
 // Romanian stress-based minimal pairs lookup table
 // Each word maps to stress patterns and their distinct meanings

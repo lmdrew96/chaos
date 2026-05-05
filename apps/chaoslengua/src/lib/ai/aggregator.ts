@@ -14,7 +14,7 @@ import { compareSemanticSimilarity, SpamAResult } from './spamA';
 import { analyzeRelevance } from './spamB';
 import { checkIntonationShift } from './spamD';
 import { analyzePronunciation } from '@chaos/ai-clients';
-import { IntonationWarning } from '../../types/intonation';
+import { IntonationWarning } from '@chaos/lang-config';
 
 /**
  * Input for the feedback pipeline — called directly, no HTTP indirection.
