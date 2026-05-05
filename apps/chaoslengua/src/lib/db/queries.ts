@@ -993,12 +993,18 @@ export async function getWorkshopFeatureTarget(
   userId: string,
   userLevel: CEFRLevelEnum
 ): Promise<WorkshopFeatureTarget | null> {
-  const [exposure, levelFeatures, errorPatterns, adaptProfile] = await Promise.all([
+  const [exposure, allLevelFeatures, errorPatterns, adaptProfile] = await Promise.all([
     getUserFeatureExposureSummary(userId),
     getFeaturesForLevel(userLevel),
     getUserErrorPatternsForContent(userId, 10),
     getAdaptationProfile(userId),
   ]);
+
+  // Phonology features need pronunciation-specific drills (read-aloud,
+  // listen-and-discriminate, stress-pair) that workshop doesn't generate.
+  // Drop them here so no selection bucket can route them into a
+  // transform/fix/complete prompt. Re-allow once a phonology drill UX exists.
+  const levelFeatures = allLevelFeatures.filter(f => f.category !== 'phonology');
 
   if (levelFeatures.length === 0) return null;
 

@@ -48,11 +48,8 @@ function pickRandomChallengeType(
   feature: GrammarFeature,
   recentTypes?: WorkshopChallengeType[]
 ): WorkshopChallengeType {
-  // Phonology features fall through to GRAMMAR_CHALLENGE_TYPES here, which is
-  // wrong (they need pronunciation-specific drills, not transform/fix prompts).
-  // Currently dormant — Adaptation Engine doesn't query phonology features yet.
-  // Wiring them up is a follow-up patch; until then phonology should be filtered
-  // out at the feature-selection layer before reaching the workshop.
+  // Phonology features are filtered upstream in getWorkshopFeatureTarget — only
+  // grammar / vocabulary_domain reach here.
   const pool = feature.category === 'vocabulary_domain'
     ? [...VOCAB_CHALLENGE_TYPES]
     : [...GRAMMAR_CHALLENGE_TYPES];
