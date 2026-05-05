@@ -76,7 +76,16 @@ next-env.d.ts
 /audio-output/
 
 # Python cache files
-scripts/tts/__pycache__
+__pycache__/
+*.pyc
 
 # Test scripts
 scripts/test-tts.js
+
+# Phoneme pronunciation spike artifacts
+scripts/spike-phoneme-output/
+scripts/spike-audio/*.wav
+scripts/spike-audio/*.mp3
+scripts/spike-audio/*.webm
+scripts/spike-audio/*.ogg
+scripts/spike-audio/*.m4a

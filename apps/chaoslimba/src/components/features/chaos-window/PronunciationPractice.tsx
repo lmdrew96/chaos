@@ -4,11 +4,45 @@ import { useState, useRef } from "react"
 import { Card, CardContent } from "@chaos/ui"
 import { Button } from "@chaos/ui"
 import { Mic, Square, Play, RotateCcw, Loader2, Volume2 } from "lucide-react"
-import { PronunciationResult } from "@chaos/ai-clients"
+import { PronunciationResult, PhonemeAlignment } from "@chaos/ai-clients"
 
 interface PronunciationPracticeProps {
   targetText: string
   onComplete?: (result: PronunciationResult) => void
+}
+
+function PhonemeBadge({ alignment }: { alignment: PhonemeAlignment }) {
+  if (alignment.match) {
+    return <span className="text-chart-4">{alignment.user}</span>
+  }
+  if (alignment.user && alignment.reference) {
+    // substitution: user said the wrong sound
+    return (
+      <span
+        className="text-destructive underline decoration-dotted"
+        title={`You said /${alignment.user}/ — expected /${alignment.reference}/`}
+      >
+        {alignment.user}
+      </span>
+    )
+  }
+  if (alignment.user) {
+    // insertion: user added a sound that shouldn't be there
+    return (
+      <span className="text-chart-3 italic" title={`Extra sound: /${alignment.user}/`}>
+        +{alignment.user}
+      </span>
+    )
+  }
+  // deletion: user missed a sound
+  return (
+    <span
+      className="text-destructive line-through opacity-60"
+      title={`Missing sound: /${alignment.reference}/`}
+    >
+      {alignment.reference}
+    </span>
+  )
 }
 
 export function PronunciationPractice({ targetText, onComplete }: PronunciationPracticeProps) {
@@ -324,6 +358,34 @@ export function PronunciationPractice({ targetText, onComplete }: PronunciationP
                   {result.fallbackUsed && (
                     <p className="text-xs text-chart-3">
                       ⚠️ Analysis service unavailable. Using fallback.
+                    </p>
+                  )}
+
+                  {result.phoneme && (
+                    <div className="space-y-2 pt-3 border-t border-accent/20">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">Sound accuracy:</span>
+                        <span className={`text-lg font-bold ${getScoreColor(result.phoneme.phonemeAccuracy)}`}>
+                          {(result.phoneme.phonemeAccuracy * 100).toFixed(0)}%
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {result.phoneme.matches} matched · {result.phoneme.substitutions} different · {result.phoneme.deletions} missing · {result.phoneme.insertions} extra
+                      </p>
+                      <div className="flex flex-wrap gap-x-1.5 gap-y-1 font-mono text-base p-3 rounded-lg bg-muted/30 leading-relaxed">
+                        {result.phoneme.alignment.map((p, i) => (
+                          <PhonemeBadge key={i} alignment={p} />
+                        ))}
+                      </div>
+                      <p className="text-[10px] text-muted-foreground italic">
+                        Hover a sound for detail · IPA notation
+                      </p>
+                    </div>
+                  )}
+
+                  {result.phonemeError && (
+                    <p className="text-xs text-chart-3 pt-2 border-t border-accent/20">
+                      ⚠️ Sound-level analysis unavailable: {result.phonemeError}
                     </p>
                   )}
                 </div>

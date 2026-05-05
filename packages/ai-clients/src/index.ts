@@ -8,3 +8,14 @@ export {
   ValidationError,
   type PronunciationResult,
 } from "./pronunciation";
+export {
+  transcribeToIpa,
+  comparePhonemes,
+  tokenizeIpa,
+  isPhonemeAnalysisAvailable,
+  PhonemeAnalysisError,
+  PhonemeNotConfiguredError,
+  type PhonemeAlignment,
+  type PhonemeAnalysis,
+  type PhonemeLanguage,
+} from "./phoneme-pronunciation";

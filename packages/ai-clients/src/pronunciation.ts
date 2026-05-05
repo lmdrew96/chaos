@@ -5,7 +5,13 @@
  * The `language` parameter is the ISO 639-1 code passed to Whisper as a language hint
  * — required by the host app since this is a shared package serving multiple target
  * languages (e.g., 'es' for ChaosLengua, 'ro' for ChaosLimbă).
+ *
+ * The optional `phoneme` field on `PronunciationResult` is populated by callers that
+ * orchestrate phoneme analysis on top of the Whisper transcription (see
+ * `transcribeToIpa` / `comparePhonemes` in phoneme-pronunciation.ts).
  */
+
+import type { PhonemeAnalysis } from "./phoneme-pronunciation";
 
 const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
 const MAX_AUDIO_SIZE_MB = 10; // 10MB limit for audio files
@@ -24,6 +30,12 @@ export interface PronunciationResult {
   fallbackUsed: boolean;
   modelUsed?: string;
   processingTimeMs?: number;
+  // Optional phoneme-level analysis (populated by host orchestration that calls
+  // `transcribeToIpa` + `comparePhonemes` alongside the Whisper transcription).
+  // Absence means phoneme analysis was disabled, unconfigured, or failed; check
+  // `phonemeError` for the reason in the failure case.
+  phoneme?: PhonemeAnalysis;
+  phonemeError?: string;
 }
 
 export class ValidationError extends Error { }

@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { analyzePronunciation, ValidationError } from "@chaos/ai-clients";
+import {
+  analyzePronunciation,
+  comparePhonemes,
+  isPhonemeAnalysisAvailable,
+  transcribeToIpa,
+  ValidationError,
+} from "@chaos/ai-clients";
+import { getRomanianReferenceIpa } from "@/lib/pronunciation/reference-cache";
 
 export async function POST(req: NextRequest) {
   try {
@@ -22,13 +29,32 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Convert File to Blob (File extends Blob, so this works directly)
-    const result = await analyzePronunciation(
-      audioFile,
-      'ro',
-      expectedText ?? undefined,
-      threshold
-    );
+    // Run Whisper transcription (cheap, free via Groq) and phoneme analysis (RunPod,
+    // ~$0.001) in parallel. Phoneme analysis is gated on:
+    //   1. RunPod endpoint configured for Romanian
+    //   2. expectedText supplied (need a target to generate the TTS reference)
+    // Failures in phoneme analysis are caught and surfaced via `phonemeError` so
+    // the user still gets the Whisper result.
+    const phonemeEligible = Boolean(expectedText) && isPhonemeAnalysisAvailable('ro');
+
+    const audioBuffer = phonemeEligible
+      ? Buffer.from(await audioFile.arrayBuffer())
+      : null;
+
+    const phonemePromise = phonemeEligible && audioBuffer
+      ? runPhonemeAnalysis(audioBuffer, expectedText!)
+      : Promise.resolve(null);
+
+    const [whisperResult, phonemeResult] = await Promise.all([
+      analyzePronunciation(audioFile, 'ro', expectedText ?? undefined, threshold),
+      phonemePromise,
+    ]);
+
+    const result = {
+      ...whisperResult,
+      ...(phonemeResult?.phoneme && { phoneme: phonemeResult.phoneme }),
+      ...(phonemeResult?.error && { phonemeError: phonemeResult.error }),
+    };
 
     return NextResponse.json({ result });
 
@@ -42,6 +68,20 @@ export async function POST(req: NextRequest) {
       { error: "Failed to analyze pronunciation" },
       { status: 500 }
     );
+  }
+}
+
+async function runPhonemeAnalysis(audioBuffer: Buffer, targetText: string) {
+  try {
+    const [userIpa, referenceIpa] = await Promise.all([
+      transcribeToIpa(audioBuffer, 'ro'),
+      getRomanianReferenceIpa(targetText),
+    ]);
+    return { phoneme: comparePhonemes(userIpa, referenceIpa) };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error('Phoneme analysis failed:', msg);
+    return { error: msg };
   }
 }
 
