@@ -130,7 +130,7 @@ export default function DashboardPage() {
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-foreground/10 rounded-full blur-3xl" />
         <div className="relative">
           <h1 className="text-3xl font-bold mb-2 bg-linear-to-r from-foreground via-primary to-primary/50 bg-clip-text text-transparent">
-            Bună ziua, Chaos Learner!
+            ¡Hola, Chaos Learner!
           </h1>
           <p className="text-muted-foreground max-w-xl">
             Ready to embrace some productive confusion? Your learning journey

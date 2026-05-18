@@ -307,7 +307,7 @@ export default function CumSePronuntaPage() {
                 ) : (
                   <Volume2 className="h-5 w-5" />
                 )}
-                Ascultă
+                Escuchar
               </Button>
 
               <Button

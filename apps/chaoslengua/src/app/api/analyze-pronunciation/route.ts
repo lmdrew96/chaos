@@ -1,18 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { analyzePronunciation, ValidationError } from "@chaos/ai-clients";
+import {
+  analyzePronunciation,
+  comparePhonemes,
+  isPhonemeAnalysisAvailable,
+  transcribeToIpa,
+  ValidationError,
+} from "@chaos/ai-clients";
+import { getSpanishReferenceIpa } from "@/lib/pronunciation/reference-cache";
 
 export async function POST(req: NextRequest) {
-  if (process.env.PRONUNCIATION_ENABLED !== "true") {
-    return NextResponse.json(
-      {
-        error: "pronunciation_not_available",
-        message: "Spanish pronunciation analysis is not available yet.",
-      },
-      { status: 501 }
-    );
-  }
-
   try {
     const { userId } = await auth();
     if (!userId) {
@@ -32,13 +29,29 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Convert File to Blob (File extends Blob, so this works directly)
-    const result = await analyzePronunciation(
-      audioFile,
-      'es',
-      expectedText ?? undefined,
-      threshold
-    );
+    // Run Whisper (free via Groq) and phoneme analysis (RunPod) in parallel.
+    // Phoneme analysis requires expectedText + a configured ES endpoint.
+    // Failures degrade gracefully via `phonemeError` — Whisper result still returns.
+    const phonemeEligible = Boolean(expectedText) && isPhonemeAnalysisAvailable('es');
+
+    const audioBuffer = phonemeEligible
+      ? Buffer.from(await audioFile.arrayBuffer())
+      : null;
+
+    const phonemePromise = phonemeEligible && audioBuffer
+      ? runPhonemeAnalysis(audioBuffer, expectedText!)
+      : Promise.resolve(null);
+
+    const [whisperResult, phonemeResult] = await Promise.all([
+      analyzePronunciation(audioFile, 'es', expectedText ?? undefined, threshold),
+      phonemePromise,
+    ]);
+
+    const result = {
+      ...whisperResult,
+      ...(phonemeResult?.phoneme && { phoneme: phonemeResult.phoneme }),
+      ...(phonemeResult?.error && { phonemeError: phonemeResult.error }),
+    };
 
     return NextResponse.json({ result });
 
@@ -52,6 +65,20 @@ export async function POST(req: NextRequest) {
       { error: "Failed to analyze pronunciation" },
       { status: 500 }
     );
+  }
+}
+
+async function runPhonemeAnalysis(audioBuffer: Buffer, targetText: string) {
+  try {
+    const [userIpa, referenceIpa] = await Promise.all([
+      transcribeToIpa(audioBuffer, 'es'),
+      getSpanishReferenceIpa(targetText),
+    ]);
+    return { phoneme: comparePhonemes(userIpa, referenceIpa) };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error('Phoneme analysis failed:', msg);
+    return { error: msg };
   }
 }
 
