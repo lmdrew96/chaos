@@ -16,6 +16,7 @@ import {
   Sun,
   Moon,
   ScrollText,
+  Mic2,
 } from "lucide-react"
 import { useState, useSyncExternalStore } from "react"
 import { useTheme } from "next-themes"
@@ -39,6 +40,12 @@ const navItems = [
     href: "/workshop",
     icon: Wrench,
     description: "Grammar micro-challenges",
+  },
+  {
+    name: "Pronunciación",
+    href: "/pronunciation-practice",
+    icon: Mic2,
+    description: "Pares mínimos de acento",
   },
   {
     name: "Deep Fog",
