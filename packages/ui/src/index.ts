@@ -1,5 +1,7 @@
 export { cn } from "./utils";
 
+export * from "./app-sidebar";
+export * from "./app-top-bar";
 export * from "./alert-dialog";
 export * from "./avatar";
 export * from "./badge";

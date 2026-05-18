@@ -1,11 +1,11 @@
 // @chaos/lang-config — language module interface shared by ChaosLengua and ChaosLimbă.
 //
-// Codifies the contract a per-language module must satisfy (intonation rules +
-// error taxonomy). Prompts and CEFR content are intentionally NOT in the
-// interface yet: prompts are still inline in route/lib files and any shape
-// defined here would be redesigned by the i18n + component-extraction work;
-// CEFR content has no language-specific data today (proficiency.ts is pure
-// scoring logic). New slots will be added when real conformers exist.
+// Codifies the contract a per-language module must satisfy (intonation rules,
+// error taxonomy, and UI config). The `ui` section drives the shared Sidebar
+// and TopBar components in @chaos/ui — brand name, logo stroke, nav items, and
+// quick-access tools are all language-specific.
+
+import type { ComponentType } from 'react'
 
 // ─── Intonation ───
 
@@ -80,6 +80,34 @@ export interface ErrorTaxonomy {
 /** CEFR level union. Defined locally to keep this package zero-dep (no @chaos/db coupling). */
 export type CEFRLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
+// ─── UI config ───
+
+/** A sidebar navigation item. Icons are typed as React components; pass Lucide icons directly. */
+export interface NavItem {
+  name: string;
+  href: string;
+  icon: ComponentType<{ className?: string }>;
+  description: string;
+}
+
+/** A quick-access tool entry in the top-bar Sparkles dropdown. */
+export interface QuickTool {
+  href: string;
+  label: string;
+  icon: ComponentType<{ className?: string }>;
+}
+
+export interface LangConfigUI {
+  /** Display name rendered in the sidebar and top-bar logo lockup. */
+  brandName: string;
+  /** SVG path `d=` attribute for the distinctive top flourish of the Chaos atom logo. */
+  logoStrokePath: string;
+  /** Ordered list of sidebar nav items. Language-specific items (e.g. Pronunciación) are included here. */
+  navItems: NavItem[];
+  /** Language-specific quick-access tools shown in the top-bar Sparkles dropdown. */
+  quickTools: QuickTool[];
+}
+
 // ─── Master interface ───
 
 export interface LangConfig {
@@ -89,4 +117,5 @@ export interface LangConfig {
   name: string;
   intonation: IntonationRules;
   errorTaxonomy: ErrorTaxonomy;
+  ui?: LangConfigUI;
 }
