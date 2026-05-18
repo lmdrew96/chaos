@@ -707,6 +707,9 @@ export function mapErrorCategoryToFeatureKey(errorType: ErrorType, category: str
 
     // Vocabulary
     'false_cognate': 'vocab_false_cognates',
+
+    // Phonology (from pronunciation-practice drill)
+    'stress_contrast': 'phon_stress_contrast',
   };
 
   // Try direct match first
@@ -719,6 +722,33 @@ export function mapErrorCategoryToFeatureKey(errorType: ErrorType, category: str
   }
 
   return null;
+}
+
+/**
+ * Returns the user's most-missed stress-pair words, ranked by error count.
+ * Used by the pronunciation-practice page to weight the drill queue.
+ */
+export async function getWeakStressWords(userId: string): Promise<Array<{ word: string; errorCount: number }>> {
+  const rows = await db
+    .select({
+      word: errorLogs.context,
+      errorCount: drizzleCount(errorLogs.id),
+    })
+    .from(errorLogs)
+    .where(
+      and(
+        eq(errorLogs.userId, userId),
+        eq(errorLogs.errorType, 'pronunciation'),
+        eq(errorLogs.category, 'stress_contrast'),
+        sql`${errorLogs.context} is not null`
+      )
+    )
+    .groupBy(errorLogs.context)
+    .orderBy(desc(drizzleCount(errorLogs.id)));
+
+  return rows
+    .filter((r): r is { word: string; errorCount: number } => r.word !== null)
+    .map(r => ({ word: r.word as string, errorCount: Number(r.errorCount) }));
 }
 
 // CEFR level to difficulty range mapping (shared with /api/content/random)

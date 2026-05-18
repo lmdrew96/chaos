@@ -31,9 +31,17 @@ function shuffle<T>(arr: T[]): T[] {
   return out
 }
 
-function buildDrillQueue(pairs: Record<string, Variant[]>): DrillRound[] {
+function buildDrillQueue(pairs: Record<string, Variant[]>, weakWords: string[] = []): DrillRound[] {
   const words = Object.keys(pairs).filter((w) => pairs[w].length >= 2)
-  return shuffle(words).map((word) => {
+  const weakSet = new Set(weakWords)
+
+  // Weak words first, then shuffle the rest
+  const ordered = [
+    ...weakWords.filter((w) => words.includes(w)),
+    ...shuffle(words.filter((w) => !weakSet.has(w))),
+  ]
+
+  return ordered.map((word) => {
     const variants = pairs[word]
     const targetVariant = variants[Math.floor(Math.random() * variants.length)]
     return {
@@ -47,6 +55,7 @@ function buildDrillQueue(pairs: Record<string, Variant[]>): DrillRound[] {
 
 export default function PronunciationPracticePage() {
   const [pairsData, setPairsData] = useState<Record<string, Variant[]> | null>(null)
+  const [weakWords, setWeakWords] = useState<string[]>([])
   const [isLoadingContent, setIsLoadingContent] = useState(true)
   const [contentError, setContentError] = useState<string | null>(null)
 
@@ -67,8 +76,7 @@ export default function PronunciationPracticePage() {
   const audioCacheRef = useRef<Map<string, string>>(new Map())
 
   useEffect(() => {
-    fetchContent()
-    fetchUsage()
+    Promise.all([fetchContent(), fetchWeakWords(), fetchUsage()])
     return () => {
       audioCacheRef.current.forEach((url) => URL.revokeObjectURL(url))
     }
@@ -80,11 +88,32 @@ export default function PronunciationPracticePage() {
       if (!res.ok) throw new Error("Failed to load")
       const data = await res.json()
       setPairsData(data.pairs)
-      setQueue(buildDrillQueue(data.pairs))
+      setWeakWords((prev) => {
+        setQueue(buildDrillQueue(data.pairs, prev))
+        return prev
+      })
     } catch {
       setContentError("No se pudieron cargar los ejercicios.")
     } finally {
       setIsLoadingContent(false)
+    }
+  }
+
+  async function fetchWeakWords() {
+    try {
+      const res = await fetch("/api/pronunciation/weak-words")
+      if (res.ok) {
+        const data = await res.json()
+        const words: string[] = (data.weakWords ?? []).map((w: { word: string }) => w.word)
+        setWeakWords(words)
+        // Re-build queue if pairs data already loaded
+        setPairsData((prev) => {
+          if (prev) setQueue(buildDrillQueue(prev, words))
+          return prev
+        })
+      }
+    } catch {
+      // Non-critical — fall back to random order
     }
   }
 
@@ -174,11 +203,33 @@ export default function PronunciationPracticePage() {
   const isRevealed = selected !== null
   const isDone = index >= queue.length && queue.length > 0
 
+  async function logDrillError(word: string, selected: string, correct: string) {
+    try {
+      await fetch("/api/errors", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          errorType: "pronunciation",
+          category: "stress_contrast",
+          context: word,
+          correction: correct,
+          source: "pronunciation_practice",
+          modality: "speech",
+        }),
+      })
+    } catch {
+      // Non-critical — don't interrupt the drill
+    }
+  }
+
   function handleSelect(variant: Variant) {
     if (isRevealed) return
     const isCorrect = variant.stress === currentRound.targetVariant.stress
     setSelected(variant)
     setScore((s) => ({ correct: s.correct + (isCorrect ? 1 : 0), total: s.total + 1 }))
+    if (!isCorrect) {
+      logDrillError(currentRound.word, variant.stress, currentRound.targetVariant.stress)
+    }
   }
 
   function handleNext() {
@@ -190,7 +241,7 @@ export default function PronunciationPracticePage() {
 
   function handleRestart() {
     if (!pairsData) return
-    setQueue(buildDrillQueue(pairsData))
+    setQueue(buildDrillQueue(pairsData, weakWords))
     setIndex(0)
     setSelected(null)
     setHasPlayed(false)
