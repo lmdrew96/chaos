@@ -71,9 +71,11 @@ export async function runFeedbackPipeline(input: FeedbackPipelineInput): Promise
           phonemeScore: pronResult.pronunciationScore ? pronResult.pronunciationScore * 100 : 0,
           stressAccuracy: pronResult.pronunciationScore ? pronResult.pronunciationScore * 100 : 0,
           overallPronunciationScore: pronResult.pronunciationScore ? pronResult.pronunciationScore * 100 : 0,
-          detectedErrors: !pronResult.isAccurate ? [{
+          // Only flag errors when there was something to compare against — open-ended
+          // prompts have no expectedResponse so isAccurate is always false by default.
+          detectedErrors: expectedResponse?.trim() && !pronResult.isAccurate ? [{
             phoneme: 'general',
-            expected: expectedResponse?.trim() || '',
+            expected: expectedResponse.trim(),
             actual: pronResult.transcribedText || '',
             severity: 'medium' as const,
             position: 0,
