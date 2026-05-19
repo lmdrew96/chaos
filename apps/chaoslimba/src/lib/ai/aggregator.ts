@@ -3,6 +3,7 @@ import {
   AggregatedReport,
   ComponentStatus,
   ExtractedErrorPattern,
+  PronunciationError,
   ScoringWeights,
   DEFAULT_WEIGHTS,
 } from '../../types/aggregator';
@@ -107,7 +108,16 @@ export async function runFeedbackPipeline(input: FeedbackPipelineInput): Promise
           isAccurate: phonemeAnalysis
             ? phonemeAnalysis.phonemeAccuracy >= 0.70
             : pronResult.isAccurate,
-          detectedErrors: [],
+          detectedErrors: phonemeAnalysis
+            ? phonemeAnalysis.alignment.reduce<PronunciationError[]>((acc, p, i) => {
+                if (!p.match && p.user !== null && p.reference !== null) {
+                  if (!acc.some(e => e.phoneme === p.reference)) {
+                    acc.push({ phoneme: p.reference, expected: p.reference, actual: p.user, severity: 'medium', position: i });
+                  }
+                }
+                return acc;
+              }, [])
+            : [],
           ...(phonemeAnalysis && { phonemeAnalysis }),
         };
       } catch (err) {
@@ -269,7 +279,7 @@ export class FeedbackAggregator {
       input.pronunciationResult.detectedErrors.forEach(error => {
         patterns.push({
           type: 'pronunciation',
-          category: 'phonology',
+          category: `${error.phoneme}_mispronunciation`,
           pattern: `${error.phoneme}_mispronunciation`,
           learnerProduction: error.actual,
           correctForm: error.expected,
