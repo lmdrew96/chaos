@@ -8,6 +8,9 @@ export interface PronunciationResult {
   phonemeScore: number;        // 0-100
   stressAccuracy: number;      // 0-100
   overallPronunciationScore: number; // 0-100
+  pronunciationScore?: number; // 0-1 (raw Whisper score for UI display)
+  transcribedText?: string;    // What Whisper heard
+  isAccurate?: boolean;        // Whether transcription matched expected
   detectedErrors: PronunciationError[];
 }
 
