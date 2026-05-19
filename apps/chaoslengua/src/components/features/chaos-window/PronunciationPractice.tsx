@@ -130,7 +130,7 @@ export function PronunciationPractice({ targetText, onComplete }: PronunciationP
 
   // Word-level diff: align target and transcribed words, highlight mismatches
   const getWordDiff = (transcribed: string, target: string) => {
-    const strip = (w: string) => w.replace(/[^a-zA-ZăâîșțĂÂÎȘȚ]/g, '')
+    const strip = (w: string) => w.replace(/[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]/g, '')
     const tWords = transcribed.toLowerCase().trim().split(/\s+/).map(strip)
     const eWords = target.toLowerCase().trim().split(/\s+/).map(strip)
     const tRaw = transcribed.trim().split(/\s+/)

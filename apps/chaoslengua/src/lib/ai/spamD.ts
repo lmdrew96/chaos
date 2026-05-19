@@ -1,192 +1,217 @@
 import { StressVariant, MinimalPair, IntonationWarning, StressPattern } from '@chaos/lang-config';
 
-// Romanian stress-based minimal pairs lookup table
+// Spanish stress-based minimal pairs lookup table
 // Each word maps to stress patterns and their distinct meanings
 export const STRESS_MINIMAL_PAIRS: Record<string, MinimalPair> = {
-  "torturi": {
-    "TOR-tu-ri": {
-      meaning: "cakes",
+  "sábana": {
+    "SÁ-ba-na": {
+      meaning: "bedsheet",
+      category: "household",
+      ipa: "ˈsa.βa.na",
+      severity: "high",
+      example_sentence: "Pon la sábana limpia en la cama."
+    },
+    "sa-BA-na": {
+      meaning: "savanna",
+      category: "geography",
+      ipa: "sa.ˈβa.na",
+      severity: "high",
+      example_sentence: "Los leones viven en la sabana africana."
+    }
+  },
+
+  "papá": {
+    "pa-PÁ": {
+      meaning: "dad / father",
+      category: "family",
+      ipa: "pa.ˈpa",
+      severity: "high",
+      example_sentence: "Mi papá trabaja en el centro."
+    },
+    "PA-pa": {
+      meaning: "potato",
       category: "food",
-      ipa: "ˈtor.tu.ri",
+      ipa: "ˈpa.pa",
       severity: "high",
-      example_sentence: "Vreau două torturi de ciocolată."
-    },
-    "tor-TU-ri": {
-      meaning: "tortures",
-      category: "violence",
-      ipa: "tor.ˈtu.ri",
-      severity: "high",
-      example_sentence: "Torturile din război au fost oribile."
+      example_sentence: "La papa hervida es un plato sencillo."
     }
   },
 
-  "masa": {
-    "MA-sa": {
-      meaning: "table",
-      category: "furniture",
-      ipa: "ˈma.sa",
+  "canto": {
+    "CAN-to": {
+      meaning: "I sing / song",
+      category: "music",
+      ipa: "ˈkan.to",
+      severity: "high",
+      example_sentence: "Canto en el coro de la iglesia."
+    },
+    "can-TÓ": {
+      meaning: "he/she sang",
+      category: "music",
+      ipa: "kan.ˈto",
+      severity: "high",
+      example_sentence: "La soprano cantó con emoción."
+    }
+  },
+
+  "término": {
+    "TÉR-mi-no": {
+      meaning: "term / end point",
+      category: "language",
+      ipa: "ˈteɾ.mi.no",
+      severity: "high",
+      example_sentence: "No entiendo ese término técnico."
+    },
+    "ter-MI-no": {
+      meaning: "I finish / I end",
+      category: "action",
+      ipa: "teɾ.ˈmi.no",
+      severity: "high",
+      example_sentence: "Termino el trabajo a las cinco."
+    },
+    "ter-mi-NÓ": {
+      meaning: "he/she finished",
+      category: "action",
+      ipa: "teɾ.mi.ˈno",
       severity: "medium",
-      example_sentence: "Pune cartea pe masă."
+      example_sentence: "Terminó la reunión tarde."
+    }
+  },
+
+  "ánimo": {
+    "Á-ni-mo": {
+      meaning: "spirit / enthusiasm",
+      category: "emotion",
+      ipa: "ˈa.ni.mo",
+      severity: "high",
+      example_sentence: "¡Mucho ánimo para el examen!"
     },
-    "ma-SA": {
-      meaning: "mass/crowd",
-      category: "collective",
-      ipa: "ma.ˈsa",
+    "a-NI-mo": {
+      meaning: "I encourage",
+      category: "action",
+      ipa: "a.ˈni.mo",
+      severity: "high",
+      example_sentence: "Siempre animo a mis amigos."
+    },
+    "a-ni-MÓ": {
+      meaning: "he/she encouraged",
+      category: "action",
+      ipa: "a.ni.ˈmo",
       severity: "medium",
-      example_sentence: "Masa de oameni se aduna în piață."
+      example_sentence: "El entrenador animó al equipo."
     }
   },
 
-  "copii": {
-    "CO-pii": {
-      meaning: "children",
-      category: "people",
-      ipa: "ˈko.pi.i",
+  "público": {
+    "PÚ-bli-co": {
+      meaning: "public (adj/noun)",
+      category: "social",
+      ipa: "ˈpu.βli.ko",
       severity: "high",
-      example_sentence: "Copiii se joacă în parc."
+      example_sentence: "El parque público está abierto."
     },
-    "co-PII": {
-      meaning: "copies",
-      category: "documents",
-      ipa: "ko.ˈpi.i",
+    "pu-BLI-co": {
+      meaning: "I publish",
+      category: "media",
+      ipa: "pu.ˈβli.ko",
       severity: "high",
-      example_sentence: "Fă trei copii ale documentului."
-    }
-  },
-
-  "copiii": {
-    "CO-pii": {
-      meaning: "children",
-      category: "people",
-      ipa: "ˈko.pi.i",
-      severity: "high",
-      example_sentence: "Copiii se joacă în parc."
+      example_sentence: "Publico artículos cada semana."
     },
-    "co-PII": {
-      meaning: "copies",
-      category: "documents",
-      ipa: "ko.ˈpi.i",
-      severity: "high",
-      example_sentence: "Fă trei copii ale documentului."
-    }
-  },
-
-  "cara": {
-    "CA-ra": {
-      meaning: "face (noun)",
-      category: "body",
-      ipa: "ˈka.ra",
+    "pu-bli-CÓ": {
+      meaning: "he/she published",
+      category: "media",
+      ipa: "pu.βli.ˈko",
       severity: "medium",
-      example_sentence: "Are o față frumoasă."
+      example_sentence: "La editorial publicó su novela."
+    }
+  },
+
+  "tráfico": {
+    "TRÁ-fi-co": {
+      meaning: "traffic",
+      category: "transport",
+      ipa: "ˈtɾa.fi.ko",
+      severity: "high",
+      example_sentence: "Hay mucho tráfico en la ciudad."
     },
-    "ca-RA": {
-      meaning: "gray (color)",
-      category: "color",
-      ipa: "ka.ˈra",
+    "tra-FI-co": {
+      meaning: "I traffic / I deal in",
+      category: "action",
+      ipa: "tɾa.ˈfi.ko",
+      severity: "medium",
+      example_sentence: "No trafico con información falsa."
+    },
+    "tra-fi-CÓ": {
+      meaning: "he/she trafficked",
+      category: "crime",
+      ipa: "tɾa.fi.ˈko",
+      severity: "medium",
+      example_sentence: "La red traficó con mercancía ilegal."
+    }
+  },
+
+  "líquido": {
+    "LÍ-qui-do": {
+      meaning: "liquid (noun/adj)",
+      category: "substance",
+      ipa: "ˈli.ki.ðo",
+      severity: "high",
+      example_sentence: "El líquido se derramó sobre la mesa."
+    },
+    "li-QUI-do": {
+      meaning: "I liquidate",
+      category: "finance",
+      ipa: "li.ˈki.ðo",
+      severity: "high",
+      example_sentence: "Liquido las deudas cada mes."
+    },
+    "li-qui-DÓ": {
+      meaning: "he/she liquidated",
+      category: "finance",
+      ipa: "li.ki.ˈðo",
+      severity: "medium",
+      example_sentence: "El banco liquidó la cuenta."
+    }
+  },
+
+  "número": {
+    "NÚ-me-ro": {
+      meaning: "number",
+      category: "quantity",
+      ipa: "ˈnu.me.ɾo",
+      severity: "high",
+      example_sentence: "¿Cuál es tu número de teléfono?"
+    },
+    "nu-ME-ro": {
+      meaning: "I number / I enumerate",
+      category: "action",
+      ipa: "nu.ˈme.ɾo",
+      severity: "medium",
+      example_sentence: "Numero las páginas del documento."
+    },
+    "nu-me-RÓ": {
+      meaning: "he/she numbered",
+      category: "action",
+      ipa: "nu.me.ˈɾo",
       severity: "low",
-      example_sentence: "Cerul e cărăși gri astăzi."
+      example_sentence: "El archivero numeró todos los documentos."
     }
   },
 
-  "acum": {
-    "A-cum": {
-      meaning: "now",
-      category: "time",
-      ipa: "ˈa.kum",
-      severity: "medium",
-      example_sentence: "Trebuie să plec acum."
-    },
-    "a-CUM": {
-      meaning: "emphasis/really",
-      category: "emphasis",
-      ipa: "a.ˈkum",
-      severity: "low",
-      example_sentence: "Acum chiar trebuie să plec!"
-    }
-  },
-
-  "mintea": {
-    "MIN-tea": {
-      meaning: "the mind",
-      category: "cognition",
-      ipa: "ˈmin.te̯a",
-      severity: "medium",
-      example_sentence: "Îmi pierd mintea."
-    },
-    "min-TEA": {
-      meaning: "the mint (plant)",
-      category: "plants",
-      ipa: "min.ˈte̯a",
-      severity: "low",
-      example_sentence: "Mentă pentru ceai."
-    }
-  },
-
-  "politica": {
-    "po-LI-ti-ca": {
-      meaning: "politics",
-      category: "governance",
-      ipa: "po.ˈli.ti.ka",
+  "hablo": {
+    "HA-blo": {
+      meaning: "I speak / I talk",
+      category: "communication",
+      ipa: "ˈa.βlo",
       severity: "high",
-      example_sentence: "Politica în România e complicată."
+      example_sentence: "Hablo español todos los días."
     },
-    "po-li-TI-ca": {
-      meaning: "the policy",
-      category: "rules",
-      ipa: "po.li.ˈti.ka",
+    "ha-BLÓ": {
+      meaning: "he/she spoke",
+      category: "communication",
+      ipa: "a.ˈβlo",
       severity: "high",
-      example_sentence: "Politica companiei interzice fumatul."
-    }
-  },
-
-  "orice": {
-    "O-ri-ce": {
-      meaning: "anything",
-      category: "quantifier",
-      ipa: "ˈo.ri.tʃe",
-      severity: "medium",
-      example_sentence: "Poți lua orice vrei."
-    },
-    "o-RI-ce": {
-      meaning: "any hour/time",
-      category: "time",
-      ipa: "o.ˈri.tʃe",
-      severity: "low",
-      example_sentence: "Orice ar fi ora, te ajut."
-    }
-  },
-
-  "vedere": {
-    "ve-DE-re": {
-      meaning: "sight/vision",
-      category: "sense",
-      ipa: "ve.ˈde.re",
-      severity: "medium",
-      example_sentence: "Am probleme de vedere."
-    },
-    "VE-de-re": {
-      meaning: "opinion/point of view",
-      category: "cognition",
-      ipa: "ˈve.de.re",
-      severity: "medium",
-      example_sentence: "Din punctul meu de vedere..."
-    }
-  },
-
-  "omul": {
-    "O-mul": {
-      meaning: "the man/person",
-      category: "people",
-      ipa: "ˈo.mul",
-      severity: "high",
-      example_sentence: "Omul acela e doctorul meu."
-    },
-    "o-MUL": {
-      meaning: "the edge/border",
-      category: "boundary",
-      ipa: "o.ˈmul",
-      severity: "medium",
-      example_sentence: "Stai pe malul râului."
+      example_sentence: "El director habló con claridad."
     }
   }
 };

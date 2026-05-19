@@ -46,10 +46,10 @@ export function TextReader({
         return <span key={index}>{segment}</span>;
       }
 
-      // Try to extract Romanian word with diacritics
+      // Try to extract Spanish word with diacritics
       // Pattern: optional punctuation + word + optional punctuation
       const wordMatch = segment.match(
-        /^([^a-zA-ZăâîșțĂÂÎȘȚéÉ]*)?([a-zA-ZăâîșțĂÂÎȘȚéÉ]+(?:-[a-zA-ZăâîșțĂÂÎȘȚéÉ]+)?)([^a-zA-ZăâîșțĂÂÎȘȚéÉ]*)?$/i
+        /^([^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]*)?([a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+(?:-[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+)?)([^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]*)?$/i
       );
 
       if (!wordMatch) {
