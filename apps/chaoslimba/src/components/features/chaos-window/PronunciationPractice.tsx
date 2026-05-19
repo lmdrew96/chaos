@@ -367,17 +367,42 @@ export function PronunciationPractice({ targetText, onComplete }: PronunciationP
 
                   {result.phoneme && (
                     <div className="space-y-2 pt-3 border-t border-accent/20">
-                      <p className="text-xs text-muted-foreground">
-                        {result.phoneme.matches} matched · {result.phoneme.substitutions} different · {result.phoneme.deletions} missing · {result.phoneme.insertions} extra
-                      </p>
-                      <div className="flex flex-wrap gap-x-1.5 gap-y-1 font-mono text-base p-3 rounded-lg bg-muted/30 leading-relaxed">
-                        {result.phoneme.alignment.map((p, i) => (
-                          <PhonemeBadge key={i} alignment={p} />
-                        ))}
+                      {(result.phoneme.substitutions > 0 || result.phoneme.insertions > 0 || result.phoneme.deletions > 0) && (
+                        <div className="space-y-1">
+                          <p className="text-xs font-medium text-muted-foreground">
+                            {result.phoneme.substitutions + result.phoneme.insertions + result.phoneme.deletions} sound{result.phoneme.substitutions + result.phoneme.insertions + result.phoneme.deletions !== 1 ? 's' : ''} to work on:
+                          </p>
+                          <ul className="space-y-0.5">
+                            {result.phoneme.alignment
+                              .filter(p => !p.match)
+                              .map((p, i) => (
+                                <li key={i} className="text-xs text-muted-foreground">
+                                  {p.user && p.reference
+                                    ? <><span className="font-mono text-destructive">/{p.user}/</span> → should be <span className="font-mono text-chart-4">/{p.reference}/</span></>
+                                    : p.user
+                                    ? <>Extra <span className="font-mono text-chart-3">/{p.user}/</span> sound</>
+                                    : <>Missing <span className="font-mono text-chart-4">/{p.reference}/</span></>
+                                  }
+                                </li>
+                              ))
+                            }
+                          </ul>
+                        </div>
+                      )}
+
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">
+                          {result.phoneme.matches} matched · {result.phoneme.substitutions} different · {result.phoneme.deletions} missing · {result.phoneme.insertions} extra
+                        </p>
+                        <div className="flex flex-wrap gap-x-1.5 gap-y-1 font-mono text-base p-3 rounded-lg bg-muted/30 leading-relaxed">
+                          {result.phoneme.alignment.map((p, i) => (
+                            <PhonemeBadge key={i} alignment={p} />
+                          ))}
+                        </div>
+                        <p className="text-[10px] text-muted-foreground italic mt-1">
+                          Hover a sound for detail · IPA notation
+                        </p>
                       </div>
-                      <p className="text-[10px] text-muted-foreground italic">
-                        Hover a sound for detail · IPA notation
-                      </p>
                     </div>
                   )}
 
