@@ -71,6 +71,9 @@ export async function runFeedbackPipeline(input: FeedbackPipelineInput): Promise
           phonemeScore: pronResult.pronunciationScore ? pronResult.pronunciationScore * 100 : 0,
           stressAccuracy: pronResult.pronunciationScore ? pronResult.pronunciationScore * 100 : 0,
           overallPronunciationScore: pronResult.pronunciationScore ? pronResult.pronunciationScore * 100 : 0,
+          pronunciationScore: pronResult.pronunciationScore ?? 0,
+          transcribedText: pronResult.transcribedText,
+          isAccurate: pronResult.isAccurate,
           detectedErrors: !pronResult.isAccurate ? [{
             phoneme: 'general',
             expected: expectedResponse?.trim() || '',

@@ -174,7 +174,9 @@ export function AIResponse({ response, isLoading, gradingReport }: AIResponsePro
         </div>
 
         {/* Pronunciation Feedback (for speech responses) */}
-        {gradingReport?.rawReport?.pronunciation && (
+        {gradingReport?.rawReport?.pronunciation &&
+         (gradingReport.rawReport.pronunciation.pronunciationScore > 0 ||
+          gradingReport.rawReport.pronunciation.transcribedText) && (
           <div className="p-4 rounded-lg bg-accent/10 border border-accent/20">
             <div className="flex items-center gap-2 mb-3">
               <Volume2 className="h-4 w-4 text-accent" />
