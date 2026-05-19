@@ -282,12 +282,16 @@ export function PronunciationPractice({ targetText, onComplete }: PronunciationP
               </div>
 
               {/* Results */}
-              {result && (
+              {result && (() => {
+                // Prefer RunPod phoneme accuracy over Whisper Levenshtein score
+                const displayScore = result.phoneme?.phonemeAccuracy ?? result.pronunciationScore
+                const isAccurate = displayScore !== undefined ? displayScore >= 0.70 : result.isAccurate
+                return (
                 <div className="p-4 rounded-lg bg-muted/50 border border-accent/20 space-y-3">
                   {/* Word-level diff */}
                   <div>
                     <p className="text-xs text-muted-foreground mb-1">You said:</p>
-                    {result.transcribedText && result.pronunciationScore !== undefined && result.pronunciationScore < 1.0 ? (
+                    {result.transcribedText && displayScore !== undefined && displayScore < 1.0 ? (
                       <p className="text-base font-medium italic flex flex-wrap gap-x-1.5 leading-relaxed">
                         {getWordDiff(result.transcribedText, targetText).map((item, i) => (
                           <span
@@ -318,18 +322,18 @@ export function PronunciationPractice({ targetText, onComplete }: PronunciationP
                     )}
                   </div>
 
-                  {result.pronunciationScore !== undefined && (
+                  {displayScore !== undefined && (
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-muted-foreground">Pronunciation Score:</span>
-                        <span className={`text-xl font-bold ${getScoreColor(result.pronunciationScore)}`}>
-                          {(result.pronunciationScore * 100).toFixed(0)}%
+                        <span className={`text-xl font-bold ${getScoreColor(displayScore)}`}>
+                          {(displayScore * 100).toFixed(0)}%
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-muted-foreground">Accuracy:</span>
-                        <span className={`text-sm font-semibold ${getScoreColor(result.pronunciationScore)}`}>
-                          {getScoreLabel(result.pronunciationScore)}
+                        <span className={`text-sm font-semibold ${getScoreColor(displayScore)}`}>
+                          {getScoreLabel(displayScore)}
                         </span>
                       </div>
 
@@ -337,17 +341,17 @@ export function PronunciationPractice({ targetText, onComplete }: PronunciationP
                       <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden">
                         <div
                           className={`h-full transition-all duration-500 ${
-                            result.pronunciationScore >= 0.85
+                            displayScore >= 0.85
                               ? 'bg-chart-4'
-                              : result.pronunciationScore >= 0.70
+                              : displayScore >= 0.70
                               ? 'bg-chart-3'
                               : 'bg-destructive'
                           }`}
-                          style={{ width: `${result.pronunciationScore * 100}%` }}
+                          style={{ width: `${displayScore * 100}%` }}
                         />
                       </div>
 
-                      {!result.isAccurate && (
+                      {!isAccurate && (
                         <p className="text-xs text-muted-foreground">
                           Listen to the target text and try again!
                         </p>
@@ -363,12 +367,6 @@ export function PronunciationPractice({ targetText, onComplete }: PronunciationP
 
                   {result.phoneme && (
                     <div className="space-y-2 pt-3 border-t border-accent/20">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-muted-foreground">Sound accuracy:</span>
-                        <span className={`text-lg font-bold ${getScoreColor(result.phoneme.phonemeAccuracy)}`}>
-                          {(result.phoneme.phonemeAccuracy * 100).toFixed(0)}%
-                        </span>
-                      </div>
                       <p className="text-xs text-muted-foreground">
                         {result.phoneme.matches} matched · {result.phoneme.substitutions} different · {result.phoneme.deletions} missing · {result.phoneme.insertions} extra
                       </p>
@@ -389,7 +387,8 @@ export function PronunciationPractice({ targetText, onComplete }: PronunciationP
                     </p>
                   )}
                 </div>
-              )}
+                )
+              })()}
             </div>
           )}
 
