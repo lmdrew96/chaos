@@ -708,8 +708,18 @@ export function mapErrorCategoryToFeatureKey(errorType: ErrorType, category: str
     // Vocabulary
     'false_cognate': 'vocab_false_cognates',
 
-    // Phonology (from pronunciation-practice drill)
+    // Phonology (from pronunciation-practice stress drill)
     'stress_contrast': 'phon_stress_contrast',
+
+    // Phoneme mispronunciations (IPA tokens from RunPod wav2vec2-xlsr-53-espeak-cv-ft)
+    // category is set to `${ipa}_mispronunciation` by the aggregator
+    'r_mispronunciation': 'phon_trill_rr',          // trill /r/ (rr words)
+    'ɾ_mispronunciation': 'phon_flap_r',            // flap /ɾ/ (single r)
+    'ɲ_mispronunciation': 'phon_palatal_n',          // palatal nasal /ɲ/ (ñ)
+    'β_mispronunciation': 'phon_bv_merger',          // bilabial fricative /β/ (b/v lenition)
+    'x_mispronunciation': 'phon_voiceless_velar_j',  // velar fricative /x/ (j, ge/gi)
+    'e_mispronunciation': 'phon_vowel_purity',       // Spanish /e/ (diphthongized by EN speakers)
+    'o_mispronunciation': 'phon_vowel_purity',       // Spanish /o/
   };
 
   // Try direct match first
