@@ -1,6 +1,10 @@
 """
 RunPod serverless handler for Spanish phoneme ASR.
-Model: Cnam-LMSSC/wav2vec2-spanish-phonemizer (~94.4MB, baked into image).
+Model: jonatasgrosman/wav2vec2-large-xlsr-53-spanish (~315MB, baked into image).
+
+This model outputs Spanish graphemes (text), not IPA directly. We run the
+transcription through espeak-ng (via the phonemizer library) to convert to IPA
+so the output contract matches the Romanian endpoint: always returns IPA tokens.
 
 Input format (RunPod serverless convention):
     { "input": { "audio": "<base64-encoded audio bytes>" } }
@@ -14,7 +18,6 @@ Output:
 """
 
 import base64
-import io
 import os
 import tempfile
 import time
@@ -22,19 +25,41 @@ import time
 import librosa
 import runpod
 import torch
-from transformers import Wav2Vec2ForCTC, AutoProcessor
+from phonemizer import phonemize
+from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
 
-MODEL_NAME = "Cnam-LMSSC/wav2vec2-spanish-phonemizer"
+MODEL_NAME = "jonatasgrosman/wav2vec2-large-xlsr-53-spanish"
 TARGET_SR = 16000
+ESPEAK_LANG = "es"
 
 print(f"[init] Loading {MODEL_NAME}...")
 _t0 = time.time()
-processor = AutoProcessor.from_pretrained(MODEL_NAME)
+processor = Wav2Vec2Processor.from_pretrained(MODEL_NAME)
 model = Wav2Vec2ForCTC.from_pretrained(MODEL_NAME)
 model.eval()
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model.to(device)
 print(f"[init] Model loaded on {device} in {time.time() - _t0:.1f}s")
+
+# Warm up espeak backend at init so first request isn't slow
+print("[init] Warming espeak-ng backend...")
+phonemize("hola", language=ESPEAK_LANG, backend="espeak", with_stress=False)
+print("[init] Ready.")
+
+
+def graphemes_to_ipa(text: str) -> str:
+    """Convert Spanish text to space-separated IPA tokens via espeak-ng."""
+    ipa = phonemize(
+        text,
+        language=ESPEAK_LANG,
+        backend="espeak",
+        with_stress=False,
+        preserve_punctuation=False,
+        njobs=1,
+    )
+    # espeak returns a continuous IPA string; split into tokens to match the
+    # format comparePhonemes() expects (space-separated phoneme tokens)
+    return " ".join(ipa.strip())
 
 
 def handler(event):
@@ -49,7 +74,6 @@ def handler(event):
         except Exception as e:
             return {"error": f"Invalid base64 audio: {e}"}
 
-        # Write to tempfile so librosa can sniff the format (BytesIO is unreliable across formats)
         with tempfile.NamedTemporaryFile(suffix=".audio", delete=False) as tmp:
             tmp.write(audio_bytes)
             tmp_path = tmp.name
@@ -73,9 +97,19 @@ def handler(event):
         with torch.no_grad():
             logits = model(input_values).logits
         predicted_ids = torch.argmax(logits, dim=-1)
-        ipa = processor.batch_decode(predicted_ids)[0]
+        transcription = processor.batch_decode(predicted_ids)[0].lower().strip()
 
-        return {"ipa": ipa, "duration_sec": round(duration, 3), "device": device}
+        if not transcription:
+            return {"error": "Model returned empty transcription"}
+
+        ipa = graphemes_to_ipa(transcription)
+
+        return {
+            "ipa": ipa,
+            "transcription": transcription,
+            "duration_sec": round(duration, 3),
+            "device": device,
+        }
 
     except Exception as e:
         return {"error": f"{type(e).__name__}: {e}"}

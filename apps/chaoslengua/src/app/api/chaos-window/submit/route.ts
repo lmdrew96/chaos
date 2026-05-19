@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
         const groqFormData = new FormData();
         groqFormData.append('file', audioFile);
         groqFormData.append('model', 'whisper-large-v3');
-        groqFormData.append('language', 'ro');
+        groqFormData.append('language', 'es');
         groqFormData.append('response_format', 'json');
 
         const transcriptionResponse = await fetch(

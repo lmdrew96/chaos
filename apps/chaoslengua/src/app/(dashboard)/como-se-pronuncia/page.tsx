@@ -131,7 +131,7 @@ export default function CumSePronuntaPage() {
         playFromUrl(url)
       } catch {
         // Error handled via state
-        setError("Nu am putut genera audio. Încearcă din nou.")
+        setError("Couldn't generate audio. Try again.")
       } finally {
         setIsLoading(false)
       }

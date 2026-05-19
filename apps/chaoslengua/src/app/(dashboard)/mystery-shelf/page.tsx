@@ -350,7 +350,7 @@ export default function MysteryShelfPage() {
                   <Label htmlFor="word">Word or Phrase</Label>
                   <Input
                     id="word"
-                    placeholder="e.g. îndoielnic"
+                    placeholder="e.g. madrugada"
                     value={newItemWord}
                     onChange={(e) => setNewItemWord(e.target.value)}
                   />
@@ -359,7 +359,7 @@ export default function MysteryShelfPage() {
                   <Label htmlFor="context">Context (Optional)</Label>
                   <Textarea
                     id="context"
-                    placeholder="Where did you see this? e.g. 'Este îndoielnic că va reuși'"
+                    placeholder="Where did you see this? e.g. 'No pude dormir hasta la madrugada'"
                     value={newItemContext}
                     onChange={(e) => setNewItemContext(e.target.value)}
                   />

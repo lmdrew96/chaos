@@ -1,5 +1,6 @@
 # Spanish phoneme ASR endpoint for RunPod Serverless
-# Model: Cnam-LMSSC/wav2vec2-spanish-phonemizer (~94MB, baked into image for fast cold starts)
+# Model: jonatasgrosman/wav2vec2-large-xlsr-53-spanish (~315MB, baked into image for fast cold starts)
+# Outputs graphemes → converted to IPA via espeak-ng (phonemizer) at inference time
 
 FROM runpod/base:0.6.2-cuda12.4.1
 

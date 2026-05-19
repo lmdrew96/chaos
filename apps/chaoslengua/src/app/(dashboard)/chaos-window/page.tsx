@@ -315,9 +315,9 @@ export default function ChaosWindowPage() {
     } catch (err) {
       // Fallback to a generic question based on content type
       const fallback = {
-        audio: 'Ce ai auzit în acest audio? Descrie pe scurt conținutul.',
-        text: 'Ce ai citit? Spune-mi ideea principală în propriile tale cuvinte.'
-      }[content.type] || 'Ce ai înțeles din acest conținut?'
+        audio: '¿Qué escuchaste en este audio? Describe brevemente el contenido.',
+        text: '¿Qué leíste? Cuéntame la idea principal en tus propias palabras.'
+      }[content.type] || '¿Qué entendiste de este contenido?'
       setTutorPrompt(fallback)
     } finally {
       setIsLoadingQuestion(false)
@@ -379,7 +379,7 @@ export default function ChaosWindowPage() {
 
       if (!res.ok) {
         if (res.status === 404) {
-          setContentError("Nu există conținut disponibil. Adaugă câteva materiale!")
+          setContentError("No content available. Add some materials!")
           return
         }
         throw new Error("Failed to fetch content")
@@ -390,6 +390,8 @@ export default function ChaosWindowPage() {
       setUserLevel(data.userLevel)
       setShowTextTranscript(false)
       setShowCulturalNotes(false)
+      setConversationHistory([])
+      setGradingReports(new Map())
 
       // Smart Chaos: store feature targeting metadata
       const features = data.targetFeatures || []
@@ -421,7 +423,7 @@ export default function ChaosWindowPage() {
         }
       } else {
         // Fallback: No transcript available, use title only
-        setCurrentContext(`Ascultă: "${data.content.title}" și răspunde la întrebări. [Note: Full transcript not available]`)
+        setCurrentContext(`Listen to: "${data.content.title}" and answer questions about it. [Note: Full transcript not available]`)
       }
 
       // Generate initial AI tutor question for this content (with feature targeting)
@@ -552,13 +554,13 @@ export default function ChaosWindowPage() {
     if (modality === "text") {
       const trimmed = response.trim()
       if (trimmed.length < 5) {
-        setError("Răspunsul trebuie să aibă cel puțin 5 caractere.")
+        setError("Your response must be at least 5 characters.")
         return
       }
     } else {
       // Speech mode
       if (!audioBlob) {
-        setError("Înregistrează un răspuns audio mai întâi.")
+        setError("Record an audio response first.")
         return
       }
     }
@@ -663,7 +665,7 @@ export default function ChaosWindowPage() {
       }
 
     } catch (submitError) {
-      setError("Nu am putut trimite răspunsul. Încearcă din nou.")
+      setError("Couldn't submit your response. Try again.")
     } finally {
       setIsSubmitting(false)
       setIsLoadingAI(false)
@@ -768,7 +770,7 @@ export default function ChaosWindowPage() {
                   {isLoadingContent ? (
                     <div className="flex items-center justify-center py-8">
                       <Loader2 className="h-8 w-8 text-destructive animate-spin" />
-                      <span className="ml-3 text-muted-foreground">Se încarcă conținutul...</span>
+                      <span className="ml-3 text-muted-foreground">Loading content...</span>
                     </div>
                   ) : contentError ? (
                     <div className="text-center py-8">
@@ -779,7 +781,7 @@ export default function ChaosWindowPage() {
                         className="border-destructive/30"
                       >
                         <RotateCcw className="h-4 w-4 mr-2" />
-                        Încearcă din nou
+                        Try again
                       </Button>
                     </div>
                   ) : currentContent ? (
@@ -891,7 +893,7 @@ export default function ChaosWindowPage() {
                     </>
                   ) : (
                     <div className="text-center py-8 text-muted-foreground">
-                      Se încarcă conținutul...
+                      Loading content...
                     </div>
                   )}
                 </CardContent>

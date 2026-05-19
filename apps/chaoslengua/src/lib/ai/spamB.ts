@@ -90,10 +90,10 @@ function generateRedirect(contentTopics: string[], interpretation: string): stri
   const topicsStr = contentTopics.slice(0, 3).join(', ');
 
   if (interpretation === 'off_topic') {
-    return `Să ne întoarcem la subiect: ${topicsStr}`;
+    return `Let's get back on topic: ${topicsStr}`;
   } else {
     // partially_relevant
-    return `Încearcă să te concentrezi mai mult pe: ${topicsStr}`;
+    return `Try to focus more on: ${topicsStr}`;
   }
 }
 

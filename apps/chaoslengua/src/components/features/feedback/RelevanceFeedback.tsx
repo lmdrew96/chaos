@@ -43,7 +43,7 @@ export function RelevanceFeedback({ relevance, className }: RelevanceFeedbackPro
         <div className="flex-1 space-y-2">
           <div className="flex items-center gap-2">
             <h4 className="font-semibold">
-              {isOffTopic ? 'Răspuns în afara subiectului' : 'Răspuns parțial relevant'}
+              {isOffTopic ? 'Off-topic response' : 'Partially relevant response'}
             </h4>
             <Badge variant={getBadgeVariant()}>
               {Math.round(relevance.relevance_score * 100)}% relevant
@@ -65,7 +65,7 @@ export function RelevanceFeedback({ relevance, className }: RelevanceFeedbackPro
 
           {relevance.topic_analysis.content_topics.length > 0 && (
             <div className="text-xs text-muted-foreground">
-              <span className="font-medium">Subiectul lecției:</span>{' '}
+              <span className="font-medium">Lesson topic:</span>{' '}
               {relevance.topic_analysis.content_topics.join(', ')}
             </div>
           )}
