@@ -13,7 +13,13 @@ import { GrammarResult, GrammarError, analyzeGrammar } from './grammar';
 import { compareSemanticSimilarity, SpamAResult } from './spamA';
 import { analyzeRelevance } from './spamB';
 import { checkIntonationShift } from './spamD';
-import { analyzePronunciation } from '@chaos/ai-clients';
+import {
+  analyzePronunciation,
+  transcribeToIpa,
+  comparePhonemes,
+  isPhonemeAnalysisAvailable,
+} from '@chaos/ai-clients';
+import { getSpanishReferenceIpa } from '@/lib/pronunciation/reference-cache';
 import { IntonationWarning } from '@chaos/lang-config';
 
 /**
@@ -66,23 +72,48 @@ export async function runFeedbackPipeline(input: FeedbackPipelineInput): Promise
   if (inputType === 'speech') {
     if (audioFile) {
       try {
-        const pronResult = await analyzePronunciation(audioFile, 'es', expectedResponse?.trim(), 0.70);
+        const phonemeAvailable = isPhonemeAnalysisAvailable('es');
+        // Buffer the audio once — needed for both Whisper (via analyzePronunciation)
+        // and RunPod (transcribeToIpa). File/Blob is re-readable so both calls work.
+        const audioBuffer = phonemeAvailable
+          ? Buffer.from(await audioFile.arrayBuffer())
+          : null;
+
+        // Whisper transcription and user IPA run in parallel (both need only the audio).
+        const [pronResult, userIpa] = await Promise.all([
+          analyzePronunciation(audioFile, 'es', expectedResponse?.trim(), 0.70),
+          phonemeAvailable && audioBuffer
+            ? transcribeToIpa(audioBuffer, 'es').catch(() => null)
+            : Promise.resolve(null),
+        ]);
+
+        // Self-reference: use Whisper transcript as target → TTS → RunPod reference IPA.
+        // This answers "are you pronouncing your own words correctly?" for open-ended turns.
+        let phonemeAnalysis = undefined;
+        if (userIpa && pronResult.transcribedText?.trim()) {
+          try {
+            const referenceIpa = await getSpanishReferenceIpa(pronResult.transcribedText.trim());
+            phonemeAnalysis = comparePhonemes(userIpa, referenceIpa);
+          } catch {
+            // Reference IPA unavailable — fall back to Whisper-only scoring
+          }
+        }
+
+        const accuracyScore = phonemeAnalysis
+          ? phonemeAnalysis.phonemeAccuracy
+          : (pronResult.pronunciationScore ?? 0);
+
         pronunciationResult = {
-          phonemeScore: pronResult.pronunciationScore ? pronResult.pronunciationScore * 100 : 0,
-          stressAccuracy: pronResult.pronunciationScore ? pronResult.pronunciationScore * 100 : 0,
-          overallPronunciationScore: pronResult.pronunciationScore ? pronResult.pronunciationScore * 100 : 0,
-          pronunciationScore: pronResult.pronunciationScore ?? 0,
+          phonemeScore: accuracyScore * 100,
+          stressAccuracy: accuracyScore * 100,
+          overallPronunciationScore: accuracyScore * 100,
+          pronunciationScore: accuracyScore,
           transcribedText: pronResult.transcribedText,
-          isAccurate: pronResult.isAccurate,
-          // Only flag errors when there was something to compare against — open-ended
-          // prompts have no expectedResponse so isAccurate is always false by default.
-          detectedErrors: expectedResponse?.trim() && !pronResult.isAccurate ? [{
-            phoneme: 'general',
-            expected: expectedResponse.trim(),
-            actual: pronResult.transcribedText || '',
-            severity: 'medium' as const,
-            position: 0,
-          }] : [],
+          isAccurate: phonemeAnalysis
+            ? phonemeAnalysis.phonemeAccuracy >= 0.70
+            : pronResult.isAccurate,
+          detectedErrors: [],
+          ...(phonemeAnalysis && { phonemeAnalysis }),
         };
       } catch (err) {
         // Pronunciation unavailable - aggregator will rebalance scoring

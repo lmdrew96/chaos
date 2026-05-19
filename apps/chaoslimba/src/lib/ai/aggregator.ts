@@ -13,7 +13,13 @@ import { GrammarResult, GrammarError, analyzeGrammar } from './grammar';
 import { compareSemanticSimilarity, SpamAResult } from './spamA';
 import { analyzeRelevance } from './spamB';
 import { checkIntonationShift } from './spamD';
-import { analyzePronunciation } from '@chaos/ai-clients';
+import {
+  analyzePronunciation,
+  transcribeToIpa,
+  comparePhonemes,
+  isPhonemeAnalysisAvailable,
+} from '@chaos/ai-clients';
+import { getRomanianReferenceIpa } from '@/lib/pronunciation/reference-cache';
 import { IntonationWarning } from '@chaos/lang-config';
 
 /**
@@ -66,21 +72,43 @@ export async function runFeedbackPipeline(input: FeedbackPipelineInput): Promise
   if (inputType === 'speech') {
     if (audioFile) {
       try {
-        const pronResult = await analyzePronunciation(audioFile, 'ro', expectedResponse?.trim(), 0.70);
+        const phonemeAvailable = isPhonemeAnalysisAvailable('ro');
+        const audioBuffer = phonemeAvailable
+          ? Buffer.from(await audioFile.arrayBuffer())
+          : null;
+
+        const [pronResult, userIpa] = await Promise.all([
+          analyzePronunciation(audioFile, 'ro', expectedResponse?.trim(), 0.70),
+          phonemeAvailable && audioBuffer
+            ? transcribeToIpa(audioBuffer, 'ro').catch(() => null)
+            : Promise.resolve(null),
+        ]);
+
+        let phonemeAnalysis = undefined;
+        if (userIpa && pronResult.transcribedText?.trim()) {
+          try {
+            const referenceIpa = await getRomanianReferenceIpa(pronResult.transcribedText.trim());
+            phonemeAnalysis = comparePhonemes(userIpa, referenceIpa);
+          } catch {
+            // Reference IPA unavailable — fall back to Whisper-only scoring
+          }
+        }
+
+        const accuracyScore = phonemeAnalysis
+          ? phonemeAnalysis.phonemeAccuracy
+          : (pronResult.pronunciationScore ?? 0);
+
         pronunciationResult = {
-          phonemeScore: pronResult.pronunciationScore ? pronResult.pronunciationScore * 100 : 0,
-          stressAccuracy: pronResult.pronunciationScore ? pronResult.pronunciationScore * 100 : 0,
-          overallPronunciationScore: pronResult.pronunciationScore ? pronResult.pronunciationScore * 100 : 0,
-          pronunciationScore: pronResult.pronunciationScore ?? 0,
+          phonemeScore: accuracyScore * 100,
+          stressAccuracy: accuracyScore * 100,
+          overallPronunciationScore: accuracyScore * 100,
+          pronunciationScore: accuracyScore,
           transcribedText: pronResult.transcribedText,
-          isAccurate: pronResult.isAccurate,
-          detectedErrors: !pronResult.isAccurate ? [{
-            phoneme: 'general',
-            expected: expectedResponse?.trim() || '',
-            actual: pronResult.transcribedText || '',
-            severity: 'medium' as const,
-            position: 0,
-          }] : [],
+          isAccurate: phonemeAnalysis
+            ? phonemeAnalysis.phonemeAccuracy >= 0.70
+            : pronResult.isAccurate,
+          detectedErrors: [],
+          ...(phonemeAnalysis && { phonemeAnalysis }),
         };
       } catch (err) {
         // Pronunciation unavailable - aggregator will rebalance scoring

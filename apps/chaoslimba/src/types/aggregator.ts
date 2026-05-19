@@ -2,8 +2,8 @@ import { GrammarResult } from '../lib/ai/grammar';
 import { SpamAResult } from '../lib/ai/spamA';
 import { SpamBResult } from '../lib/ai/spamB';
 import { IntonationWarning } from '@chaos/lang-config';
+import type { PhonemeAnalysis } from '@chaos/ai-clients';
 
-// Pronunciation analysis result (placeholder until implemented)
 export interface PronunciationResult {
   phonemeScore: number;        // 0-100
   stressAccuracy: number;      // 0-100
@@ -12,6 +12,7 @@ export interface PronunciationResult {
   transcribedText?: string;    // What Whisper heard
   isAccurate?: boolean;        // Whether transcription matched expected
   detectedErrors: PronunciationError[];
+  phonemeAnalysis?: PhonemeAnalysis; // RunPod phoneme-level detail (when available)
 }
 
 export interface PronunciationError {
