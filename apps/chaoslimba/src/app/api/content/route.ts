@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { db } from '@/lib/db';
 import { contentItems, NewContentItem, contentTypeEnum } from '@/lib/db/schema';
-import { and, gte, lte, eq, desc } from 'drizzle-orm';
+import { and, gte, lte, eq, desc, isNotNull } from 'drizzle-orm';
 
 // GET /api/content - List content with optional filters
 export async function GET(req: NextRequest) {
@@ -13,6 +13,8 @@ export async function GET(req: NextRequest) {
     }
     const { searchParams } = new URL(req.url);
     const type = searchParams.get('type') as (typeof contentTypeEnum)[number] | null;
+    const hasAudio = searchParams.get('hasAudio') === 'true';
+    const hasText = searchParams.get('hasText') === 'true';
     const minDifficulty = searchParams.get('minDifficulty');
     const maxDifficulty = searchParams.get('maxDifficulty');
     const topic = searchParams.get('topic');
@@ -24,6 +26,12 @@ export async function GET(req: NextRequest) {
 
     if (type && contentTypeEnum.includes(type)) {
       conditions.push(eq(contentItems.type, type));
+    }
+    if (hasAudio) {
+      conditions.push(isNotNull(contentItems.audioUrl));
+    }
+    if (hasText) {
+      conditions.push(isNotNull(contentItems.textContent));
     }
     if (minDifficulty) {
       conditions.push(gte(contentItems.difficultyLevel, minDifficulty));

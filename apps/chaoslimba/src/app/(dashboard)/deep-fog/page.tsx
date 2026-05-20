@@ -186,8 +186,10 @@ export default function DeepFogPage() {
         setIsLoading(true);
         setError(null);
         const params = new URLSearchParams();
-        if (filter !== "all") {
-          params.set("type", filter);
+        if (filter === "audio") {
+          params.set("hasAudio", "true");
+        } else if (filter === "text") {
+          params.set("hasText", "true");
         }
 
         // Apply fog range filtering unless browsing all
