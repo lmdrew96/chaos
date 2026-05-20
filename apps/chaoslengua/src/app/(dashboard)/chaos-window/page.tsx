@@ -831,21 +831,29 @@ export default function ChaosWindowPage() {
 
                       {/* Content Display based on type */}
                       {currentContent.type === 'text' && currentContent.textContent && (
-                        <div className="mb-4">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => setShowTextTranscript(!showTextTranscript)}
-                            className={showTextTranscript ? "text-primary bg-primary/10 hover:bg-primary/20 mb-2" : "text-muted-foreground hover:bg-primary/10 mb-2"}
-                          >
-                            <FileText className="h-4 w-4 mr-1.5" />
-                            {showTextTranscript ? "Hide transcript" : "Show transcript"}
-                          </Button>
-                          {showTextTranscript && (
-                            <div className="max-h-48 overflow-y-auto rounded-lg bg-muted/40 border border-primary/10 p-4 leading-relaxed text-sm">
-                              <p className="text-foreground/80 whitespace-pre-line">{currentContent.textContent}</p>
-                            </div>
+                        <div className="mb-4 space-y-3">
+                          {currentContent.audioUrl && (
+                            <AudioPlayer
+                              audioUrl={currentContent.audioUrl}
+                              title={currentContent.title}
+                            />
                           )}
+                          <div>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => setShowTextTranscript(!showTextTranscript)}
+                              className={showTextTranscript ? "text-primary bg-primary/10 hover:bg-primary/20 mb-2" : "text-muted-foreground hover:bg-primary/10 mb-2"}
+                            >
+                              <FileText className="h-4 w-4 mr-1.5" />
+                              {showTextTranscript ? "Hide transcript" : "Show transcript"}
+                            </Button>
+                            {showTextTranscript && (
+                              <div className="max-h-48 overflow-y-auto rounded-lg bg-muted/40 border border-primary/10 p-4 leading-relaxed text-sm">
+                                <p className="text-foreground/80 whitespace-pre-line">{currentContent.textContent}</p>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       )}
 

@@ -75,12 +75,19 @@ export function ContentPlayer({
         );
       }
       return (
-        <TextReader
-          content={content.textContent}
-          title={content.title}
-          className={className}
-          onWordClick={onWordClick}
-        />
+        <div className={cn("space-y-4", className)}>
+          {content.audioUrl && (
+            <AudioPlayer
+              audioUrl={content.audioUrl}
+              title={content.title}
+            />
+          )}
+          <TextReader
+            content={content.textContent}
+            title={content.title}
+            onWordClick={onWordClick}
+          />
+        </div>
       );
 
     default:
