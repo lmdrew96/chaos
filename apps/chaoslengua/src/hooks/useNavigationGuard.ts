@@ -6,9 +6,11 @@ import { useEffect, useRef } from "react"
  * Warns the user before navigating away from the page when a session is active.
  * Covers browser-level navigation (refresh, close tab) and client-side navigation (sidebar links, back/forward).
  */
-export function useNavigationGuard(shouldBlock: boolean) {
+export function useNavigationGuard(shouldBlock: boolean, onLeave?: () => void) {
   const shouldBlockRef = useRef(shouldBlock)
   shouldBlockRef.current = shouldBlock
+  const onLeaveRef = useRef(onLeave)
+  onLeaveRef.current = onLeave
 
   useEffect(() => {
     if (!shouldBlock) return
@@ -27,6 +29,7 @@ export function useNavigationGuard(shouldBlock: boolean) {
           "You have an active session. Leaving will end it. Are you sure?"
         )
         if (!confirmed) return
+        onLeaveRef.current?.()
       }
       return originalPushState(...args)
     }
@@ -40,6 +43,8 @@ export function useNavigationGuard(shouldBlock: boolean) {
       if (!confirmed) {
         // Push current URL back to undo the back navigation
         history.pushState(null, "", window.location.href)
+      } else {
+        onLeaveRef.current?.()
       }
     }
 

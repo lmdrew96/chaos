@@ -100,8 +100,26 @@ export default function ChaosWindowPage() {
   // Transcript toggle state (for text content — audio uses AudioPlayer's built-in toggle)
   const [showTextTranscript, setShowTextTranscript] = useState(false)
 
-  // Warn before navigating away during active session
-  useNavigationGuard(isActive && !!sessionId)
+  // Fire-and-forget session complete on unload (tab close, hard navigation, confirmed client-side leave).
+  // sendBeacon survives page teardown; sessionId null-check prevents double-firing after endSession().
+  const sessionIdRef = useRef<string | null>(null)
+  sessionIdRef.current = sessionId
+
+  const abandonSession = useCallback(() => {
+    const id = sessionIdRef.current
+    if (!id) return
+    navigator.sendBeacon(`/api/sessions/${id}/complete`)
+  }, [])
+
+  // pagehide covers tab close and hard navigation that bypass the confirm dialog
+  useEffect(() => {
+    const handlePageHide = () => abandonSession()
+    window.addEventListener('pagehide', handlePageHide)
+    return () => window.removeEventListener('pagehide', handlePageHide)
+  }, [abandonSession])
+
+  // Warn before navigating away during active session; call abandonSession if user confirms
+  useNavigationGuard(isActive && !!sessionId, abandonSession)
 
   // Smart Chaos: feature targeting state
   const [targetFeatures, setTargetFeatures] = useState<Array<{ featureKey: string; featureName: string; description: string }>>([])

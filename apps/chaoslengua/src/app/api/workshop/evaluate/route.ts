@@ -5,6 +5,7 @@ import { userPreferences, grammarFeatureMap } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { saveErrorPatternsToGarden, getWorkshopFeatureTarget, saveBeautifulMistake } from '@/lib/db/queries';
 import { evaluateWorkshopResponse, generateWorkshopChallenge } from '@/lib/ai/workshop';
+import { recordSessionProficiency } from '@/lib/proficiency';
 import { trackFeatureExposure } from '@/lib/ai/exposure-tracker';
 import type { WorkshopChallenge, WorkshopChallengeType } from '@/lib/ai/workshop';
 import type { CEFRLevelEnum } from '@/lib/db/schema';
@@ -92,8 +93,14 @@ export async function POST(req: NextRequest) {
       }
 
       if (errorPatterns.length > 0) {
-        saveErrorPatternsToGarden(errorPatterns, userId, sessionId, 'workshop', 'text').catch(err => {
-          console.error('[Workshop Evaluate] Failed to save errors:', err);
+        saveErrorPatternsToGarden(errorPatterns, userId, sessionId, 'workshop', 'text')
+          .then(() => recordSessionProficiency(userId, sessionId))
+          .catch(err => {
+            console.error('[Workshop Evaluate] Failed to save errors/update proficiency:', err);
+          });
+      } else {
+        recordSessionProficiency(userId, sessionId).catch(err => {
+          console.error('[Workshop Evaluate] Failed to update proficiency:', err);
         });
       }
 
