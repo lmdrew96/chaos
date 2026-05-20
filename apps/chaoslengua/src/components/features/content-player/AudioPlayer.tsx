@@ -159,7 +159,7 @@ export function AudioPlayer({
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="font-medium text-primary truncate">{title}</h3>
-          <p className="text-xs text-muted-foreground">Podcast / Audio</p>
+          <p className="text-xs text-muted-foreground">Listening Passage</p>
         </div>
       </div>
 
