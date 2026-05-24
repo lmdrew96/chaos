@@ -214,6 +214,14 @@ export function PatternModal({ pattern, isOpen, onCloseAction }: PatternModalPro
                                 <div className="flex-1">
                                     <h3 className="text-lg font-semibold text-primary mb-1">Adaptive Intervention</h3>
                                     <p className="text-primary/80 mb-3">{pattern.intervention}</p>
+                                    {pattern.fossilizationReason === 'baseline-relative' && pattern.baselineRatio !== undefined && (
+                                        <p className="text-sm text-amber-500/90 mb-3 flex items-center gap-2">
+                                            <AlertTriangle className="h-4 w-4 shrink-0" />
+                                            <span>
+                                                <strong>{pattern.baselineRatio.toFixed(1)}×</strong> the typical rate for learners at your level — flagged by corpus baseline, not absolute frequency.
+                                            </span>
+                                        </p>
+                                    )}
                                     <div className="flex flex-wrap gap-3 mb-4">
                                         {pattern.tier > 0 && (
                                             <span

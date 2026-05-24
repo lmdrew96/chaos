@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { db } from '@/lib/db';
-import { errorLogs, ErrorLog } from '@/lib/db/schema';
+import { errorLogs, ErrorLog, grammarFeatureMap, userPreferences } from '@/lib/db/schema';
 import { eq, sql, desc, and, gte } from 'drizzle-orm';
-import { getAdaptationProfile, type AdaptationPriority } from '@chaos/core-ai';
+import { getAdaptationProfile, evaluateFossilization, type AdaptationPriority, type BaselineCEFRKey } from '@chaos/core-ai';
 
 export type TrendDirection = 'improving' | 'stable' | 'worsening';
 
@@ -23,7 +23,9 @@ export type ErrorPattern = {
   frequency: number; // 0-100
   recentContext: string | null;
   lastOccurred: Date;
-  isFossilizing: boolean; // frequency >= 70%
+  isFossilizing: boolean; // absolute OR baseline-relative threshold exceeded
+  fossilizationReason?: 'absolute' | 'baseline-relative';
+  baselineRatio?: number; // e.g. 4.2 means "4.2× the population rate"
   // Adaptation Engine data
   tier: 0 | 1 | 2 | 3; // 0 = not tracked, 1 = nudge, 2 = push, 3 = destabilize
   trendDirection: TrendDirection;
@@ -540,15 +542,35 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Parallel: fetch error logs + adaptation profile
-    const [allLogs, adaptProfile] = await Promise.all([
+    // Parallel: fetch error logs, adaptation profile, grammar feature baselines, and user CEFR level
+    const [allLogs, adaptProfile, grammarFeatures, userPrefs] = await Promise.all([
       db
         .select()
         .from(errorLogs)
         .where(eq(errorLogs.userId, userId))
         .orderBy(desc(errorLogs.createdAt)),
       getAdaptationProfile(userId),
+      db.select({
+        featureKey: grammarFeatureMap.featureKey,
+        populationBaseline: grammarFeatureMap.populationBaseline,
+      }).from(grammarFeatureMap),
+      db.select({ languageLevel: userPreferences.languageLevel })
+        .from(userPreferences)
+        .where(eq(userPreferences.userId, userId))
+        .limit(1),
     ]);
+
+    // Map featureKey → baseline for fast lookup
+    const baselineByFeatureKey = new Map(
+      grammarFeatures.map(f => [f.featureKey, { populationBaseline: f.populationBaseline }])
+    );
+
+    // Map user CEFR level to baseline key
+    const rawLevel = userPrefs[0]?.languageLevel ?? 'B1';
+    const cefrKey: BaselineCEFRKey =
+      rawLevel === 'A1' || rawLevel === 'A2' ? 'A1_A2' :
+      rawLevel === 'B1' ? 'B1' :
+      rawLevel === 'B2' ? 'B2' : 'C1';
 
     const totalErrors = allLogs.length;
 
@@ -579,11 +601,19 @@ export async function GET(req: NextRequest) {
       const logs = clusteredErrors[key];
       const count = logs.length;
       const frequency = Math.round((count / totalErrors) * 100);
-      const isFossilizing = frequency >= 70;
 
       const latestLog = logs[0];
       const errorType = latestLog.errorType;
       const category = latestLog.category || 'General';
+
+      // Evaluate fossilization — absolute threshold OR corpus baseline-relative
+      const featureBaseline = errorType === 'grammar' && category !== 'General'
+        ? (baselineByFeatureKey.get(category) ?? { populationBaseline: null })
+        : { populationBaseline: null };
+      const fossilizationVerdict = evaluateFossilization(featureBaseline, frequency, cefrKey);
+      const isFossilizing = fossilizationVerdict.tier !== 'normal';
+      const fossilizationReason = fossilizationVerdict.tier !== 'normal' ? fossilizationVerdict.reason : undefined;
+      const baselineRatio = fossilizationVerdict.ratio;
 
       // Match with adaptation engine data
       const adaptationKey = `${errorType}|${category.toLowerCase()}`;
@@ -638,6 +668,8 @@ export async function GET(req: NextRequest) {
         recentContext: latestLog.context,
         lastOccurred: latestLog.createdAt,
         isFossilizing,
+        fossilizationReason,
+        baselineRatio,
         tier,
         trendDirection,
         interventionCount,

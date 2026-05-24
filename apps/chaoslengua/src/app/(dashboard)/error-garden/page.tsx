@@ -189,7 +189,7 @@ export default function ErrorGardenPage() {
         <StatsCard
           label="Fossilization Risks"
           value={data?.stats.fossilizingCount || 0}
-          subtext=">70% frequency"
+          subtext="Absolute or baseline-relative"
           icon={AlertTriangle}
           color="orange"
         />
@@ -457,7 +457,7 @@ export default function ErrorGardenPage() {
             </div>
             <div>
               <strong className="block text-foreground/80 mb-2">Fossilization Detection</strong>
-              <p>Patterns appearing in &gt;70% of production opportunities indicate a high risk of fossilization. The system identifies these early to inject "chaos" (varied input/forced production) to destabilize the incorrect rule.</p>
+              <p>Patterns above 70% frequency indicate high fossilization risk. The system also detects directional fossilization at much lower rates — if your error rate is 4× or more the corpus baseline for your level, the pattern is flagged even below the absolute threshold.</p>
             </div>
           </div>
         </CardContent>
@@ -559,6 +559,11 @@ function PatternCard({ pattern, onClick }: { pattern: ErrorPattern, onClick: () 
             {pattern.isFossilizing && !tierBadge && (
               <span className="text-xs px-2 py-1 rounded border border-destructive/50 bg-destructive/10 text-destructive font-semibold">
                 HIGH RISK
+              </span>
+            )}
+            {pattern.fossilizationReason === 'baseline-relative' && pattern.baselineRatio !== undefined && (
+              <span className="text-xs px-2 py-1 rounded border border-amber-500/50 bg-amber-500/10 text-amber-500 font-semibold" title="Rate compared to typical learners at your level">
+                {pattern.baselineRatio.toFixed(1)}× population rate
               </span>
             )}
             {pattern.primaryModality && pattern.primaryModality !== 'mixed' && (
