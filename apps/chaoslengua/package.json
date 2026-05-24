@@ -1,6 +1,6 @@
 {
   "name": "chaoslengua",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "scripts": {
     "dev": "next dev -H 0.0.0.0 -p 5002",
@@ -20,6 +20,7 @@
     "generate:stats": "npx tsx scripts/generate-content.ts stats",
     "generate:topics": "npx tsx scripts/generate-content.ts topics",
     "generate:podcasts": "npx tsx scripts/generate-podcast-audio.ts",
+    "analyze:cows": "npx tsx scripts/analyze-cows-l2h.ts",
     "test": "jest",
     "test:watch": "jest --watch"
   },

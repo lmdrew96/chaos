@@ -394,6 +394,12 @@ export const grammarFeatureMap = pgTable('grammar_feature_map', {
   category: text('category').$type<FeatureCategory>().notNull(), // 'grammar' | 'vocabulary_domain' | 'phonology'
   description: text('description'), // Brief description for AI prompting
   sortOrder: integer('sort_order').default(0).notNull(), // Rough priority within level
+  populationBaseline: jsonb('population_baseline').$type<{
+    A1_A2?: number; // decimal rate, e.g. 0.026 for 2.6%
+    B1?: number;
+    B2?: number;
+    C1?: number;
+  }>(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 

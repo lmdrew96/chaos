@@ -8,10 +8,12 @@ import {
   db,
   errorLogs,
   adaptationInterventions,
+  grammarFeatureMap,
   type ErrorType,
   type AdaptationTier,
   type AdaptationSource,
   type NewAdaptationIntervention,
+  type GrammarFeature,
 } from '@chaos/db';
 import { eq, and, gte, lte, desc } from 'drizzle-orm';
 
@@ -56,10 +58,20 @@ export interface FossilizationAlert {
   lastOccurred: string; // relative, e.g. "2 days ago"
 }
 
+export type BaselineCEFRKey = 'A1_A2' | 'B1' | 'B2' | 'C1';
+
+export interface FossilizationVerdict {
+  tier: 'fossilized' | 'nudge' | 'normal';
+  reason?: 'absolute' | 'baseline-relative';
+  ratio?: number; // only present for baseline-relative verdicts
+}
+
 // ─── Constants ───
 
 const FOSSILIZATION_THRESHOLD = 70; // frequency % to be considered fossilizing
 const NUDGE_THRESHOLD = 40; // frequency % to start nudging
+const BASELINE_MULTIPLIER_NUDGE = 4;   // 4× population baseline → nudge
+const BASELINE_MULTIPLIER_FOSSIL = 8;  // 8× population baseline → fossilization candidate
 const TIER2_INTERVENTION_COUNT = 2; // interventions without improvement to escalate to tier 2
 const TIER3_INTERVENTION_COUNT = 4; // interventions without improvement to escalate to tier 3
 const MEASUREMENT_WINDOW_DAYS = 3; // days before measuring intervention outcomes
@@ -75,6 +87,49 @@ const TIER1_WORKSHOP_WEIGHTS: ContentWeights = { unseen: 0.40, weak: 0.40, fossi
 const TIER2_WORKSHOP_WEIGHTS: ContentWeights = { unseen: 0.30, weak: 0.15, fossilizing: 0.35, random: 0.20 };
 const TIER3_WORKSHOP_WEIGHTS: ContentWeights = { unseen: 0.20, weak: 0.10, fossilizing: 0.50, random: 0.20 };
 
+// ─── Helpers ───
+
+function toCEFRBaselineKey(cefrLevel: string): BaselineCEFRKey {
+  if (cefrLevel === 'A1' || cefrLevel === 'A2') return 'A1_A2';
+  if (cefrLevel === 'B1') return 'B1';
+  if (cefrLevel === 'B2') return 'B2';
+  return 'C1';
+}
+
+/**
+ * Evaluates whether a learner's error rate warrants a nudge or fossilization flag.
+ * Checks absolute thresholds first (unchanged behavior), then baseline-relative thresholds
+ * (catches sub-40% directional fossilization that absolute thresholds miss).
+ *
+ * @param feature - GrammarFeature with optional populationBaseline
+ * @param frequencyPct - Learner's error frequency as 0–100 integer (% of all error logs)
+ * @param cefrKey - Learner's CEFR band for baseline lookup
+ */
+export function evaluateFossilization(
+  feature: Pick<GrammarFeature, 'populationBaseline'>,
+  frequencyPct: number,
+  cefrKey: BaselineCEFRKey
+): FossilizationVerdict {
+  // Absolute-threshold path (unchanged behavior for high-error patterns)
+  if (frequencyPct >= FOSSILIZATION_THRESHOLD) return { tier: 'fossilized', reason: 'absolute' };
+  if (frequencyPct >= NUDGE_THRESHOLD) return { tier: 'nudge', reason: 'absolute' };
+
+  // Baseline-relative path (catches sub-40% directional fossilization)
+  const baseline = feature.populationBaseline?.[cefrKey];
+  if (baseline && baseline > 0) {
+    const learnerRate = frequencyPct / 100;
+    const ratio = learnerRate / baseline;
+    if (ratio >= BASELINE_MULTIPLIER_FOSSIL) {
+      return { tier: 'fossilized', reason: 'baseline-relative', ratio };
+    }
+    if (ratio >= BASELINE_MULTIPLIER_NUDGE) {
+      return { tier: 'nudge', reason: 'baseline-relative', ratio };
+    }
+  }
+
+  return { tier: 'normal' };
+}
+
 // ─── Core Functions ───
 
 /**
@@ -86,14 +141,28 @@ const TIER3_WORKSHOP_WEIGHTS: ContentWeights = { unseen: 0.20, weak: 0.10, fossi
  *
  * Also lazily measures outcomes of past interventions older than 3 days.
  */
-export async function getAdaptationProfile(userId: string): Promise<AdaptationProfile> {
-  // Parallel: fetch error logs + intervention history
-  const [allErrors, interventions] = await Promise.all([
+export async function getAdaptationProfile(
+  userId: string,
+  learnerCEFR?: string
+): Promise<AdaptationProfile> {
+  const cefrKey: BaselineCEFRKey = learnerCEFR ? toCEFRBaselineKey(learnerCEFR) : 'B1';
+
+  // Parallel: fetch error logs, intervention history, and grammar feature baselines
+  const [allErrors, interventions, grammarFeatures] = await Promise.all([
     db.select().from(errorLogs).where(eq(errorLogs.userId, userId)),
     db.select().from(adaptationInterventions)
       .where(eq(adaptationInterventions.userId, userId))
       .orderBy(desc(adaptationInterventions.createdAt)),
+    db.select({
+      featureKey: grammarFeatureMap.featureKey,
+      populationBaseline: grammarFeatureMap.populationBaseline,
+    }).from(grammarFeatureMap),
   ]);
+
+  // Build a fast lookup: featureKey → populationBaseline
+  const baselineByFeatureKey = new Map(
+    grammarFeatures.map(f => [f.featureKey, { populationBaseline: f.populationBaseline }])
+  );
 
   if (allErrors.length === 0) {
     return {
@@ -126,8 +195,15 @@ export async function getAdaptationProfile(userId: string): Promise<AdaptationPr
     const [errorType, category] = patternKey.split('|');
     const frequency = Math.round((logs.length / allErrors.length) * 100);
 
-    // Skip patterns below nudge threshold
-    if (frequency < NUDGE_THRESHOLD) continue;
+    // For grammar patterns, look up the population baseline by featureKey (= category)
+    const featureBaseline = errorType === 'grammar' && category !== 'general'
+      ? (baselineByFeatureKey.get(category) ?? { populationBaseline: null })
+      : { populationBaseline: null };
+
+    const verdict = evaluateFossilization(featureBaseline, frequency, cefrKey);
+
+    // Skip patterns that neither exceed absolute thresholds nor trigger baseline-relative signals
+    if (verdict.tier === 'normal') continue;
 
     // Get intervention history for this pattern
     const patternInterventions = interventions.filter(i => i.patternKey === patternKey);

@@ -112,7 +112,54 @@ const features: NewGrammarFeature[] = [
     cefrLevel: 'B1',
     category: 'grammar',
     description: 'Same adjective with ser vs estar produces different meanings: es aburrido (boring) vs está aburrido (bored); es listo (clever) vs está listo (ready); es rico (wealthy) vs está rico (tastes good); es verde (green / inexperienced) vs está verde (unripe). The most challenging Spanish L2 fossilization point.',
+    populationBaseline: { A1_A2: 0.026, B1: 0.017, B2: 0.012 },
     sortOrder: 12,
+  },
+
+  // ═══════════════════════════════════════
+  // DIRECTIONAL FOSSILIZATION SUB-FEATURES (Corpus-grounded — Stage 1)
+  // Derived from COWS-L2H validation (docs/analysis/cows-l2h-validation.md)
+  // Each pair captures the *direction* of L1-English learner overuse.
+  // ═══════════════════════════════════════
+
+  // SER/ESTAR directional
+  {
+    featureKey: 'ser_estar_overuse_ser',
+    featureName: 'Ser/Estar: Overuse of Ser',
+    cefrLevel: 'A2',
+    category: 'grammar',
+    description: 'Learner uses ser in contexts requiring estar. Corpus-dominant direction (es→está outnumbers está→es ~3:1 at A1-A2, ~3:1 at B1). Highest-leverage Stage 1 fossilization signal for L1-English learners.',
+    populationBaseline: { A1_A2: 0.011, B1: 0.007, B2: 0.005 },
+    sortOrder: 12,
+  },
+  {
+    featureKey: 'ser_estar_overuse_estar',
+    featureName: 'Ser/Estar: Overuse of Estar',
+    cefrLevel: 'A2',
+    category: 'grammar',
+    description: 'Learner uses estar in contexts requiring ser. Less common direction but emerges at B1+ as learners over-correct (estaba→era dominates at B2: 28 vs 26 for the reverse). Watch for B2+ learners showing this pattern.',
+    populationBaseline: { A1_A2: 0.004, B1: 0.005, B2: 0.007 },
+    sortOrder: 13,
+  },
+
+  // POR/PARA directional
+  {
+    featureKey: 'por_para_overuse_por',
+    featureName: 'Por/Para: Overuse of Por',
+    cefrLevel: 'A2',
+    category: 'grammar',
+    description: 'Learner uses por in contexts requiring para. Corpus-dominant direction at B1+ (para→por outnumbers por→para roughly 3:2 at B1, 2:1 at B2). Most common L1-English fossilization for prepositions.',
+    populationBaseline: { A1_A2: 0.015, B1: 0.018, B2: 0.022 },
+    sortOrder: 14,
+  },
+  {
+    featureKey: 'por_para_overuse_para',
+    featureName: 'Por/Para: Overuse of Para',
+    cefrLevel: 'A2',
+    category: 'grammar',
+    description: 'Learner uses para in contexts requiring por. Smaller but real signal — roughly 40% of por/para errors at A1-A2, dropping to 33% at B2.',
+    populationBaseline: { A1_A2: 0.014, B1: 0.012, B2: 0.012 },
+    sortOrder: 15,
   },
 
   // ═══════════════════════════════════════
@@ -172,7 +219,28 @@ const features: NewGrammarFeature[] = [
     cefrLevel: 'B1',
     category: 'grammar',
     description: 'Same verb in both tenses produces different meanings: conocí (I met) vs conocía (I knew); supe (I found out) vs sabía (I knew); quise (I tried) vs quería (I wanted); pude (I managed to) vs podía (I was able to). Major Spanish L2 fossilization point — no English L1 model.',
+    populationBaseline: { A1_A2: 0.015, B1: 0.021, B2: 0.024 },
     sortOrder: 18,
+  },
+
+  // PRETERITE/IMPERFECT directional
+  {
+    featureKey: 'pret_imp_overuse_preterite',
+    featureName: 'Preterite/Imperfect: Overuse of Preterite',
+    cefrLevel: 'B1',
+    category: 'grammar',
+    description: 'Learner uses preterite where imperfect was required. Corpus-dominant direction at ALL levels — fue→era is the single most common pret/imp error pair. Reflects L1-English bias toward default past tense. Highest-priority directional drill for B1+.',
+    populationBaseline: { A1_A2: 0.010, B1: 0.014, B2: 0.016 },
+    sortOrder: 19,
+  },
+  {
+    featureKey: 'pret_imp_overuse_imperfect',
+    featureName: 'Preterite/Imperfect: Overuse of Imperfect',
+    cefrLevel: 'B1',
+    category: 'grammar',
+    description: 'Learner uses imperfect where preterite was required. Less common but real (era→fue, estaba→era at B2). Watch for over-correction patterns in learners who previously fossilized preterite-overuse.',
+    populationBaseline: { A1_A2: 0.005, B1: 0.007, B2: 0.008 },
+    sortOrder: 20,
   },
 
   // ═══════════════════════════════════════
@@ -184,6 +252,7 @@ const features: NewGrammarFeature[] = [
     cefrLevel: 'A2',
     category: 'grammar',
     description: 'Direct object pronouns me/te/lo/la/nos/os/los/las placed before finite verbs: Lo veo. La compré. Nos llamaron. Replace the direct object. Preverbal position only at Stage 1; attached forms (quiero verlo) are Stage 2.',
+    populationBaseline: { A1_A2: 0.002, B1: 0.002, B2: 0.002 },
     sortOrder: 19,
   },
   {
@@ -192,6 +261,7 @@ const features: NewGrammarFeature[] = [
     cefrLevel: 'A2',
     category: 'grammar',
     description: 'Indirect object pronouns me/te/le/nos/os/les placed before finite verbs: Le di el libro. Me escribió una carta. Nos explicó todo. Marks the recipient. Redundant "a + noun" common (Le di el libro a María).',
+    populationBaseline: { A1_A2: 0.002, B1: 0.002, B2: 0.001 },
     sortOrder: 20,
   },
 
@@ -321,6 +391,7 @@ async function seedGrammarFeatures() {
             cefrLevel: feature.cefrLevel,
             category: feature.category,
             description: feature.description,
+            populationBaseline: feature.populationBaseline ?? null,
             sortOrder: feature.sortOrder ?? 0,
           },
         });
