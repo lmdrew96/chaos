@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { db } from '@/lib/db';
-import { errorLogs, ErrorLog, grammarFeatureMap, userPreferences } from '@/lib/db/schema';
+import { errorLogs, ErrorLog, ErrorType, grammarFeatureMap, userPreferences } from '@/lib/db/schema';
 import { eq, sql, desc, and, gte } from 'drizzle-orm';
 import { getAdaptationProfile, evaluateFossilization, type AdaptationPriority, type BaselineCEFRKey } from '@chaos/core-ai';
+import { mapErrorCategoryToFeatureKey } from '@/lib/db/queries';
 
 export type TrendDirection = 'improving' | 'stable' | 'worsening';
 
@@ -607,8 +608,11 @@ export async function GET(req: NextRequest) {
       const category = latestLog.category || 'General';
 
       // Evaluate fossilization — absolute threshold OR corpus baseline-relative
-      const featureBaseline = errorType === 'grammar' && category !== 'General'
-        ? (baselineByFeatureKey.get(category) ?? { populationBaseline: null })
+      const mappedFeatureKey = errorType === 'grammar' && category !== 'General'
+        ? mapErrorCategoryToFeatureKey(errorType as ErrorType, category)
+        : null;
+      const featureBaseline = mappedFeatureKey
+        ? (baselineByFeatureKey.get(mappedFeatureKey) ?? { populationBaseline: null })
         : { populationBaseline: null };
       const fossilizationVerdict = evaluateFossilization(featureBaseline, frequency, cefrKey);
       const isFossilizing = fossilizationVerdict.tier !== 'normal';

@@ -84,3 +84,5 @@ scripts/tts/__pycache__
 
 # Test scripts
 scripts/test-tts.js
+# COWS-L2H corpus (research data, not committed)
+data/cows-l2h/

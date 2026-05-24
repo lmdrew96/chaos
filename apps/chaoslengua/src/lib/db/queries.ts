@@ -666,23 +666,23 @@ export function mapErrorCategoryToFeatureKey(errorType: ErrorType, category: str
   // See docs/pedagogy/error-garden-taxonomy-es.md for the full taxonomy.
   const directMappings: Record<string, string> = {
     // Ser vs Estar (Stage 1 iconic)
-    'ser_vs_estar_core': 'ser_vs_estar_core',
-    'ser_vs_estar_meaning_shift': 'ser_vs_estar_meaning_shift',
+    'ser_vs_estar_core': 'ser_estar_contrast',
+    'ser_vs_estar_meaning_shift': 'ser_estar_contrast',
 
     // Aspect (Stage 1 iconic)
-    'preterite_formation': 'preterite_formation',
-    'imperfect_formation': 'imperfect_formation',
-    'preterite_vs_imperfect_aspect': 'preterite_vs_imperfect_aspect',
-    'preterite_imperfect_meaning_shift': 'preterite_imperfect_meaning_shift',
+    'preterite_formation': 'preterite_perfective',
+    'imperfect_formation': 'imperfect_habitual',
+    'preterite_vs_imperfect_aspect': 'preterite_imperfect_contrast',
+    'preterite_imperfect_meaning_shift': 'preterite_imperfect_contrast',
 
     // Object pronouns (Stage 1)
-    'direct_object_pronouns': 'direct_object_pronouns',
-    'indirect_object_pronouns': 'indirect_object_pronouns',
-    'combined_object_pronouns': 'combined_object_pronouns',
+    'direct_object_pronouns': 'direct_object_pronoun_preverbal',
+    'indirect_object_pronouns': 'indirect_object_pronoun_preverbal',
+    'combined_object_pronouns': 'combined_object_pronoun_preverbal',
     'personal_a': 'basic_prepositions',
 
     // Por vs Para (Stage 1 iconic)
-    'por_vs_para': 'por_vs_para_intro',
+    'por_vs_para': 'por_para_overuse_por',
 
     // Gender & articles
     'gender_agreement': 'gender_agreement',
