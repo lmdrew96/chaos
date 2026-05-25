@@ -12,7 +12,9 @@ import {
   Square,
   Loader2,
   AlertCircle,
+  Mic2,
 } from "lucide-react"
+import Link from "next/link"
 
 import { ChallengeCard } from "@/components/features/workshop/ChallengeCard"
 import { WorkshopFeedback } from "@/components/features/workshop/WorkshopFeedback"
@@ -58,6 +60,7 @@ export default function WorkshopPage() {
   const [error, setError] = useState<string | null>(null)
   const [showingFeedback, setShowingFeedback] = useState(false)
   const [userLevel, setUserLevel] = useState<string | null>(null)
+  const [phonologyNudge, setPhonologyNudge] = useState<{ featureKey: string | null } | null>(null)
 
   // Warn before navigating away during active session
   useNavigationGuard(isActive && !!sessionId)
@@ -82,7 +85,7 @@ export default function WorkshopPage() {
     }
   }, [timerMode, isActive, timeRemaining > 0, isPaused]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Fetch user level on mount
+  // Fetch user level and phonology nudge on mount
   useEffect(() => {
     fetch("/api/user/preferences", { credentials: "include" })
       .then((r) => r.ok ? r.json() : null)
@@ -92,6 +95,15 @@ export default function WorkshopPage() {
         }
       })
       .catch(() => {}) // Non-critical — defaults to A1
+
+    fetch("/api/workshop/nudge", { credentials: "include" })
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (data?.phonologyRecommended) {
+          setPhonologyNudge({ featureKey: data.phonologyFeatureKey })
+        }
+      })
+      .catch(() => {}) // Non-critical — nudge is additive
   }, [])
 
   const getRecentTypes = useCallback(() => typeHistory.slice(-3), [typeHistory])
@@ -334,6 +346,25 @@ export default function WorkshopPage() {
                   </p>
                 </CardContent>
               </Card>
+            )}
+
+            {phonologyNudge && (
+              <div className="flex items-start gap-3 rounded-xl border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
+                <Mic2 className="h-4 w-4 shrink-0 mt-0.5 text-primary" />
+                <div className="flex-1">
+                  <p className="font-medium text-foreground">Your top challenge right now is pronunciation</p>
+                  <p className="text-muted-foreground mt-0.5">
+                    Workshop doesn&apos;t drill phonology — head to Pronunciation Practice for targeted help.
+                  </p>
+                  <Link
+                    href={phonologyNudge.featureKey ? `/pronunciation-practice?feature=${encodeURIComponent(phonologyNudge.featureKey)}` : '/pronunciation-practice'}
+                    className="mt-2 inline-flex items-center gap-1.5 text-primary hover:underline font-medium"
+                  >
+                    <Mic2 className="h-3.5 w-3.5" />
+                    Go to Pronunciation Practice
+                  </Link>
+                </div>
+              </div>
             )}
 
             <div className="flex flex-wrap gap-3 pt-2">

@@ -284,6 +284,7 @@ export const stressMinimalPairs = pgTable('stress_minimal_pairs', {
   meaning: text('meaning').notNull(),
   example: text('example').notNull(),
   isSuggested: pgBoolean('is_suggested').default(false).notNull(),
+  featureKey: text('feature_key'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 

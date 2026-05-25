@@ -1,15 +1,16 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { getSuggestedWordsWithPairs } from '@/lib/db/queries';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     const { userId } = await auth();
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const data = await getSuggestedWordsWithPairs();
+    const featureKey = req.nextUrl.searchParams.get('feature') ?? undefined;
+    const data = await getSuggestedWordsWithPairs(featureKey);
 
     return NextResponse.json(data, {
       headers: {

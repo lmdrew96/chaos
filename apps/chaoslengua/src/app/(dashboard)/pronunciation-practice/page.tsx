@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect, useCallback } from "react"
+import { useSearchParams } from "next/navigation"
 import { Card, CardContent } from "@chaos/ui"
 import { Button } from "@chaos/ui"
 import {
@@ -53,7 +54,16 @@ function buildDrillQueue(pairs: Record<string, Variant[]>, weakWords: string[] =
   })
 }
 
+const FEATURE_LABELS: Record<string, { subtitle: string }> = {
+  phon_stress_accent: { subtitle: 'Pares mínimos — acento de sílaba' },
+  phon_trill_rr:     { subtitle: 'Pares mínimos — /r/ vs /rr/ (vibrante)' },
+  phon_palatal_n:    { subtitle: 'Pares mínimos — /n/ vs /ñ/ (palatal nasal)' },
+}
+
 export default function PronunciationPracticePage() {
+  const searchParams = useSearchParams()
+  const featureKey = searchParams.get('feature') ?? undefined
+
   const [pairsData, setPairsData] = useState<Record<string, Variant[]> | null>(null)
   const [weakWords, setWeakWords] = useState<string[]>([])
   const [isLoadingContent, setIsLoadingContent] = useState(true)
@@ -80,11 +90,14 @@ export default function PronunciationPracticePage() {
     return () => {
       audioCacheRef.current.forEach((url) => URL.revokeObjectURL(url))
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function fetchContent() {
     try {
-      const res = await fetch("/api/pronunciation/suggested-words")
+      const url = featureKey
+        ? `/api/pronunciation/suggested-words?feature=${encodeURIComponent(featureKey)}`
+        : '/api/pronunciation/suggested-words'
+      const res = await fetch(url)
       if (!res.ok) throw new Error("Failed to load")
       const data = await res.json()
       setPairsData(data.pairs)
@@ -280,7 +293,9 @@ export default function PronunciationPracticePage() {
             <Mic2 className="h-7 w-7 text-primary" />
             Práctica de Pronunciación
           </h1>
-          <p className="text-muted-foreground">Pares mínimos — acento de sílaba</p>
+          <p className="text-muted-foreground">
+            {(featureKey && FEATURE_LABELS[featureKey]?.subtitle) ?? FEATURE_LABELS.phon_stress_accent.subtitle}
+          </p>
         </div>
 
         <Card className="rounded-2xl border-border/40 bg-gradient-to-br from-primary/10 via-background to-accent/10">
@@ -325,7 +340,9 @@ export default function PronunciationPracticePage() {
             <Mic2 className="h-7 w-7 text-primary" />
             Práctica de Pronunciación
           </h1>
-          <p className="text-muted-foreground">Pares mínimos — acento de sílaba</p>
+          <p className="text-muted-foreground">
+            {(featureKey && FEATURE_LABELS[featureKey]?.subtitle) ?? FEATURE_LABELS.phon_stress_accent.subtitle}
+          </p>
         </div>
         {score.total > 0 && (
           <div className="text-right text-sm text-muted-foreground">

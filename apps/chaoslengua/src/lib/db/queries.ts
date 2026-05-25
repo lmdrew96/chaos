@@ -243,16 +243,19 @@ export async function getUserErrorPatternsForContent(
 }
 
 /**
- * Fetches suggested pronunciation words and their stress minimal pairs.
- * Returns a list of suggested words and a record mapping each word to its stress variants.
+ * Fetches suggested pronunciation words and their minimal pairs.
+ * When featureKey is provided, returns only pairs tagged with that key.
+ * Without a featureKey, defaults to 'phon_stress_accent' (stress drills).
  */
-export async function getSuggestedWordsWithPairs(): Promise<{
+export async function getSuggestedWordsWithPairs(featureKey?: string): Promise<{
   words: string[];
   pairs: Record<string, { stress: string; meaning: string; example: string }[]>;
 }> {
+  const targetKey = featureKey ?? 'phon_stress_accent';
   const rows = await db
     .select()
-    .from(stressMinimalPairs);
+    .from(stressMinimalPairs)
+    .where(eq(stressMinimalPairs.featureKey, targetKey));
 
   // Extract unique suggested words
   const suggestedSet = new Set<string>();
@@ -1019,6 +1022,8 @@ export interface WorkshopFeatureTarget {
   selectionReason: WorkshopSelectionReason;
   destabilizationTier?: AdaptationTier;
   adaptationProfile?: AdaptationProfile;
+  phonologyRecommended?: boolean;
+  phonologyFeatureKey?: string;
 }
 
 /**
@@ -1040,11 +1045,22 @@ export async function getWorkshopFeatureTarget(
     getAdaptationProfile(userId),
   ]);
 
-  // Phonology features need pronunciation-specific drills (read-aloud,
-  // listen-and-discriminate, stress-pair) that workshop doesn't generate.
-  // Drop them here so no selection bucket can route them into a
-  // transform/fix/complete prompt. Re-allow once a phonology drill UX exists.
+  // Phonology features are intentionally excluded from Workshop because the
+  // transform/fix/complete challenge types don't target phoneme production.
+  // Phonology fossilization is handled by /pronunciation-practice instead.
+  // When phonology is the dominant fossilizing pattern, the Workshop UI surfaces
+  // a nudge card linking to the appropriate targeted drill.
   const levelFeatures = allLevelFeatures.filter(f => f.category !== 'phonology');
+
+  // Detect whether phonology is the top fossilizing pattern so the UI can nudge.
+  const topFossilizingPhonology = adaptProfile.fossilizingPatterns.find(p => {
+    const fk = mapErrorCategoryToFeatureKey(p.errorType, p.category);
+    return fk?.startsWith('phon_');
+  });
+  const phonologyRecommended = !!topFossilizingPhonology;
+  const phonologyFeatureKey = topFossilizingPhonology
+    ? mapErrorCategoryToFeatureKey(topFossilizingPhonology.errorType, topFossilizingPhonology.category) ?? undefined
+    : undefined;
 
   if (levelFeatures.length === 0) return null;
 
@@ -1133,6 +1149,8 @@ export async function getWorkshopFeatureTarget(
     selectionReason: reason,
     destabilizationTier,
     adaptationProfile: adaptProfile,
+    phonologyRecommended,
+    phonologyFeatureKey,
   };
 }
 
