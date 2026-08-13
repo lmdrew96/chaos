@@ -5,8 +5,8 @@
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
-// Switching to Llama 3.3 70B (DeepSeek R1 Distill was decommissioned)
-export const GROQ_MODEL = "llama-3.3-70b-versatile";
+// Switching to GPT-OSS 120B (Llama 3.3 70B Versatile was decommissioned by Groq on 2026-08-16)
+export const GROQ_MODEL = "openai/gpt-oss-120b";
 
 export type ChatMessage = {
     role: "system" | "user" | "assistant";

@@ -8,7 +8,7 @@ import { resolve } from 'path';
 dotenv.config({ path: resolve(process.cwd(), '.env.local') });
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
-const GROQ_MODEL = 'llama-3.3-70b-versatile';
+const GROQ_MODEL = 'openai/gpt-oss-120b';
 
 async function callGroq(messages: { role: string; content: string }[]): Promise<string> {
   if (!GROQ_API_KEY) throw new Error('GROQ_API_KEY is not set');
